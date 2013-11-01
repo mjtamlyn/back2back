@@ -1,0 +1,22 @@
+{
+  "name": "back2back",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "coffee-script": "~1.6.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mjtamlyn/back2back.git"
+  },
+  "author": "mjtamlyn",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/mjtamlyn/back2back/issues"
+  }
+}
