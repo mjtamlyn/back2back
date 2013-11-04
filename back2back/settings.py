@@ -14,7 +14,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = (
+    'back2back',
+
     'rest_framework',
+    'south',
 
     'django.contrib.admin',
     'django.contrib.auth',
