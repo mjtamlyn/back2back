@@ -15,9 +15,11 @@ class BaseCategory(object):
     def create_entry(self, name, agb_number='', seeding=None):
         Entry.objects.create(category=self.slug, name=name, agb_number=agb_number, seeding=seeding)
 
-    def get_first_round_groups(self):
+    def get_first_round_groups(self, entries=None):
         num_groups = int(self.max_entries / 6)
-        return [Group(category=self, number=i, entries=self.get_entries()) for i in range(num_groups)]
+        if entries is None:
+            entries = self.get_entries()
+        return [Group(category=self, number=i, entries=entries) for i in range(num_groups)]
 
 
 class GentsRecurve(BaseCategory):

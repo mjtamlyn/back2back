@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import TemplateView, ListView, FormView, DeleteView
+from django.http import HttpResponseRedirect
+from django.views.generic import View, TemplateView, ListView, FormView, DeleteView
 
 from .forms import EntryForm
 from .models import Entry
@@ -65,8 +66,21 @@ class FirstRoundSetGroups(TemplateView):
 
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
-        groups = category.get_first_round_groups()
+        entries = category.get_entries()
+        groups = category.get_first_round_groups(entries=entries)
         return {
             'category': category,
             'groups': groups,
+            'unprocessed': [e for e in entries if e.first_group_number is None],
         }
+
+
+class FirstRoundGroupAdd(View):
+    def post(self, request, *args, **kwargs):
+        entry = Entry.objects.get(pk=self.request.POST['entry'])
+        print(entry, self.request.POST)
+        entry.first_group_number = int(self.request.POST['group'])
+        entry.save()
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_first_round_groups()
+        return HttpResponseRedirect(reverse('first-round-set-groups', kwargs={'category': self.kwargs['category']}))

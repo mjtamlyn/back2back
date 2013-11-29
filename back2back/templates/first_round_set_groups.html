@@ -14,4 +14,24 @@
     {% endfor %}
 </table>
 {% endfor %}
+
+<h4>Entries not in a group</h4>
+<table>
+    {% for entry in unprocessed %}
+    <tr>
+        <td>{{ entry.seeding }}</td>
+        <td>{{ entry.name }}</td>
+        <td>Add to:
+            {% for group in groups %}
+            <form method="POST" action="{% url 'first-round-group-add' category=category.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="entry" value="{{ entry.pk }}">
+                <input type="hidden" name="group" value="{{ group.number }}">
+                <input type="submit" value="{{ group }}">
+            </form>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
