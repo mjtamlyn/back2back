@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import TemplateView, ListView, FormView
+from django.views.generic import TemplateView, ListView, FormView, DeleteView
 
 from .forms import EntryForm
 from .models import Entry
@@ -49,3 +49,13 @@ class EntryEdit(EntryAdd):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = Entry.objects.get(pk=self.kwargs['entry'])
         return kwargs
+
+
+class EntryDelete(DeleteView):
+    template_name = 'entry_delete.html'
+    pk_url_kwarg = 'entry'
+    model = Entry
+
+    def get_success_url(self):
+        return reverse('entry-list', kwargs={'category': self.kwargs['category']})
+
