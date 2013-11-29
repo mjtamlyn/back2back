@@ -80,6 +80,20 @@ class Group(object):
             entry.first_group_index = i
             entry.save()
 
+    def matches(self):
+        entries = self.entries()
+        arrangement = [
+            [[0, 5], [1, 2], [3, 4]],
+            [[0, 4], [1, 3], [2, 5]],
+            [[0, 3], [1, 5], [2, 4]],
+            [[0, 2], [1, 4], [3, 5]],
+            [[0, 1], [2, 3], [4, 5]],
+        ]
+        return [[{
+            'archer_1': entries[match[0]] if len(entries) > match[0] else 'BYE',
+            'archer_2': entries[match[1]] if len(entries) > match[1] else 'BYE',
+        } for match in row] for row in arrangement]
+
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
 CATEGORIES_BY_SLUG = OrderedDict((category.slug, category) for category in CATEGORIES)

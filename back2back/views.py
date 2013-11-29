@@ -93,3 +93,18 @@ class FirstRoundGroupRemove(View):
         group = groups[entry.first_group_number]
         group.remove_entry(entry)
         return HttpResponseRedirect(reverse('first-round-set-groups', kwargs={'category': self.kwargs['category']}))
+
+
+class FirstRoundMatches(TemplateView):
+    template_name = 'first_round_matches.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_first_round_groups(entries=entries)
+        print(groups[0].matches())
+        return {
+            'category': category,
+            'groups': groups,
+            'unprocessed': [e for e in entries if e.first_group_number is None],
+        }

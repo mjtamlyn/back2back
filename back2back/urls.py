@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/first-round/set-groups/$', views.FirstRoundSetGroups.as_view(), name='first-round-set-groups'),
     url(r'^(?P<category>[a-z-]+)/first-round/set-groups/add/$', views.FirstRoundGroupAdd.as_view(), name='first-round-group-add'),
     url(r'^(?P<category>[a-z-]+)/first-round/set-groups/remove/$', views.FirstRoundGroupRemove.as_view(), name='first-round-group-remove'),
+    url(r'^(?P<category>[a-z-]+)/first-round/matches/$', views.FirstRoundMatches.as_view(), name='first-round-matches'),
     url(r'^admin/', include(admin.site.urls)),
 )
