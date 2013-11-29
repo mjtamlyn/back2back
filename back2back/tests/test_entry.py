@@ -24,3 +24,7 @@ class TestCreatingEntry(TestCase):
         category = GentsRecurve()
         for i in range(category.max_entries):
             category.create_entry('Archer %s' % i)
+
+
+class TestEntryView(TestCase):
+    pass

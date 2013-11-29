@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block heading %}Entries for {{ category }}{% endblock %}
+
+{% block content %}
+<h3>{{ entries|length }} of {{ category.max_entries }} entries</h3>
+
+<table>
+    {% for entry in entries %}
+    <tr><td>{{ entry }}</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
