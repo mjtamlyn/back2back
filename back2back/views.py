@@ -59,3 +59,14 @@ class EntryDelete(DeleteView):
     def get_success_url(self):
         return reverse('entry-list', kwargs={'category': self.kwargs['category']})
 
+
+class FirstRoundSetGroups(TemplateView):
+    template_name = 'first_round_set_groups.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_first_round_groups()
+        return {
+            'category': category,
+            'groups': groups,
+        }

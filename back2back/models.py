@@ -14,6 +14,11 @@ class Entry(models.Model):
     name = models.CharField(max_length=255)
     agb_number = models.CharField(max_length=20, blank=True, default='', verbose_name='AGB number')
     seeding = models.PositiveIntegerField(blank=True, null=True)
+    first_group_number = models.PositiveIntegerField(blank=True, null=True)
+    first_group_index = models.PositiveIntegerField(blank=True, null=True, help_text='indexed 0-5 to do the match layout')
+    first_group_placing = models.PositiveIntegerField(blank=True, null=True)
+    first_group_points = models.PositiveIntegerField(default=0)
+    first_group_score = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name

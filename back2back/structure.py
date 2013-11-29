@@ -4,7 +4,7 @@ from .models import Entry
 
 
 class BaseCategory(object):
-    max_entries = 24
+    max_entries = 30
 
     def __str__(self):
         return self.name
@@ -15,6 +15,10 @@ class BaseCategory(object):
     def create_entry(self, name, agb_number='', seeding=None):
         Entry.objects.create(category=self.slug, name=name, agb_number=agb_number, seeding=seeding)
 
+    def get_first_round_groups(self):
+        num_groups = int(self.max_entries / 6)
+        return [Group(category=self, number=i, entries=self.get_entries()) for i in range(num_groups)]
+
 
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'
@@ -24,6 +28,7 @@ class GentsRecurve(BaseCategory):
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
+    max_entries = 18
 
 
 class GentsCompound(BaseCategory):
@@ -34,6 +39,25 @@ class GentsCompound(BaseCategory):
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
+    max_entries = 18
+
+
+
+class Group(object):
+    def __init__(self, category, number, entries):
+        self.category = category
+        self.number = number
+        self.all_entries = entries
+
+    def __str__(self):
+        return 'Group {}'.format(self.label)
+
+    @property
+    def label(self):
+        return 'ABCDEF'[self.number]
+
+    def entries(self):
+        return [e for e in self.all_entries if e.first_group_number == self.number]
 
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]

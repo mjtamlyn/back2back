@@ -4,12 +4,20 @@
 <nav>
     <ul>
         <li>
-        Manage Entries
-        <ul>
-            {% for category in categories %}
-            <li><a href="{% url 'entry-list' category=category.slug %}">{{ category }}</a></li>
-            {% endfor %}
-        </ul>
+            Manage Entries
+            <ul>
+                {% for category in categories %}
+                <li><a href="{% url 'entry-list' category=category.slug %}">{{ category }}</a></li>
+                {% endfor %}
+            </ul>
+            </li>
+        <li>
+            Set up first round groups
+            <ul>
+                {% for category in categories %}
+                <li><a href="{% url 'first-round-set-groups' category=category.slug %}">{{ category }}</a></li>
+                {% endfor %}
+            </ul>
         </li>
     </ul>
 </nav>
