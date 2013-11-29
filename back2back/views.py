@@ -42,3 +42,10 @@ class EntryAdd(FormView):
 
     def get_success_url(self):
         return reverse('entry-list', kwargs={'category': self.kwargs['category']})
+
+
+class EntryEdit(EntryAdd):
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = Entry.objects.get(pk=self.kwargs['entry'])
+        return kwargs

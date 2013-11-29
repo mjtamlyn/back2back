@@ -10,7 +10,7 @@ class BaseCategory(object):
         return self.name
 
     def get_entries(self):
-        return Entry.objects.filter(category=self.slug)
+        return Entry.objects.filter(category=self.slug).order_by('seeding', 'name')
 
     def create_entry(self, name, agb_number='', seeding=None):
         Entry.objects.create(category=self.slug, name=name, agb_number=agb_number, seeding=seeding)

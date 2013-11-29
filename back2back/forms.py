@@ -14,4 +14,7 @@ class EntryForm(forms.ModelForm):
         super().__init__(**kwargs)
 
     def save(self):
-        self.category.create_entry(**self.cleaned_data)
+        if self.instance.pk:
+            self.instance.save()
+        else:
+            self.category.create_entry(**self.cleaned_data)

@@ -20,7 +20,7 @@
             <td>{{ entry.seeding }}</td>
             <td>{{ entry.name }}</td>
             <td>{{ entry.agb_number }}</td>
-            <td>Edit | Delete</td>
+            <td><a href="{% url 'entry-edit' category=category.slug entry=entry.pk %}">Edit</a> | Delete</td>
         </tr>
         {% endfor %}
     </tbody>
