@@ -9,5 +9,6 @@ from . import views
 urlpatterns = patterns('',
     url(r'^$', views.Index.as_view(), name='index'),
     url(r'^entries/(?P<category>[a-z-]+)/$', views.EntryList.as_view(), name='entry-list'),
+    url(r'^entries/(?P<category>[a-z-]+)/add/$', views.EntryAdd.as_view(), name='entry-add'),
     url(r'^admin/', include(admin.site.urls)),
 )

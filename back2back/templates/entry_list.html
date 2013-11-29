@@ -6,8 +6,26 @@
 <h3>{{ entries|length }} of {{ category.max_entries }} entries</h3>
 
 <table>
-    {% for entry in entries %}
-    <tr><td>{{ entry }}</td></tr>
-    {% endfor %}
+    <thead>
+        <tr>
+            <th>Seeding</th>
+            <th>Name</th>
+            <th>AGB Number</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.seeding }}</td>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.agb_number }}</td>
+            <td>Edit | Delete</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
+
+<a href="{% url 'entry-add' category=category.slug %}">Add entry</a>
+
 {% endblock %}

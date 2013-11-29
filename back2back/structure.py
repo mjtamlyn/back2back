@@ -12,8 +12,8 @@ class BaseCategory(object):
     def get_entries(self):
         return Entry.objects.filter(category=self.slug)
 
-    def create_entry(self, name, agb_number=''):
-        Entry.objects.create(category=self.slug, name=name, agb_number=agb_number)
+    def create_entry(self, name, agb_number='', seeding=None):
+        Entry.objects.create(category=self.slug, name=name, agb_number=agb_number, seeding=seeding)
 
 
 class GentsRecurve(BaseCategory):

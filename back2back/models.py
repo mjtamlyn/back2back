@@ -13,6 +13,7 @@ class Entry(models.Model):
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     name = models.CharField(max_length=255)
     agb_number = models.CharField(max_length=20, blank=True, default='', verbose_name='AGB number')
+    seeding = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'entries'

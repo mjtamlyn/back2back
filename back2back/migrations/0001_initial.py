@@ -13,7 +13,8 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('category', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('agb_number', self.gf('django.db.models.fields.CharField')(default='', max_length=20, blank=True)),
+            ('agb_number', self.gf('django.db.models.fields.CharField')(max_length=20, default='', blank=True)),
+            ('seeding', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
         ))
         db.send_create_signal('back2back', ['Entry'])
 
@@ -26,10 +27,11 @@ class Migration(SchemaMigration):
     models = {
         'back2back.entry': {
             'Meta': {'object_name': 'Entry'},
-            'agb_number': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20', 'blank': 'True'}),
+            'agb_number': ('django.db.models.fields.CharField', [], {'max_length': '20', 'default': "''", 'blank': 'True'}),
             'category': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'seeding': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         }
     }
 
