@@ -102,7 +102,6 @@ class FirstRoundMatches(TemplateView):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
         groups = category.get_first_round_groups(entries=entries)
-        print(groups[0].matches())
         return {
             'category': category,
             'groups': groups,
