@@ -61,6 +61,25 @@ class Group(object):
     def entries(self):
         return [e for e in self.all_entries if e.first_group_number == self.number]
 
+    def load_entries(self):
+        return self.category.get_entries().filter(first_group_number=self.number)
+
+    def add_entry(self, entry):
+        entry.first_group_number = self.number
+        entry.save()
+        self.index_entries()
+
+    def remove_entry(self, entry):
+        entry.first_group_number = None
+        entry.save()
+        self.index_entries()
+
+    def index_entries(self):
+        entries = self.load_entries()
+        for i, entry in enumerate(entries):
+            entry.first_group_index = i
+            entry.save()
+
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
 CATEGORIES_BY_SLUG = OrderedDict((category.slug, category) for category in CATEGORIES)
