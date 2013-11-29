@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from .models import Entry
 
 
@@ -26,3 +28,7 @@ class GentsCompound(BaseCategory):
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
+
+
+CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
+CATEGORIES_BY_SLUG = OrderedDict((category.slug, category) for category in CATEGORIES)

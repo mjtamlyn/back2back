@@ -18,11 +18,5 @@ class Entry(models.Model):
         verbose_name_plural = 'entries'
 
     def get_category(self):
-        from . import structure
-        classes = {
-            'gents-recurve': structure.GentsRecurve,
-            'ladies-recurve': structure.LadiesRecurve,
-            'gents-compound': structure.GentsCompound,
-            'ladies-compound': structure.LadiesCompound,
-        }
-        return classes[self.category]()
+        from .structure import CATEGORIES_BY_SLUG
+        return CATEGORIES_BY_SLUG[self.category]
