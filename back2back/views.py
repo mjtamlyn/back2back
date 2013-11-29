@@ -78,8 +78,17 @@ class FirstRoundSetGroups(TemplateView):
 class FirstRoundGroupAdd(View):
     def post(self, request, *args, **kwargs):
         entry = Entry.objects.get(pk=self.request.POST['entry'])
-        print(entry, self.request.POST)
         entry.first_group_number = int(self.request.POST['group'])
+        entry.save()
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_first_round_groups()
+        return HttpResponseRedirect(reverse('first-round-set-groups', kwargs={'category': self.kwargs['category']}))
+
+
+class FirstRoundGroupRemove(View):
+    def post(self, request, *args, **kwargs):
+        entry = Entry.objects.get(pk=self.request.POST['entry'])
+        entry.first_group_number = None
         entry.save()
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         groups = category.get_first_round_groups()

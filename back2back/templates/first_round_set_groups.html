@@ -10,6 +10,13 @@
     <tr>
         <td>{{ entry.seeding }}</td>
         <td>{{ entry.name }}</td>
+        <td>
+            <form method="POST" action="{% url 'first-round-group-remove' category=category.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="entry" value="{{ entry.pk }}">
+                <input type="submit" value="Remove">
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>
