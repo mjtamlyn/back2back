@@ -2,8 +2,9 @@
 import os
 import sys
 
-import envdir
-envdir.read()
+if os.path.exists('envdir'):
+    import envdir
+    envdir.read()
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "back2back.settings")
