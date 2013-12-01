@@ -56,7 +56,7 @@ class Group(object):
 
     @property
     def label(self):
-        return 'ABCDEF'[self.number]
+        return 'ABCDE'[self.number]
 
     def entries(self):
         return [e for e in self.all_entries if e.first_group_number == self.number]
@@ -89,10 +89,14 @@ class Group(object):
             [[0, 2], [1, 4], [3, 5]],
             [[0, 1], [2, 3], [4, 5]],
         ]
-        return [[{
-            'archer_1': entries[match[0]] if len(entries) > match[0] else 'BYE',
-            'archer_2': entries[match[1]] if len(entries) > match[1] else 'BYE',
-        } for match in row] for row in arrangement]
+        return [{
+            'index': i,
+            'matches': [{
+                'archer_1': entries[match[0]] if len(entries) > match[0] else 'BYE',
+                'archer_2': entries[match[1]] if len(entries) > match[1] else 'BYE',
+                'index': j,
+            } for j, match in enumerate(row)],
+        } for i, row in enumerate(arrangement)]
 
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]

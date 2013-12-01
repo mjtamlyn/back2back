@@ -8,9 +8,9 @@
     <caption>{{ group }}</caption>
     {% for time in group.matches %}
     <tr>
-        {% for match in time %}
+        {% for match in time.matches %}
         <td>{{ match.archer_1 }}</td>
-        <td>V</td>
+        <td><a href="{% url 'first-round-match-record' category=category.slug group=group.number match=match.index time=time.index %}" %}>V</a></td>
         <td>{{ match.archer_2 }}</td>
         {% endfor %}
     </tr>

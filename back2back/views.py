@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic import View, TemplateView, ListView, FormView, DeleteView
 
-from .forms import EntryForm
+from .forms import EntryForm, MatchForm
 from .models import Entry
 from .structure import CATEGORIES, CATEGORIES_BY_SLUG
 
@@ -107,3 +107,32 @@ class FirstRoundMatches(TemplateView):
             'groups': groups,
             'unprocessed': [e for e in entries if e.first_group_number is None],
         }
+
+
+class FirstRoundMatchRecord(FormView):
+    template_name = 'first_round_match_record.html'
+    form_class = MatchForm
+
+    def get_form_kwargs(self):
+        self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = self.category.get_first_round_groups()
+        self.group = groups[int(self.kwargs['group'])]
+        self.match = self.group.matches()[int(self.kwargs['time'])]['matches'][int(self.kwargs['match'])]
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'group': self.group,
+            'match': self.match,
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'category': self.category,
+            'group': self.group,
+            'match': self.match,
+        })
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
