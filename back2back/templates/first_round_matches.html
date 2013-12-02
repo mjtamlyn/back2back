@@ -9,9 +9,21 @@
     {% for time in group.matches %}
     <tr>
         {% for match in time.matches %}
-        <td>{{ match.archer_1 }}</td>
-        <td><a href="{% url 'first-round-match-record' category=category.slug group=group.number match=match.index time=time.index %}" %}>V</a></td>
-        <td>{{ match.archer_2 }}</td>
+        <td>
+            {% if match.score_1.is_win %}<b>{% endif %}
+            {{ match.archer_1 }}
+            {% if match.score_1.is_win %}</b>{% endif %}
+        </td>
+        <td>{{ match.score_1.score }}</td>
+        <td>
+            <a href="{% url 'first-round-match-record' category=category.slug group=group.number match=match.index time=time.index %}" %}>V</a>
+        </td>
+        <td>{{ match.score_2.score }}</td>
+        <td>
+            {% if match.score_2.is_win %}<b>{% endif %}
+            {{ match.archer_2 }}
+            {% if match.score_2.is_win %}</b>{% endif %}
+        </td>
         {% endfor %}
     </tr>
     {% endfor %}

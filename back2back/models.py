@@ -8,6 +8,11 @@ CATEGORY_CHOICES = (
     ('ladies-compound', 'Ladies Compound'),
 )
 
+STAGE_CHOICES = (
+    ('first-round', 'First Round'),
+    ('second-round', 'Second Round'),
+)
+
 
 class Entry(models.Model):
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
@@ -29,3 +34,15 @@ class Entry(models.Model):
     def get_category(self):
         from .structure import CATEGORIES_BY_SLUG
         return CATEGORIES_BY_SLUG[self.category]
+
+
+class Score(models.Model):
+    entry = models.ForeignKey(Entry)
+    stage = models.CharField(max_length=255, choices=STAGE_CHOICES)
+    time = models.PositiveIntegerField()
+    opponent = models.ForeignKey(Entry, blank=True, null=True, related_name='opponent_score_set')
+    score = models.PositiveIntegerField()
+    points = models.PositiveIntegerField()
+
+    def is_win(self):
+        return self.points == 2

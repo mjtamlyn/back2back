@@ -21,15 +21,19 @@ class EntryForm(forms.ModelForm):
 
 
 class MatchForm(forms.Form):
-    archer_1 = forms.IntegerField(required=False)
-    archer_2 = forms.IntegerField(required=False)
+    archer_1 = forms.IntegerField()
+    archer_2 = forms.IntegerField()
 
     def __init__(self, group, match, **kwargs):
         self.group = group
         self.match = match
         super().__init__(**kwargs)
         self.fields['archer_1'].label = match['archer_1']
+        if match['score_1']:
+            self.fields['archer_1'].initial = match['score_1'].score
         self.fields['archer_2'].label = match['archer_2']
+        if match['score_2']:
+            self.fields['archer_2'].initial = match['score_2'].score
 
     def save(self):
-        self.group.record_result(match, self.cleaned_data)
+        self.group.record_result(self.match, self.cleaned_data)

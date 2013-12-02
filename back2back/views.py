@@ -136,3 +136,6 @@ class FirstRoundMatchRecord(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('first-round-matches', kwargs={'category': self.kwargs['category']})
