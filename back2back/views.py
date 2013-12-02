@@ -100,12 +100,10 @@ class FirstRoundMatches(TemplateView):
 
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
-        entries = category.get_entries()
-        groups = category.get_first_round_groups(entries=entries)
+        groups = category.get_first_round_groups()
         return {
             'category': category,
             'groups': groups,
-            'unprocessed': [e for e in entries if e.first_group_number is None],
         }
 
 
@@ -139,3 +137,15 @@ class FirstRoundMatchRecord(FormView):
 
     def get_success_url(self):
         return reverse('first-round-matches', kwargs={'category': self.kwargs['category']})
+
+
+class FirstRoundLeaderboard(TemplateView):
+    template_name = 'first_round_leaderboard.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_first_round_groups()
+        return {
+            'category': category,
+            'groups': groups,
+        }

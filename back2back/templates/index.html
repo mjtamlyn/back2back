@@ -27,6 +27,14 @@
                 {% endfor %}
             </ul>
         </li>
+        <li>
+            First round leaderboard
+            <ul>
+                {% for category in categories %}
+                <li><a href="{% url 'first-round-leaderboard' category=category.slug %}">{{ category }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
     </ul>
 </nav>
 {% endblock %}

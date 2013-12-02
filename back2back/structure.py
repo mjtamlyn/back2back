@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+from django.db.models import Sum
+
 from .models import Entry, Score
 
 
@@ -153,6 +155,17 @@ class Group(object):
         if data['archer_1'] < data['archer_2']:
             return {'archer_1': 0, 'archer_2': 2}
 
+    def denorm_group_data(self):
+        for entry in self.entries():
+            totals = Score.objects.filter(stage='first-round', entry=entry).aggregate(points=Sum('points'), score=Sum('score'))
+            entry.first_group_points = totals['points'] or 0
+            entry.first_group_score = totals['score'] or 0
+            entry.save()
+        entries = self.leaderboard(scores=True)
+        for i, entry in enumerate(entries, 1):
+            entry.first_group_placing = i
+            entry.save()
+
     def record_result(self, match, data):
         score_1 = self.get_score(match['archer_1'], match['archer_2'], match['time'])
         score_2 = self.get_score(match['archer_2'], match['archer_1'], match['time'])
@@ -165,6 +178,14 @@ class Group(object):
             score_2.score = data['archer_2']
             score_2.points = result['archer_2']
             score_2.save()
+        self.denorm_group_data()
+
+    def leaderboard(self, scores=False):
+        entries = self.entries()
+        if scores:
+            return sorted(entries, key=lambda e: (e.first_group_points, e.first_group_score), reverse=True)
+        else:
+            return sorted(entries, key=lambda e: (e.first_group_placing or 10))
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
 CATEGORIES_BY_SLUG = OrderedDict((category.slug, category) for category in CATEGORIES)
