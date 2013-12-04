@@ -165,3 +165,10 @@ class SecondRoundSetGroups(TemplateView):
             'category': category,
             'groups': groups,
         }
+
+    def post(self, request, *args, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_first_round_qualifiers(entries=entries)
+        groups = category.set_second_round_groups(qualifiers)
+        return HttpResponseRedirect(reverse('index'))

@@ -46,7 +46,7 @@ class BaseCategory(object):
         while len(qualified) < num_q and counter < len(entries):
             start_value = entries[counter].first_group_score
             second_counter = counter
-            while entries[second_counter].first_group_score == start_value:
+            while second_counter < len(entries) and entries[second_counter].first_group_score == start_value:
                 second_counter += 1
             new_qs = entries[counter:second_counter]
             counter += len(new_qs)
@@ -69,6 +69,14 @@ class BaseCategory(object):
                     entry.second_group_number = group_number
                     groups[group_number].all_entries.append(entry)
             return groups
+
+    def set_second_round_groups(self, qualifiers):
+        groups = self.get_second_round_groups(qualifiers)
+        for i, group in enumerate(groups):
+            for j, entry in enumerate(group.entries()):
+                entry.second_group_number = i
+                entry.second_group_index = j
+                entry.save()
                 
 
 
