@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from django.db.models import Sum
 
+from .forms import MatchForm
 from .models import Entry, Score
 
 
@@ -174,7 +175,7 @@ class Group(object):
         else:
             archer_2 = BYE
             score_2 = ''
-        return {
+        match = {
             'archer_1': archer_1,
             'archer_2': archer_2,
             'score_1': score_1,
@@ -182,6 +183,8 @@ class Group(object):
             'index': match_number,
             'time': time,
         }
+        match['form'] = MatchForm(group=self, match=match)
+        return match
 
     def get_score(self, entry, opponent, time):
         if entry == BYE:
