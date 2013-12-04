@@ -10,6 +10,12 @@ BYE = 'BYE'
 
 class BaseCategory(object):
     max_entries = 30
+    first_round_high_scores = 2
+    second_round_layout = [
+        0, 1, 1, 0, 1, # Winners
+        1, 0, 0, 1, 0, # Runners up
+        1, 0, # High scores
+    ]
 
     def __str__(self):
         return self.name
@@ -24,7 +30,45 @@ class BaseCategory(object):
         num_groups = int(self.max_entries / 6)
         if entries is None:
             entries = self.get_entries()
-        return [Group(category=self, number=i, entries=entries) for i in range(num_groups)]
+        return [Group(category=self, stage='first-round', number=i, entries=entries) for i in range(num_groups)]
+
+    def get_first_round_qualifiers(self, entries):
+        direct_qs = filter(lambda e: (e.first_group_placing is not None and e.first_group_placing <= 2), entries)
+        direct_qs = sorted(direct_qs, key=lambda e: (e.first_group_placing, e.first_group_number))
+        for q in direct_qs:
+            q.qualified = 'Q'
+        entries = filter(lambda e: (e.first_group_placing is not None and e.first_group_placing > 2), entries)
+        entries = sorted(entries, key=lambda e: e.first_group_score, reverse=True)
+        num_q = self.first_round_high_scores
+        qualified = []
+        counter = 0
+        while len(qualified) < num_q and counter < len(entries):
+            start_value = entries[counter].first_group_score
+            second_counter = counter
+            while entries[second_counter].first_group_score == start_value:
+                second_counter += 1
+            new_qs = entries[counter:second_counter]
+            counter += len(new_qs)
+            qualified += new_qs
+            label = 'q' if len(qualified) <= num_q else 'tie ({})'.format(len(new_qs))
+            for q in new_qs:
+                q.qualified = label
+        return direct_qs + qualified
+
+    def get_second_round_groups(self, qualifiers=None):
+        if qualifiers is not None:
+            groups = [
+                Group(category=self, stage='second-round', number=0, entries=[]),
+                Group(category=self, stage='second-round', number=1, entries=[]),
+            ]
+            layout = self.second_round_layout
+            for i, entry in enumerate(qualifiers):
+                if entry.qualified in ['Q', 'q']:
+                    group_number = layout[i]
+                    entry.second_group_number = group_number
+                    groups[group_number].all_entries.append(entry)
+            return groups
+                
 
 
 class GentsRecurve(BaseCategory):
@@ -36,6 +80,7 @@ class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
     max_entries = 18
+    first_round_high_scores = 6
 
 
 class GentsCompound(BaseCategory):
@@ -47,12 +92,14 @@ class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
     max_entries = 18
+    first_round_high_scores = 6
 
 
 
 class Group(object):
-    def __init__(self, category, number, entries):
+    def __init__(self, category, stage, number, entries):
         self.category = category
+        self.stage = stage
         self.number = number
         self.all_entries = entries
 
@@ -64,7 +111,10 @@ class Group(object):
         return 'ABCDE'[self.number]
 
     def entries(self):
-        return [e for e in self.all_entries if e.first_group_number == self.number]
+        if self.stage == 'first-round':
+            return [e for e in self.all_entries if e.first_group_number == self.number]
+        else:
+            return [e for e in self.all_entries if e.second_group_number == self.number]
 
     def load_entries(self):
         return self.category.get_entries().filter(first_group_number=self.number)
@@ -181,11 +231,13 @@ class Group(object):
         self.denorm_group_data()
 
     def leaderboard(self, scores=False):
+        """If you don't pass scores=True this will use the denormed placing field."""
         entries = self.entries()
         if scores:
             return sorted(entries, key=lambda e: (e.first_group_points, e.first_group_score), reverse=True)
         else:
             return sorted(entries, key=lambda e: (e.first_group_placing or 10))
+
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
 CATEGORIES_BY_SLUG = OrderedDict((category.slug, category) for category in CATEGORIES)

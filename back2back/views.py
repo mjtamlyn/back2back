@@ -144,7 +144,23 @@ class FirstRoundLeaderboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
-        groups = category.get_first_round_groups()
+        entries = category.get_entries()
+        groups = category.get_first_round_groups(entries=entries)
+        category.get_first_round_qualifiers(entries=entries)
+        return {
+            'category': category,
+            'groups': groups,
+        }
+
+
+class SecondRoundSetGroups(TemplateView):
+    template_name = 'second_round_set_groups.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_first_round_qualifiers(entries=entries)
+        groups = category.get_second_round_groups(qualifiers)
         return {
             'category': category,
             'groups': groups,
