@@ -102,6 +102,8 @@ class FirstRoundMatches(TemplateView):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         groups = category.get_first_round_groups()
         return {
+            'round': 'First',
+            'match_url_name': 'first-round-match-record',
             'category': category,
             'groups': groups,
         }
@@ -110,10 +112,14 @@ class FirstRoundMatches(TemplateView):
 class FirstRoundMatchRecord(FormView):
     template_name = 'first_round_match_record.html'
     form_class = MatchForm
+    success_url_name = 'first-round-matches'
+
+    def get_groups(self):
+        return self.category.get_first_round_groups()
 
     def get_form_kwargs(self):
         self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
-        groups = self.category.get_first_round_groups()
+        groups = self.get_groups()
         self.group = groups[int(self.kwargs['group'])]
         self.match = self.group.matches()[int(self.kwargs['time'])]['matches'][int(self.kwargs['match'])]
         kwargs = super().get_form_kwargs()
@@ -136,7 +142,7 @@ class FirstRoundMatchRecord(FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('first-round-matches', kwargs={'category': self.kwargs['category']})
+        return reverse(self.success_url_name, kwargs={'category': self.kwargs['category']})
 
 
 class FirstRoundLeaderboard(TemplateView):
@@ -148,6 +154,7 @@ class FirstRoundLeaderboard(TemplateView):
         groups = category.get_first_round_groups(entries=entries)
         category.get_first_round_qualifiers(entries=entries)
         return {
+            'round': 'First',
             'category': category,
             'groups': groups,
         }
@@ -172,3 +179,37 @@ class SecondRoundSetGroups(TemplateView):
         qualifiers = category.get_first_round_qualifiers(entries=entries)
         groups = category.set_second_round_groups(qualifiers)
         return HttpResponseRedirect(reverse('index'))
+
+
+class SecondRoundMatches(TemplateView):
+    template_name = 'first_round_matches.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_second_round_groups()
+        return {
+            'round': 'Second',
+            'match_url_name': 'second-round-match-record',
+            'category': category,
+            'groups': groups,
+        }
+
+
+class SecondRoundMatchRecord(FirstRoundMatchRecord):
+    success_url_name = 'second-round-matches'
+
+    def get_groups(self):
+        return self.category.get_second_round_groups()
+
+
+class SecondRoundLeaderboard(TemplateView):
+    template_name = 'second_round_leaderboard.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_second_round_groups()
+        return {
+            'round': 'Second',
+            'category': category,
+            'groups': groups,
+        }

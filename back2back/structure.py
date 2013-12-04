@@ -56,7 +56,7 @@ class BaseCategory(object):
                 q.qualified = label
         return direct_qs + qualified
 
-    def get_second_round_groups(self, qualifiers=None):
+    def get_second_round_groups(self, qualifiers=None, entries=None):
         if qualifiers is not None:
             groups = [
                 Group(category=self, stage='second-round', number=0, entries=[]),
@@ -69,6 +69,12 @@ class BaseCategory(object):
                     entry.second_group_number = group_number
                     groups[group_number].all_entries.append(entry)
             return groups
+        if entries is None:
+            entries = self.get_entries()
+        return [
+            Group(category=self, stage='second-round', number=0, entries=entries),
+            Group(category=self, stage='second-round', number=1, entries=entries),
+        ]
 
     def set_second_round_groups(self, qualifiers):
         groups = self.get_second_round_groups(qualifiers)
@@ -90,6 +96,11 @@ class LadiesRecurve(BaseCategory):
     slug = 'ladies-recurve'
     max_entries = 18
     first_round_high_scores = 6
+    second_round_layout = [
+        0, 1, 1, # Winners
+        1, 0, 0, # Runners up
+        1, 0, 0, 1, 1, 0, # High scores
+    ]
 
 
 class GentsCompound(BaseCategory):
@@ -102,7 +113,11 @@ class LadiesCompound(BaseCategory):
     slug = 'ladies-compound'
     max_entries = 18
     first_round_high_scores = 6
-
+    second_round_layout = [
+        0, 1, 1, # Winners
+        1, 0, 0, # Runners up
+        1, 0, 0, 1, 1, 0, # High scores
+    ]
 
 
 class Group(object):
@@ -117,7 +132,9 @@ class Group(object):
 
     @property
     def label(self):
-        return 'ABCDE'[self.number]
+        if self.stage == 'first-round':
+            return 'ABCDE'[self.number]
+        return 'FG'[self.number]
 
     def entries(self):
         if self.stage == 'first-round':
@@ -146,7 +163,7 @@ class Group(object):
 
     def matches(self):
         entries = self.entries()
-        scores = Score.objects.filter(entry__in=entries, stage='first-round')
+        scores = Score.objects.filter(entry__in=entries, stage=self.stage)
         scores_by_entry = {}
         for score in scores:
             if score.entry not in scores_by_entry:
@@ -198,9 +215,9 @@ class Group(object):
         if entry == BYE:
             return None
         try:
-            score = Score.objects.get(entry=entry, time=time, stage='first-round')
+            score = Score.objects.get(entry=entry, time=time, stage=self.stage)
         except Score.DoesNotExist:
-            score = Score(entry=entry, time=time, stage='first-round')
+            score = Score(entry=entry, time=time, stage=self.stage)
         score.opponent = None if opponent == BYE else opponent
         return score
 
@@ -218,13 +235,20 @@ class Group(object):
 
     def denorm_group_data(self):
         for entry in self.entries():
-            totals = Score.objects.filter(stage='first-round', entry=entry).aggregate(points=Sum('points'), score=Sum('score'))
-            entry.first_group_points = totals['points'] or 0
-            entry.first_group_score = totals['score'] or 0
+            totals = Score.objects.filter(stage=self.stage, entry=entry).aggregate(points=Sum('points'), score=Sum('score'))
+            if self.stage == 'first-round':
+                entry.first_group_points = totals['points'] or 0
+                entry.first_group_score = totals['score'] or 0
+            else:
+                entry.second_group_points = totals['points'] or 0
+                entry.second_group_score = totals['score'] or 0
             entry.save()
         entries = self.leaderboard(scores=True)
         for i, entry in enumerate(entries, 1):
-            entry.first_group_placing = i
+            if self.stage == 'first-round':
+                entry.first_group_placing = i
+            else:
+                entry.second_group_placing = i
             entry.save()
 
     def record_result(self, match, data):
@@ -244,10 +268,16 @@ class Group(object):
     def leaderboard(self, scores=False):
         """If you don't pass scores=True this will use the denormed placing field."""
         entries = self.entries()
-        if scores:
-            return sorted(entries, key=lambda e: (e.first_group_points, e.first_group_score), reverse=True)
+        if self.stage == 'first-round':
+            if scores:
+                return sorted(entries, key=lambda e: (e.first_group_points, e.first_group_score), reverse=True)
+            else:
+                return sorted(entries, key=lambda e: (e.first_group_placing or 10))
         else:
-            return sorted(entries, key=lambda e: (e.first_group_placing or 10))
+            if scores:
+                return sorted(entries, key=lambda e: (e.second_group_points, e.second_group_score), reverse=True)
+            else:
+                return sorted(entries, key=lambda e: (e.second_group_placing or 10))
 
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
