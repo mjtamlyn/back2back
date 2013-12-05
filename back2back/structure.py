@@ -222,6 +222,8 @@ class Group(object):
         return score
 
     def get_result(self, match, data):
+        if data['archer_1'] is None:
+            return None
         if match['archer_1'] == 'BYE':
             return {'archer_2': 2}
         if match['archer_2'] == 'BYE':
@@ -255,14 +257,20 @@ class Group(object):
         score_1 = self.get_score(match['archer_1'], match['archer_2'], match['time'])
         score_2 = self.get_score(match['archer_2'], match['archer_1'], match['time'])
         result = self.get_result(match, data)
-        if score_1 is not None:
-            score_1.score = data['archer_1']
-            score_1.points = result['archer_1']
-            score_1.save()
-        if score_2 is not None:
-            score_2.score = data['archer_2']
-            score_2.points = result['archer_2']
-            score_2.save()
+        if result is None:
+            if score_1 is not None and score_1.pk:
+                score_1.delete()
+            if score_2 is not None and score_2.pk:
+                score_2.delete()
+        else:
+            if score_1 is not None:
+                score_1.score = data['archer_1']
+                score_1.points = result['archer_1']
+                score_1.save()
+            if score_2 is not None:
+                score_2.score = data['archer_2']
+                score_2.points = result['archer_2']
+                score_2.save()
         self.denorm_group_data()
 
     def leaderboard(self, scores=False):

@@ -21,8 +21,8 @@ class EntryForm(forms.ModelForm):
 
 
 class MatchForm(forms.Form):
-    archer_1 = forms.IntegerField()
-    archer_2 = forms.IntegerField()
+    archer_1 = forms.IntegerField(required=False)
+    archer_2 = forms.IntegerField(required=False)
 
     def __init__(self, group, match, **kwargs):
         self.group = group
@@ -34,6 +34,14 @@ class MatchForm(forms.Form):
         self.fields['archer_2'].label = match['archer_2']
         if match['score_2']:
             self.fields['archer_2'].initial = match['score_2'].score
+
+    def clean(self):
+        if 'archer_1' in self.cleaned_data and 'archer_2' in self.cleaned_data:
+            a1 = self.cleaned_data['archer_1']
+            a2 = self.cleaned_data['archer_2']
+            if (a1 is None and a2 is not None) or (a1 is not None and a2 is None):
+                raise forms.ValidationError('Please record one result or neither.')
+        return self.cleaned_data
 
     def save(self):
         self.group.record_result(self.match, self.cleaned_data)
