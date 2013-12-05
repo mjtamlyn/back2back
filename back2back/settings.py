@@ -1,5 +1,6 @@
 import os
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as DEFAULT_TEMPLATE_CONTEXT_PROCESSORS
 import dj_database_url
 
 
@@ -38,6 +39,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'back2back.urls'
 WSGI_APPLICATION = 'back2back.wsgi.application'
+
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_TEMPLATE_CONTEXT_PROCESSORS + ('back2back.context_processors.categories',)
 
 # Database
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost/back2back')}
