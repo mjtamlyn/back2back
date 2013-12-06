@@ -1,38 +1,45 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}compiled/css/base.css">
+    </head>
     <body>
-        <h1>Back2Back Scoring System</h1>
-        <nav>
-            <a href="{% url 'index' %}">Index</a>
-            <table>
-                <tr>
-                    <th rowspan="2">Manage Entries</th>
-                    <th colspan="3">First round</th>
-                    <th colspan="3">Second round</th>
-                </tr>
-                <tr>
-                    <th>Groups</th>
-                    <th>Matches</th>
-                    <th>Leaderboard</th>
-                    <th>Groups</th>
-                    <th>Matches</th>
-                    <th>Leaderboard</th>
-                </tr>
-                {% for category in CATEGORIES %}
-                    <tr>
-                        <td><a href="{% url 'entry-list' category=category.slug %}">{{ category }}</a></td>
-                        <td><a href="{% url 'first-round-set-groups' category=category.slug %}">{{ category }}</a></td>
-                        <td><a href="{% url 'first-round-matches' category=category.slug %}">{{ category }}</a></td>
-                        <td><a href="{% url 'first-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
-                        <td><a href="{% url 'second-round-set-groups' category=category.slug %}">{{ category }}</a></td>
-                        <td><a href="{% url 'second-round-matches' category=category.slug %}">{{ category }}</a></td>
-                        <td><a href="{% url 'second-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </nav>
-        <h2>{% block heading %}{% endblock %}</h2>
-        {% block content %}{% endblock %}
+        <div class="container">
+            <h1><a href="{% url 'index' %}">Back2Back Scoring System</a></h1>
+            <nav>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Manage Entries</th>
+                            <th colspan="3">First round</th>
+                            <th colspan="3">Second round</th>
+                        </tr>
+                        <tr>
+                            <th>Groups</th>
+                            <th>Matches</th>
+                            <th>Leaderboard</th>
+                            <th>Groups</th>
+                            <th>Matches</th>
+                            <th>Leaderboard</th>
+                        </tr>
+                    </thead>
+                    {% for category in CATEGORIES %}
+                        <tr>
+                            <td><a href="{% url 'entry-list' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'first-round-set-groups' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'first-round-matches' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'first-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'second-round-set-groups' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'second-round-matches' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'second-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </nav>
+            <h2>{% block heading %}{% endblock %}</h2>
+            {% block content %}{% endblock %}
+        </div>
     </body>
 </html>
 

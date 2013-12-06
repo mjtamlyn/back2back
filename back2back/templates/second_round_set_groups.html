@@ -3,20 +3,24 @@
 {% block heading %}Confirm second round groups for {{ category }}{% endblock %}
 
 {% block content %}
+<div class="row">
 {% for group in groups %}
-<table>
-    <caption>{{ group }}</caption>
-    {% for entry in group.entries %}
-    <tr>
-        <td>{{ entry.seeding }}</td>
-        <td>{{ entry.qualified }}</td>
-        <td>{{ entry.name }}</td>
-        <td>{{ entry.first_group_points }}</td>
-        <td>{{ entry.first_group_score }}</td>
-    </tr>
+    <div class="col-sm-4">
+        <table class="table">
+            <caption>{{ group }}</caption>
+            {% for entry in group.entries %}
+            <tr>
+                <td>{{ entry.seeding }}</td>
+                <td>{{ entry.qualified }}</td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.first_group_points }}</td>
+                <td>{{ entry.first_group_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
     {% endfor %}
-</table>
-{% endfor %}
+</div>
 <form method="POST">
     {% csrf_token %}
     <input type="submit" value="Confirm">

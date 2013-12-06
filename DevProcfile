@@ -1,1 +1,2 @@
 server: python manage.py runserver
+compass: compass watch

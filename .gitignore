@@ -1,2 +1,4 @@
 node_modules/*
 envdir/*
+.sass-cache
+back2back/static/compiled
