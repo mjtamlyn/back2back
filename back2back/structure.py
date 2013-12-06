@@ -33,28 +33,35 @@ class BaseCategory(object):
             entries = self.get_entries()
         return [Group(category=self, stage='first-round', number=i, entries=entries) for i in range(num_groups)]
 
+    def get_top_entries(self, entries, number, key, label):
+        entries = sorted(entries, key=key, reverse=True)
+        result = []
+        start = 0
+        while len(result) < number and start < len(entries):
+            scan = start
+            start_value = key(entries[start])
+            while scan < len(entries) and key(entries[scan]) == start_value:
+                scan += 1
+            to_add = entries[start:scan]
+            result += to_add
+            start += len(to_add)
+            actual_label = label if len(result) <= number else '{} (tie {})'.format(label, len(to_add))
+            for e in to_add:
+                e.qualified = actual_label
+        return result
+
     def get_first_round_qualifiers(self, entries):
-        direct_qs = filter(lambda e: (e.first_group_placing is not None and e.first_group_placing <= 2), entries)
-        direct_qs = sorted(direct_qs, key=lambda e: (e.first_group_placing, e.first_group_number))
-        for q in direct_qs:
-            q.qualified = 'Q'
-        entries = filter(lambda e: (e.first_group_placing is not None and e.first_group_placing > 2), entries)
+        groups = self.get_first_round_groups(entries=entries)
+        direct_qs = []
+        for group in groups:
+            group_entries = group.leaderboard()
+            top_ranked = self.get_top_entries(group_entries, number=2, key=lambda e: (e.first_group_points, e.first_group_score), label='Q')
+            direct_qs += top_ranked
+        entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
         entries = sorted(entries, key=lambda e: e.first_group_score, reverse=True)
-        num_q = self.first_round_high_scores
-        qualified = []
-        counter = 0
-        while len(qualified) < num_q and counter < len(entries):
-            start_value = entries[counter].first_group_score
-            second_counter = counter
-            while second_counter < len(entries) and entries[second_counter].first_group_score == start_value:
-                second_counter += 1
-            new_qs = entries[counter:second_counter]
-            counter += len(new_qs)
-            qualified += new_qs
-            label = 'q' if len(qualified) <= num_q else 'tie ({})'.format(len(new_qs))
-            for q in new_qs:
-                q.qualified = label
-        return direct_qs + qualified
+        left_to_qualify = self.first_round_high_scores - (len(direct_qs) - self.max_entries / 6 * 2)
+        other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.first_group_score, label='q')
+        return direct_qs + other_qs
 
     def get_second_round_groups(self, qualifiers=None, entries=None):
         if qualifiers is not None:
@@ -83,8 +90,16 @@ class BaseCategory(object):
                 entry.second_group_number = i
                 entry.second_group_index = j
                 entry.save()
-                
 
+    def get_second_round_qualifiers(self, entries):
+        groups = self.get_second_round_groups(entries=entries)
+        direct_qs = []
+        for group in groups:
+            group_entries = group.leaderboard()
+            top_ranked = self.get_top_entries(group_entries, number=2, key=lambda e: (e.second_group_points, e.second_group_score), label='Q')
+            direct_qs += top_ranked
+        return direct_qs
+                
 
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'

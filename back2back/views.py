@@ -204,7 +204,9 @@ class SecondRoundLeaderboard(TemplateView):
 
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
-        groups = category.get_second_round_groups()
+        entries = category.get_entries()
+        groups = category.get_second_round_groups(entries=entries)
+        qualifiers = category.get_second_round_qualifiers(entries=entries)
         return {
             'round': 'Second',
             'category': category,

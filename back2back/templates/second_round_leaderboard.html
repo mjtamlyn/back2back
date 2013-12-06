@@ -8,6 +8,7 @@
     <caption>{{ group }}</caption>
     {% for entry in group.leaderboard %}
     <tr>
+        <td>{{ entry.qualified }}</td>
         <td>{{ entry }}</td>
         <td>{{ entry.second_group_points }}</td>
         <td>{{ entry.second_group_score }}</td>
