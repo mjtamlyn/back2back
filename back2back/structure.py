@@ -149,7 +149,8 @@ class Group(object):
     def label(self):
         if self.stage == 'first-round':
             return 'ABCDE'[self.number]
-        return 'FG'[self.number]
+        labels = 'ABCDEFG'[int(self.category.max_entries / 6):]
+        return labels[self.number]
 
     def entries(self):
         if self.stage == 'first-round':
