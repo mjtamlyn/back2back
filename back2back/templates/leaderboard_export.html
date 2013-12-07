@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block nav %}{% endblock %}
+
+{% block heading %}Leaderboard{% endblock %}
+
+{% block content %}
+<marquee direction="up" height="700px">
+    {% for category in leaderboards %}
+    <h3>{{ category.category }}</h3>
+    <div class="row">
+        {% for group in category.groups %}
+        <div class="col-sm-4">
+            <table class="table">
+                <caption>{{ group }}</caption>
+                {% for entry in group.leaderboard %}
+                <tr>
+                    <td>{{ entry.qualified }}</td>
+                    <td>{{ entry }}</td>
+                    <td>{{ entry.first_group_points }}</td>
+                    <td>{{ entry.first_group_score }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</marquee>
+{% endblock %}

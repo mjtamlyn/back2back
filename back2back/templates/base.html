@@ -6,7 +6,8 @@
     </head>
     <body>
         <div class="container">
-            <h1><a href="{% url 'index' %}">Back2Back Scoring System</a></h1>
+            <h1><a href="{% url 'index' %}">Back2Back</a></h1>
+            {% block nav %}
             <nav>
                 <table class="table table-condensed">
                     <thead>
@@ -37,6 +38,7 @@
                     {% endfor %}
                 </table>
             </nav>
+            {% endblock %}
             <h2>{% block heading %}{% endblock %}</h2>
             {% block content %}{% endblock %}
         </div>

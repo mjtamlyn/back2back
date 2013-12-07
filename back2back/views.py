@@ -167,6 +167,21 @@ class FirstRoundLeaderboard(TemplateView):
         }
 
 
+class FirstRoundLeaderboardExport(TemplateView):
+    template_name = 'leaderboard_export.html'
+
+    def get_context_data(self, **kwargs):
+        leaderboards = []
+        for category in CATEGORIES:
+            entries = category.get_entries()
+            groups = category.get_first_round_groups(entries=entries)
+            category.get_first_round_qualifiers(entries=entries)
+            leaderboards.append({'category': category, 'groups': groups})
+        return {
+            'leaderboards': leaderboards,
+        }
+
+
 class SecondRoundSetGroups(TemplateView):
     template_name = 'second_round_set_groups.html'
 
@@ -223,4 +238,18 @@ class SecondRoundLeaderboard(TemplateView):
             'round': 'Second',
             'category': category,
             'groups': groups,
+        }
+
+
+class SecondRoundLeaderboardExport(FirstRoundLeaderboardExport):
+
+    def get_context_data(self, **kwargs):
+        leaderboards = []
+        for category in CATEGORIES:
+            entries = category.get_entries()
+            groups = category.get_second_round_groups(entries=entries)
+            category.get_second_round_qualifiers(entries=entries)
+            leaderboards.append({'category': category, 'groups': groups})
+        return {
+            'leaderboards': leaderboards,
         }

@@ -20,11 +20,13 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/first-round/matches/$', views.FirstRoundMatches.as_view(), name='first-round-matches'),
     url(r'^(?P<category>[a-z-]+)/first-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.FirstRoundMatchRecord.as_view(), name='first-round-match-record'),
     url(r'^(?P<category>[a-z-]+)/first-round/leaderboard/$', views.FirstRoundLeaderboard.as_view(), name='first-round-leaderboard'),
+    url(r'^first-round/leaderboard/$', views.FirstRoundLeaderboardExport.as_view(), name='first-round-leaderboard-export'),
 
     url(r'^(?P<category>[a-z-]+)/second-round/set-groups/$', views.SecondRoundSetGroups.as_view(), name='second-round-set-groups'),
     url(r'^(?P<category>[a-z-]+)/second-round/matches/$', views.SecondRoundMatches.as_view(), name='second-round-matches'),
     url(r'^(?P<category>[a-z-]+)/second-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.SecondRoundMatchRecord.as_view(), name='second-round-match-record'),
     url(r'^(?P<category>[a-z-]+)/second-round/leaderboard/$', views.SecondRoundLeaderboard.as_view(), name='second-round-leaderboard'),
+    url(r'^second-round/leaderboard/$', views.SecondRoundLeaderboardExport.as_view(), name='second-round-leaderboard-export'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
