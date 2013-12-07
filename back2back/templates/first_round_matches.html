@@ -4,8 +4,8 @@
 
 {% block content %}
 {% for time in matches %}
-<div class="row">
-    <h3>Match {{ forloop.counter }}</h3>
+<h3>Match {{ forloop.counter }}</h3>
+<div class="row" id="match-{{ forloop.counter0 }}">
     {% for group in time %}
     <div class="col-sm-6">
         <table class="table table-striped table-bordered">

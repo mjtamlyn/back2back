@@ -149,7 +149,7 @@ class FirstRoundMatchRecord(FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse(self.success_url_name, kwargs={'category': self.kwargs['category']})
+        return reverse(self.success_url_name, kwargs={'category': self.kwargs['category']}) + '#match-' + self.kwargs['time']
 
 
 class FirstRoundLeaderboard(TemplateView):
