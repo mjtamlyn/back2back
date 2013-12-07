@@ -95,14 +95,24 @@ class FirstRoundGroupRemove(View):
 class FirstRoundMatches(TemplateView):
     template_name = 'first_round_matches.html'
 
+    def rearrange_matches(self, groups):
+        """Rearrange the matches so they're ordered by time not group."""
+        times = [[], [], [], [], []]
+        for group in groups:
+            for matches in group.matches():
+                times[matches['index']].append({'group': group, 'matches': matches['matches']})
+        return times
+
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         groups = category.get_first_round_groups()
+        matches = self.rearrange_matches(groups)
         return {
             'round': 'First',
             'match_url_name': 'first-round-match-record',
             'category': category,
             'groups': groups,
+            'matches': matches,
         }
 
 
@@ -178,17 +188,19 @@ class SecondRoundSetGroups(TemplateView):
         return HttpResponseRedirect(reverse('index'))
 
 
-class SecondRoundMatches(TemplateView):
+class SecondRoundMatches(FirstRoundMatches):
     template_name = 'first_round_matches.html'
 
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         groups = category.get_second_round_groups()
+        matches = self.rearrange_matches(groups)
         return {
             'round': 'Second',
             'match_url_name': 'second-round-match-record',
             'category': category,
             'groups': groups,
+            'matches': matches,
         }
 
 
