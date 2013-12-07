@@ -178,6 +178,10 @@ class Group(object):
 
     def matches(self):
         entries = self.entries()
+        if self.stage == 'first-round':
+            entries = sorted(entries, key=lambda e: e.first_group_index)
+        else:
+            entries = sorted(entries, key=lambda e: e.second_group_index)
         scores = Score.objects.filter(entry__in=entries, stage=self.stage)
         scores_by_entry = {}
         for score in scores:
@@ -185,11 +189,11 @@ class Group(object):
                 scores_by_entry[score.entry] = {}
             scores_by_entry[score.entry][score.time] = score
         arrangement = [
-            [[0, 5], [1, 2], [3, 4]],
-            [[0, 4], [1, 3], [2, 5]],
-            [[0, 3], [1, 5], [2, 4]],
-            [[0, 2], [1, 4], [3, 5]],
-            [[0, 1], [2, 3], [4, 5]],
+            [[0, 2], [3, 4], [5, 1]],
+            [[3, 1], [4, 0], [2, 5]],
+            [[5, 4], [1, 2], [0, 3]],
+            [[1, 0], [5, 3], [4, 2]],
+            [[2, 3], [0, 5], [1, 4]],
         ]
         return [{
             'index': i,
