@@ -29,5 +29,7 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/second-round/leaderboard/$', views.SecondRoundLeaderboard.as_view(), name='second-round-leaderboard'),
     url(r'^second-round/leaderboard/$', views.SecondRoundLeaderboardExport.as_view(), name='second-round-leaderboard-export'),
 
+    url(r'^results/$', views.ResultsPDF.as_view(), name='results-pdf'),
+
     url(r'^admin/', include(admin.site.urls)),
 )

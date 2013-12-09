@@ -1,5 +1,8 @@
+import subprocess
+
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, ListView, FormView, DeleteView
 
 from .forms import EntryForm, MatchForm
@@ -267,3 +270,35 @@ class SecondRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
         return {
             'leaderboards': leaderboards,
         }
+
+
+class ResultsPDF(TemplateView):
+    response_class = HttpResponse
+    content_type = 'application/pdf'
+    template_name = 'results.tex'
+
+    def get_context_data(self, **kwargs):
+        results = []
+        for category in CATEGORIES:
+            entries = category.get_entries()
+            first_groups = category.get_first_round_groups(entries=entries)
+            category.get_first_round_qualifiers(entries=entries)
+            results.append({
+                'category': category,
+                'first_groups': first_groups,
+            })
+        return {'results': results}
+
+    def render_tex(self, tex):
+        with open('/tmp/tmp.tex', 'w') as f:
+            f.write(tex)
+        process = subprocess.call(['texi2pdf', '/tmp/tmp.tex', '-o', '/tmp/tmp.pdf'])
+        with open('/tmp/tmp.pdf', 'rb') as f:
+            content = f.read()
+        return content
+
+    def render_to_response(self, context, **response_kwargs):
+        tex = render_to_string(self.get_template_names(), context)
+        content = self.render_tex(tex)
+        response_kwargs.setdefault('content_type', self.content_type)
+        return self.response_class(content, **response_kwargs)

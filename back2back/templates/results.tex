@@ -1,0 +1,42 @@
+\documentclass[a4paper]{article}
+\usepackage[cm]{fullpage}
+\usepackage{rotating}
+\usepackage{tabu}
+
+\begin{document}
+
+\textsc{\LARGE Back2Back 2013 Results}\\[0.5cm]
+
+{% for category in results %}
+\textsc{\large {{ category.category }}}\\[0.3cm]
+
+\textsc{First group stage}\\[0.2cm]
+
+{% for group in category.first_groups %}
+
+    \begin{tabu} spread 10cm { X[3l] | X[c] | X[c] | X[c] | X[c] | X[c] | X[c] }
+        \textbf{ {{ group }} }
+        {% for entry in group.entries_by_index %}& 
+        \begin{sideways}
+        {{ entry }}
+        \end{sideways}
+        {% endfor %} \\
+        {% for entry in group.entries_with_matches %}
+        \hline
+            {{ entry.entry }} 
+            {% for match in entry.matches %}& 
+                {% if match %}{{ match }}{% endif %}
+            {% endfor %} \\
+        {% endfor %}
+    \end{tabu}\\[0.5cm]
+
+    \begin{tabular}{ r l c c }
+        {% for entry in group.leaderboard %}
+        {{ entry.qualified }} & {{ entry }} & {{ entry.first_group_points }} & {{ entry.first_group_score }} \\
+        {% endfor %}
+    \end{tabular}\\[0.5cm]
+{% endfor %}
+
+{% endfor %}
+
+\end{document}

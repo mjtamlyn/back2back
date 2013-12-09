@@ -201,6 +201,24 @@ class Group(object):
             'matches': [self.get_match(archer_1, archer_2, entries=entries, scores=scores_by_entry, time=i, match_number=j) for j, (archer_1, archer_2) in enumerate(row)],
         } for i, row in enumerate(arrangement)]
 
+    def entries_by_index(self):
+        return sorted(self.entries(), key=lambda e: e.first_group_index)
+
+    def entries_with_matches(self):
+        """Used for results tables."""
+        matches = self.matches()
+        entries = self.entries_by_index()
+        results = []
+        for entry in entries:
+            results.append({'entry': entry, 'matches': [None, None, None, None, None, None]})
+        for time in matches:
+            for match in time['matches']:
+                index_1 = match['archer_1'].first_group_index
+                index_2 = match['archer_2'].first_group_index
+                results[index_1]['matches'][index_2] = '{} - {}'.format(match['score_1'].score, match['score_2'].score)
+                results[index_2]['matches'][index_1] = '{} - {}'.format(match['score_2'].score, match['score_1'].score)
+        return results
+
     def get_match(self, archer_1, archer_2, entries, scores, time, match_number):
         if len(entries) > archer_1:
             archer_1 = entries[archer_1]
