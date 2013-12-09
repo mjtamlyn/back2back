@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{% url 'first-round-leaderboard-export' %}">First round</a>
+<h3>Display Leaderboards</h3>
+<a href="{% url 'first-round-leaderboard-export-compound' %}">First round (Compound)</a><br>
+<a href="{% url 'first-round-leaderboard-export-recurve' %}">First round (Recurve)</a>
+<br>
 <a href="{% url 'second-round-leaderboard-export' %}">Second round</a>
 {% endblock %}

@@ -167,12 +167,26 @@ class FirstRoundLeaderboard(TemplateView):
         }
 
 
-class FirstRoundLeaderboardExport(TemplateView):
+class FirstRoundLeaderboardExportRecurve(TemplateView):
     template_name = 'leaderboard_export.html'
 
     def get_context_data(self, **kwargs):
         leaderboards = []
-        for category in CATEGORIES:
+        for category in CATEGORIES[:2]:
+            entries = category.get_entries()
+            groups = category.get_first_round_groups(entries=entries)
+            category.get_first_round_qualifiers(entries=entries)
+            leaderboards.append({'category': category, 'groups': groups})
+        return {
+            'leaderboards': leaderboards,
+        }
+
+
+class FirstRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
+
+    def get_context_data(self, **kwargs):
+        leaderboards = []
+        for category in CATEGORIES[2:]:
             entries = category.get_entries()
             groups = category.get_first_round_groups(entries=entries)
             category.get_first_round_qualifiers(entries=entries)
@@ -241,7 +255,7 @@ class SecondRoundLeaderboard(TemplateView):
         }
 
 
-class SecondRoundLeaderboardExport(FirstRoundLeaderboardExport):
+class SecondRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
 
     def get_context_data(self, **kwargs):
         leaderboards = []
