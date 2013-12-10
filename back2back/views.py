@@ -291,6 +291,7 @@ class ResultsPDF(TemplateView):
                 'category': category,
                 'first_groups': first_groups,
                 'second_groups': second_groups,
+                'finals': category.get_finals_matches(entries=entries)
             })
         return {'results': results}
 

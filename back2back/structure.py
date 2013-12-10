@@ -99,6 +99,21 @@ class BaseCategory(object):
             top_ranked = self.get_top_entries(group_entries, number=2, key=lambda e: (e.second_group_points, e.second_group_score), label='Q')
             direct_qs += top_ranked
         return direct_qs
+
+    def get_finals_matches(self, entries):
+        matches = []
+        names = ['Semi-final 1', 'Semi-final 2', 'Bronze final', 'Final']
+        fields = ['semi_1_points', 'semi_2_points', 'bronze_points', 'gold_points']
+        for name, field in zip(names, fields):
+            match = {'name': name}
+            match_entries = list(filter(lambda e: getattr(e, field) is not None, entries))
+            if len(match_entries) == 2:
+                match['archer_1'] = match_entries[0]
+                match['archer_2'] = match_entries[1]
+                match['score_1'] = getattr(match_entries[0], field)
+                match['score_2'] = getattr(match_entries[1], field)
+            matches.append(match)
+        return matches
                 
 
 class GentsRecurve(BaseCategory):

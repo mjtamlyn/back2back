@@ -81,15 +81,9 @@ Top two in each group qualify for the finals.\\
 \subsection*{Finals}
 
 Semi-finals and finals shot to set format.\\
-\\
-\textbf{Semi-final 1}\\
-George Harding 6 - 2 Ashe Morgan\\
-\textbf{Semi-final 2}\\
-George Harding 6 - 2 Ashe Morgan\\
-\textbf{Bronze}\\
-George Harding 6 - 2 Ashe Morgan\\
-\textbf{Final}\\
-George Harding 6 - 2 Ashe Morgan\\
+\\ {% for match in category.finals %}
+    \textbf{% templatetag openbrace %}{{ match.name }}}\\
+    {{ match.archer_1 }} {{ match.score_1 }} - {{ match.score_2 }} {{ match.archer_2 }}\\ {% endfor %}
 
 \pagebreak
 
