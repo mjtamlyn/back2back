@@ -1,21 +1,22 @@
 \documentclass[a4paper]{article}
 \usepackage[cm]{fullpage}
 \usepackage{rotating}
-\usepackage{tabu}
+\renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
 
-\textsc{\LARGE Back2Back 2013 Results}\\[0.5cm]
+\part*{\LARGE Back2Back 2013 Results}
 
 {% for category in results %}
-\textsc{\large {{ category.category }}}\\[0.3cm]
+\section*{% templatetag openbrace %}{{ category.category }}}
 
-\textsc{First group stage}\\[0.2cm]
+\subsection*{First group stage}
+
+Top two in each group qualify, plus highest scoring losers so that there are 12 in the next round.\\
 
 {% for group in category.first_groups %}
-
-    \begin{tabu} spread 10cm { X[3l] | X[c] | X[c] | X[c] | X[c] | X[c] | X[c] }
-        \textbf{ {{ group }} }
+    \begin{tabular}{ l | c | c | c | c | c | c }
+        \textbf{% templatetag openbrace %}{{ group }}{% templatetag closebrace %}
         {% for entry in group.entries_by_index %}& 
         \begin{sideways}
         {{ entry }}
@@ -28,14 +29,69 @@
                 {% if match %}{{ match }}{% endif %}
             {% endfor %} \\
         {% endfor %}
-    \end{tabu}\\[0.5cm]
+    \end{tabular}\\
+    \\
+{% endfor %}
 
+\textbf{Standings}\\
+{% for group in category.first_groups %}
     \begin{tabular}{ r l c c }
+        & \textbf{ {{ group }} } & \\
         {% for entry in group.leaderboard %}
         {{ entry.qualified }} & {{ entry }} & {{ entry.first_group_points }} & {{ entry.first_group_score }} \\
         {% endfor %}
-    \end{tabular}\\[0.5cm]
+    \end{tabular}\\
+    \\
 {% endfor %}
+
+\subsection*{Second group stage}
+
+Top two in each group qualify for the finals.\\
+
+{% for group in category.second_groups %}
+    \begin{tabular}{ l | c | c | c | c | c | c }
+        \textbf{% templatetag openbrace %}{{ group }}{% templatetag closebrace %}
+        {% for entry in group.entries_by_index %}& 
+        \begin{sideways}
+        {{ entry }}
+        \end{sideways}
+        {% endfor %} \\
+        {% for entry in group.entries_with_matches %}
+        \hline
+            {{ entry.entry }} 
+            {% for match in entry.matches %}& 
+                {% if match %}{{ match }}{% endif %}
+            {% endfor %} \\
+        {% endfor %}
+    \end{tabular}\\
+    \\
+{% endfor %}
+
+\textbf{Standings}\\
+{% for group in category.second_groups %}
+    \begin{tabular}{ r l c c }
+        & \textbf{ {{ group }} } & \\
+        {% for entry in group.leaderboard %}
+        {{ entry.qualified }} & {{ entry }} & {{ entry.second_group_points }} & {{ entry.second_group_score }} \\
+        {% endfor %}
+    \end{tabular}\\
+    \\
+{% endfor %}
+
+\subsection*{Finals}
+
+Semi-finals and finals shot to set format.\\
+\\
+\textbf{Semi-final 1}\\
+George Harding 6 - 2 Ashe Morgan\\
+\textbf{Semi-final 2}\\
+George Harding 6 - 2 Ashe Morgan\\
+\textbf{Bronze}\\
+George Harding 6 - 2 Ashe Morgan\\
+\textbf{Final}\\
+George Harding 6 - 2 Ashe Morgan\\
+
+\pagebreak
 
 {% endfor %}
 

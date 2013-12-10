@@ -202,7 +202,10 @@ class Group(object):
         } for i, row in enumerate(arrangement)]
 
     def entries_by_index(self):
-        return sorted(self.entries(), key=lambda e: e.first_group_index)
+        if self.stage == 'first-round':
+            return sorted(self.entries(), key=lambda e: e.first_group_index)
+        else:
+            return sorted(self.entries(), key=lambda e: e.second_group_index)
 
     def entries_with_matches(self):
         """Used for results tables."""
@@ -213,8 +216,12 @@ class Group(object):
             results.append({'entry': entry, 'matches': [None, None, None, None, None, None]})
         for time in matches:
             for match in time['matches']:
-                index_1 = match['archer_1'].first_group_index
-                index_2 = match['archer_2'].first_group_index
+                if self.stage == 'first-round':
+                    index_1 = match['archer_1'].first_group_index
+                    index_2 = match['archer_2'].first_group_index
+                else:
+                    index_1 = match['archer_1'].second_group_index
+                    index_2 = match['archer_2'].second_group_index
                 results[index_1]['matches'][index_2] = '{} - {}'.format(match['score_1'].score, match['score_2'].score)
                 results[index_2]['matches'][index_1] = '{} - {}'.format(match['score_2'].score, match['score_1'].score)
         return results
