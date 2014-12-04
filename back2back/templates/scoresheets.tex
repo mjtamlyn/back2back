@@ -1,0 +1,82 @@
+\documentclass[a4paper]{article}
+\usepackage[cm]{fullpage}
+\usepackage{multicol}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\renewcommand\arraystretch{2.8}
+\setlength\tabcolsep{20pt}
+
+\begin{center}
+
+{% for group in groups %}
+{% for time in group.matches %}
+{% for match in time.matches %}
+
+\textbf{\LARGE Back2Back 2014}\\
+\vspace{0.2in}
+{\large {{ category }}}\\
+\vspace{0.1in}
+{\large {{ group }}, Match {{ match.time|add:1 }}}\\
+\vspace{0.1in}
+{\large Target {{ match.target }}}\\
+
+\begin{multicols}{2}
+
+\textbf{\large {{ match.archer_1 }}}\\
+\vspace{0.1in}
+
+\begin{tabular}{| c | c | c | c | c |}
+\hline
+\multicolumn{3}{|c|}{\textbf{Arrows}} & \textbf{S} & \textbf{RT}\\
+\hline
+& & & & \\
+\hline
+& & & & \\
+\hline
+& & & & \\
+\hline
+& & & & \\
+\hline
+\end {tabular}
+
+\begin{flushleft}
+Signed:\\
+\end{flushleft}
+\vspace{0.4in}
+\hrule
+
+\textbf{\large {{ match.archer_2 }}}\\
+\vspace{0.1in}
+
+\begin{tabular}{| c | c | c | c | c |}
+\hline
+\multicolumn{3}{|c|}{\textbf{Arrows}} & \textbf{S} & \textbf{RT}\\
+\hline
+& & & & \\
+\hline
+& & & & \\
+\hline
+& & & & \\
+\hline
+& & & & \\
+\hline
+\end {tabular}
+
+\begin{flushleft}
+Signed:\\
+\end{flushleft}
+\vspace{0.4in}
+\hrule
+
+\end{multicols}
+\vspace{0.4in}
+
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+\end{center}
+\end{document}

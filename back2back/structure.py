@@ -13,9 +13,9 @@ class BaseCategory(object):
     max_entries = 30
     first_round_high_scores = 2
     second_round_layout = [
-        0, 1, 1, 0, 1, # Winners
-        1, 0, 0, 1, 0, # Runners up
-        1, 0, # High scores
+        0, 1, 1, 0, 1,  # Winners
+        1, 0, 0, 1, 0,  # Runners up
+        1, 0,  # High scores
     ]
 
     def __str__(self):
@@ -31,7 +31,7 @@ class BaseCategory(object):
         num_groups = int(self.max_entries / 6)
         if entries is None:
             entries = self.get_entries()
-        return [Group(category=self, stage='first-round', number=i, entries=entries) for i in range(num_groups)]
+        return [Group(category=self, stage='first-round', number=i, entries=entries, start_target=i * 3 + self.first_round_target) for i in range(num_groups)]
 
     def get_top_entries(self, entries, number, key, label):
         entries = sorted(entries, key=key, reverse=True)
@@ -66,8 +66,8 @@ class BaseCategory(object):
     def get_second_round_groups(self, qualifiers=None, entries=None):
         if qualifiers is not None:
             groups = [
-                Group(category=self, stage='second-round', number=0, entries=[]),
-                Group(category=self, stage='second-round', number=1, entries=[]),
+                Group(category=self, stage='second-round', number=0, entries=[], start_target=self.second_round_target),
+                Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 3),
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
@@ -79,8 +79,8 @@ class BaseCategory(object):
         if entries is None:
             entries = self.get_entries()
         return [
-            Group(category=self, stage='second-round', number=0, entries=entries),
-            Group(category=self, stage='second-round', number=1, entries=entries),
+            Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
+            Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 3),
         ]
 
     def set_second_round_groups(self, qualifiers):
@@ -114,48 +114,57 @@ class BaseCategory(object):
                 match['score_2'] = getattr(match_entries[1], field)
             matches.append(match)
         return matches
-                
+
 
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'
     slug = 'gents-recurve'
+    first_round_target = 1
+    second_round_target = 15
 
 
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
-    max_entries = 18
-    first_round_high_scores = 6
+    max_entries = 24
+    first_round_target = 16
+    second_round_target = 22
+    first_round_high_scores = 4
     second_round_layout = [
-        0, 1, 1, # Winners
-        1, 0, 0, # Runners up
-        1, 0, 0, 1, 1, 0, # High scores
+        0, 1, 1, 0,  # Winners
+        1, 0, 0, 1,  # Runners up
+        1, 0, 0, 1,  # High scores
     ]
 
 
 class GentsCompound(BaseCategory):
     name = 'Gents Compound'
     slug = 'gents-compound'
+    first_round_target = 1
+    second_round_target = 1
 
 
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
-    max_entries = 18
-    first_round_high_scores = 6
+    max_entries = 24
+    first_round_target = 16
+    second_round_target = 8
+    first_round_high_scores = 4
     second_round_layout = [
-        0, 1, 1, # Winners
-        1, 0, 0, # Runners up
-        1, 0, 0, 1, 1, 0, # High scores
+        0, 1, 1, 0,  # Winners
+        1, 0, 0, 1,  # Runners up
+        1, 0, 0, 1,  # High scores
     ]
 
 
 class Group(object):
-    def __init__(self, category, stage, number, entries):
+    def __init__(self, category, stage, number, entries, start_target):
         self.category = category
         self.stage = stage
         self.number = number
         self.all_entries = entries
+        self.start_target = start_target
 
     def __str__(self):
         return 'Group {}'.format(self.label)
@@ -267,6 +276,7 @@ class Group(object):
             'score_2': score_2,
             'index': match_number,
             'time': time,
+            'target': match_number + self.start_target,
         }
         match['form'] = MatchForm(group=self, match=match)
         return match

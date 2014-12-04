@@ -3,11 +3,30 @@ import subprocess
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.views.generic import View, TemplateView, ListView, FormView, DeleteView
+from django.views.generic import View, TemplateView, FormView, DeleteView
 
 from .forms import EntryForm, MatchForm
 from .models import Entry
 from .structure import CATEGORIES, CATEGORIES_BY_SLUG
+
+
+class TexPDFView(TemplateView):
+    response_class = HttpResponse
+    content_type = 'application/pdf'
+
+    def render_tex(self, tex):
+        with open('/tmp/tmp.tex', 'w') as f:
+            f.write(tex)
+        subprocess.call(['texi2pdf', '/tmp/tmp.tex', '-o', '/tmp/tmp.pdf'])
+        with open('/tmp/tmp.pdf', 'rb') as f:
+            content = f.read()
+        return content
+
+    def render_to_response(self, context, **response_kwargs):
+        tex = render_to_string(self.get_template_names(), context)
+        content = self.render_tex(tex)
+        response_kwargs.setdefault('content_type', self.content_type)
+        return self.response_class(content, **response_kwargs)
 
 
 class Index(TemplateView):
@@ -199,6 +218,19 @@ class FirstRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
         }
 
 
+class FirstRoundScoresheets(TexPDFView):
+    template_name = 'scoresheets.tex'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_first_round_groups(entries=entries)
+        return {
+            'category': category,
+            'groups': groups,
+        }
+
+
 class SecondRoundSetGroups(TemplateView):
     template_name = 'second_round_set_groups.html'
 
@@ -216,7 +248,7 @@ class SecondRoundSetGroups(TemplateView):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
         qualifiers = category.get_first_round_qualifiers(entries=entries)
-        groups = category.set_second_round_groups(qualifiers)
+        category.set_second_round_groups(qualifiers)
         return HttpResponseRedirect(reverse('index'))
 
 
@@ -250,7 +282,6 @@ class SecondRoundLeaderboard(TemplateView):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
         groups = category.get_second_round_groups(entries=entries)
-        qualifiers = category.get_second_round_qualifiers(entries=entries)
         return {
             'round': 'Second',
             'category': category,
@@ -272,9 +303,20 @@ class SecondRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
         }
 
 
-class ResultsPDF(TemplateView):
-    response_class = HttpResponse
-    content_type = 'application/pdf'
+class SecondRoundScoresheets(TexPDFView):
+    template_name = 'scoresheets.tex'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_second_round_groups(entries=entries)
+        return {
+            'category': category,
+            'groups': groups,
+        }
+
+
+class ResultsPDF(TexPDFView):
     template_name = 'results.tex'
 
     def get_context_data(self, **kwargs):
@@ -294,17 +336,3 @@ class ResultsPDF(TemplateView):
                 'finals': category.get_finals_matches(entries=entries)
             })
         return {'results': results}
-
-    def render_tex(self, tex):
-        with open('/tmp/tmp.tex', 'w') as f:
-            f.write(tex)
-        process = subprocess.call(['texi2pdf', '/tmp/tmp.tex', '-o', '/tmp/tmp.pdf'])
-        with open('/tmp/tmp.pdf', 'rb') as f:
-            content = f.read()
-        return content
-
-    def render_to_response(self, context, **response_kwargs):
-        tex = render_to_string(self.get_template_names(), context)
-        content = self.render_tex(tex)
-        response_kwargs.setdefault('content_type', self.content_type)
-        return self.response_class(content, **response_kwargs)

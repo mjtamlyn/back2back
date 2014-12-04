@@ -13,13 +13,14 @@
                     <thead>
                         <tr>
                             <th rowspan="2">Manage Entries</th>
-                            <th colspan="3">First round</th>
-                            <th colspan="3">Second round</th>
+                            <th colspan="4">First round</th>
+                            <th colspan="4">Second round</th>
                         </tr>
                         <tr>
                             <th>Groups</th>
                             <th>Matches</th>
                             <th>Leaderboard</th>
+                            <th>Scoresheets</th>
                             <th>Groups</th>
                             <th>Matches</th>
                             <th>Leaderboard</th>
@@ -31,6 +32,7 @@
                             <td><a href="{% url 'first-round-set-groups' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'first-round-matches' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'first-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'first-round-scoresheets' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'second-round-set-groups' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'second-round-matches' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'second-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
