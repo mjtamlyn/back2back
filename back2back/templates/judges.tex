@@ -1,0 +1,35 @@
+\documentclass[a4paper]{article}
+\usepackage[cm]{fullpage}
+\usepackage{multicol}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\renewcommand\arraystretch{2.6}
+\setlength\tabcolsep{18pt}
+\begin{center}
+
+{% for time in matches %}
+\textbf{\LARGE Back2Back 2014}\\
+\vspace{0.2in}
+{\large {{ category }}}\\
+\vspace{0.1in}
+{\large Match {{ forloop.counter }}}\\
+\vspace{0.1in}
+
+\begin{tabular}{crcl}
+{% for group in time %}
+\multicolumn{4}{c}{\large {{ group.group }}}\\
+\hline
+{% for match in group.matches %}
+T{{ match.target }} & {{ match.archer_1|safe }} & v & {{ match.archer_2|safe }} \\
+{% endfor %}
+{% endfor %}
+\end{tabular}
+
+\pagebreak
+{% endfor %}
+
+\end{center}
+\end{document}

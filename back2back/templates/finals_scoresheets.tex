@@ -14,40 +14,22 @@
 \setlength\tabcolsep{18pt}
 \begin{center}
 
-{% for group in groups %}
+{% for category in categories %}
+{% for round in rounds %}
 \textbf{\LARGE Back2Back 2014}\\
 \vspace{0.2in}
-{\large {{ group }}}\\
+{\large {{ category }} finals}\\
 \vspace{0.1in}
-
-\begin{tabular}{crcl}
-{% for time in group.matches %}
-\multicolumn{4}{c}{\large Match {{ forloop.counter }}}\\
-\hline
-{% for match in time.matches %}
-T{{ match.target }} & {{ match.archer_1|safe }} & v & {{ match.archer_2|safe }} \\
-{% endfor %}
-{% endfor %}
-\end{tabular}
-
-\pagebreak
-{% endfor %}
-
-{% for group in groups %}
-{% for time in group.matches %}
-{% for match in time.matches %}
-
-\textbf{\LARGE Back2Back 2014}\\
-\vspace{0.2in}
-{\large {{ category }}}\\
+{\large {{ round }}}\\
 \vspace{0.1in}
-{\large {{ group }}, Match {{ match.time|add:1 }}}\\
-\vspace{0.1in}
-{\large Target {{ match.target }}}\\
 
 \begin{multicols}{2}
 
-\textbf{\large {{ match.archer_1|safe }}}\\
+\begin{flushleft}
+Archer 1:\\
+\end{flushleft}
+\vspace{0.4in}
+\hrule
 \vspace{0.1in}
 
 \begin{tabular}{| j | c | c | c | c | c |}
@@ -70,7 +52,11 @@ Signed:\\
 \vspace{0.4in}
 \hrule
 
-\textbf{\large {{ match.archer_2|safe }}}\\
+\begin{flushleft}
+Archer 2:\\
+\end{flushleft}
+\vspace{0.4in}
+\hrule
 \vspace{0.1in}
 
 \begin{tabular}{| j | c | c | c | c | c |}
@@ -94,10 +80,10 @@ Signed:\\
 \hrule
 
 \end{multicols}
-\vspace{0.4in}
+\vspace{0.2in}
 
 {% endfor %}
-{% endfor %}
+\pagebreak
 {% endfor %}
 
 \end{center}

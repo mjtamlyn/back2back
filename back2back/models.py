@@ -29,10 +29,12 @@ class Entry(models.Model):
     second_group_placing = models.PositiveIntegerField(blank=True, null=True)
     second_group_points = models.PositiveIntegerField(default=0)
     second_group_score = models.PositiveIntegerField(default=0)
-    semi_1_points = models.PositiveIntegerField(blank=True, null=True)
-    semi_2_points = models.PositiveIntegerField(blank=True, null=True)
-    bronze_points = models.PositiveIntegerField(blank=True, null=True)
-    gold_points = models.PositiveIntegerField(blank=True, null=True)
+    final_round_seed = models.PositiveIntegerField(blank=True, null=True)
+    final_match_1_score = models.PositiveIntegerField(blank=True, null=True)
+    final_match_2_score = models.PositiveIntegerField(blank=True, null=True)
+    final_match_3_score = models.PositiveIntegerField(blank=True, null=True)
+    final_match_4_score = models.PositiveIntegerField(blank=True, null=True)
+    final_match_5_score = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name

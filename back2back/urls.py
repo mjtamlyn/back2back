@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/first-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.FirstRoundMatchRecord.as_view(), name='first-round-match-record'),
     url(r'^(?P<category>[a-z-]+)/first-round/leaderboard/$', views.FirstRoundLeaderboard.as_view(), name='first-round-leaderboard'),
     url(r'^(?P<category>[a-z-]+)/first-round/scoresheets/$', views.FirstRoundScoresheets.as_view(), name='first-round-scoresheets'),
+    url(r'^(?P<category>[a-z-]+)/first-round/judges/$', views.FirstRoundJudges.as_view(), name='first-round-judges'),
     url(r'^first-round/leaderboard/recurve/$', views.FirstRoundLeaderboardExportRecurve.as_view(), name='first-round-leaderboard-export-recurve'),
     url(r'^first-round/leaderboard/compound/$', views.FirstRoundLeaderboardExportCompound.as_view(), name='first-round-leaderboard-export-compound'),
 
@@ -29,7 +30,12 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/second-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.SecondRoundMatchRecord.as_view(), name='second-round-match-record'),
     url(r'^(?P<category>[a-z-]+)/second-round/leaderboard/$', views.SecondRoundLeaderboard.as_view(), name='second-round-leaderboard'),
     url(r'^(?P<category>[a-z-]+)/second-round/scoresheets/$', views.SecondRoundScoresheets.as_view(), name='second-round-scoresheets'),
+    url(r'^(?P<category>[a-z-]+)/second-round/judges/$', views.SecondRoundJudges.as_view(), name='second-round-judges'),
     url(r'^second-round/leaderboard/$', views.SecondRoundLeaderboardExport.as_view(), name='second-round-leaderboard-export'),
+
+    url(r'^finals/$', views.Finals.as_view(), name='finals'),
+    url(r'^finals/(?P<category>[a-z-]+)/(?P<match>\d+)/$', views.FinalsMatchRecord.as_view(), name='finals-match-record'),
+    url(r'^finals/scoresheets/$', views.FinalsScoresheets.as_view(), name='finals-scoresheets'),
 
     url(r'^results/$', views.ResultsPDF.as_view(), name='results-pdf'),
 

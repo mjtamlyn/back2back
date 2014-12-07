@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, FormView, DeleteView
 
-from .forms import EntryForm, MatchForm
+from .forms import EntryForm, MatchForm, FinalMatchForm
 from .models import Entry
 from .structure import CATEGORIES, CATEGORIES_BY_SLUG
 
@@ -231,6 +231,27 @@ class FirstRoundScoresheets(TexPDFView):
         }
 
 
+class FirstRoundJudges(TexPDFView):
+    template_name = 'judges.tex'
+
+    def rearrange_matches(self, groups):
+        """Rearrange the matches so they're ordered by time not group."""
+        times = [[], [], [], [], []]
+        for group in groups:
+            for matches in group.matches():
+                times[matches['index']].append({'group': group, 'matches': matches['matches']})
+        return times
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_first_round_groups(entries=entries)
+        return {
+            'category': category,
+            'matches': self.rearrange_matches(groups),
+        }
+
+
 class SecondRoundSetGroups(TemplateView):
     template_name = 'second_round_set_groups.html'
 
@@ -282,6 +303,7 @@ class SecondRoundLeaderboard(TemplateView):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
         groups = category.get_second_round_groups(entries=entries)
+        category.get_second_round_qualifiers(entries=entries)
         return {
             'round': 'Second',
             'category': category,
@@ -316,6 +338,92 @@ class SecondRoundScoresheets(TexPDFView):
         }
 
 
+class SecondRoundJudges(TexPDFView):
+    template_name = 'judges.tex'
+
+    def rearrange_matches(self, groups):
+        """Rearrange the matches so they're ordered by time not group."""
+        times = [[], [], [], [], []]
+        for group in groups:
+            for matches in group.matches():
+                times[matches['index']].append({'group': group, 'matches': matches['matches']})
+        return times
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_second_round_groups(entries=entries)
+        return {
+            'category': category,
+            'matches': self.rearrange_matches(groups),
+        }
+
+
+class Finals(TemplateView):
+    template_name = 'finals.html'
+
+    def get_context_data(self, **kwargs):
+        rounds = ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final']
+        finalists = []
+        for category in CATEGORIES:
+            entries = category.get_entries()
+            qualifiers = category.get_second_round_qualifiers(entries=entries)
+            matches = category.finals_matches(qualifiers)
+            finalists.append({
+                'category': category,
+                'matches': matches,
+            })
+        return {
+            'rounds': rounds,
+            'finalists': finalists,
+        }
+
+
+class FinalsMatchRecord(FormView):
+    template_name = 'finals_match_record.html'
+    form_class = FinalMatchForm
+
+    def get_groups(self):
+        return self.category.get_first_round_groups()
+
+    def get_form_kwargs(self):
+        self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = self.category.get_entries()
+        qualifiers = self.category.get_second_round_qualifiers(entries=entries)
+        matches = self.category.finals_matches(qualifiers)
+        self.match = matches[int(self.kwargs['match'])]
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'category': self.category,
+            'match': self.match,
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'category': self.category,
+            'match': self.match,
+        })
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('finals')
+
+
+class FinalsScoresheets(TexPDFView):
+    template_name = 'finals_scoresheets.tex'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'categories': CATEGORIES,
+            'rounds': ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final'],
+        }
+
+
 class ResultsPDF(TexPDFView):
     template_name = 'results.tex'
 
@@ -328,11 +436,11 @@ class ResultsPDF(TexPDFView):
             # hack - deliberately reload entries here
             entries = category.get_entries()
             second_groups = category.get_second_round_groups(entries=entries)
-            category.get_second_round_qualifiers(entries=entries)
+            qualifiers = category.get_second_round_qualifiers(entries=entries)
             results.append({
                 'category': category,
                 'first_groups': first_groups,
                 'second_groups': second_groups,
-                'finals': category.get_finals_matches(entries=entries)
+                'finals': category.finals_matches(qualifiers)
             })
         return {'results': results}

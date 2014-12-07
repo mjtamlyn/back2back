@@ -19,12 +19,12 @@ Top two in each group qualify, plus highest scoring losers so that there are 12 
         \textbf{% templatetag openbrace %}{{ group }}{% templatetag closebrace %}
         {% for entry in group.entries_by_index %}& 
         \begin{sideways}
-        {{ entry }}
+        {{ entry|safe }}
         \end{sideways}
         {% endfor %} \\
         {% for entry in group.entries_with_matches %}
         \hline
-            {{ entry.entry }} 
+            {{ entry.entry|safe }} 
             {% for match in entry.matches %}& 
                 {% if match %}{{ match }}{% endif %}
             {% endfor %} \\
@@ -38,7 +38,7 @@ Top two in each group qualify, plus highest scoring losers so that there are 12 
     \begin{tabular}{ r l c c }
         & \textbf{ {{ group }} } & \\
         {% for entry in group.leaderboard %}
-        {{ entry.qualified }} & {{ entry }} & {{ entry.first_group_points }} & {{ entry.first_group_score }} \\
+        {{ entry.qualified }} & {{ entry|safe }} & {{ entry.first_group_points }} & {{ entry.first_group_score }} \\
         {% endfor %}
     \end{tabular}\\
     \\
@@ -46,19 +46,19 @@ Top two in each group qualify, plus highest scoring losers so that there are 12 
 
 \subsection*{Second group stage}
 
-Top two in each group qualify for the finals.\\
+Top two in each group qualify for the shoot up, plus two highest losers.\\
 
 {% for group in category.second_groups %}
     \begin{tabular}{ l | c | c | c | c | c | c }
         \textbf{% templatetag openbrace %}{{ group }}{% templatetag closebrace %}
         {% for entry in group.entries_by_index %}& 
         \begin{sideways}
-        {{ entry }}
+        {{ entry|safe }}
         \end{sideways}
         {% endfor %} \\
         {% for entry in group.entries_with_matches %}
         \hline
-            {{ entry.entry }} 
+            {{ entry.entry|safe }} 
             {% for match in entry.matches %}& 
                 {% if match %}{{ match }}{% endif %}
             {% endfor %} \\
@@ -72,7 +72,7 @@ Top two in each group qualify for the finals.\\
     \begin{tabular}{ r l c c }
         & \textbf{ {{ group }} } & \\
         {% for entry in group.leaderboard %}
-        {{ entry.qualified }} & {{ entry }} & {{ entry.second_group_points }} & {{ entry.second_group_score }} \\
+        {{ entry.qualified }} & {{ entry|safe }} & {{ entry.second_group_points }} & {{ entry.second_group_score }} \\
         {% endfor %}
     \end{tabular}\\
     \\
@@ -80,10 +80,10 @@ Top two in each group qualify for the finals.\\
 
 \subsection*{Finals}
 
-Semi-finals and finals shot to set format.\\
+Twelve arrow passes, winner stays on.\\
 \\ {% for match in category.finals %}
     \textbf{% templatetag openbrace %}{{ match.name }}}\\
-    {{ match.archer_1 }} {{ match.score_1 }} - {{ match.score_2 }} {{ match.archer_2 }}\\ {% endfor %}
+    {{ match.archer_1|safe }} {{ match.score_1 }} - {{ match.score_2 }} {{ match.archer_2|safe }}\\ {% endfor %}
 
 \pagebreak
 

@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from django.db.models import Sum
 
-from .forms import MatchForm
+from .forms import MatchForm, FinalMatchForm
 from .models import Entry, Score
 
 
@@ -12,6 +12,7 @@ BYE = 'BYE'
 class BaseCategory(object):
     max_entries = 30
     first_round_high_scores = 2
+    second_round_high_scores = 2
     second_round_layout = [
         0, 1, 1, 0, 1,  # Winners
         1, 0, 0, 1, 0,  # Runners up
@@ -98,37 +99,65 @@ class BaseCategory(object):
             group_entries = group.leaderboard()
             top_ranked = self.get_top_entries(group_entries, number=2, key=lambda e: (e.second_group_points, e.second_group_score), label='Q')
             direct_qs += top_ranked
-        return direct_qs
+        entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
+        entries = sorted(entries, key=lambda e: e.second_group_score, reverse=True)
+        left_to_qualify = self.second_round_high_scores - (len(direct_qs) - 4)
+        other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.second_group_score, label='q')
+        return direct_qs + other_qs
 
-    def get_finals_matches(self, entries):
-        matches = []
-        names = ['Semi-final 1', 'Semi-final 2', 'Bronze final', 'Final']
-        fields = ['semi_1_points', 'semi_2_points', 'bronze_points', 'gold_points']
-        for name, field in zip(names, fields):
-            match = {'name': name}
-            match_entries = list(filter(lambda e: getattr(e, field) is not None, entries))
-            if len(match_entries) == 2:
-                match['archer_1'] = match_entries[0]
-                match['archer_2'] = match_entries[1]
-                match['score_1'] = getattr(match_entries[0], field)
-                match['score_2'] = getattr(match_entries[1], field)
-            matches.append(match)
-        return matches
+    def finals_matches(self, qualifiers):
+        seeded_qualifiers = sorted(qualifiers, key=lambda e: (
+            e.final_round_seed,
+        ), reverse=True)
+        return [self.get_finals_match(seeded_qualifiers, i) for i in range(5)]
+
+    def get_finals_match(self, qualifiers, number):
+        match_names = ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final']
+        match = {
+            'index': number,
+            'name': match_names[number],
+        }
+        if number == 0:
+            match['archer_1'] = qualifiers[0]
+        else:
+            prev_score_attr = 'final_match_%s_score' % number
+            prev_archer = sorted(qualifiers, key=lambda e: getattr(e, prev_score_attr) or 0, reverse=True)[0]
+            if getattr(prev_archer, prev_score_attr) is not None:
+                match['archer_1'] = prev_archer
+            else:
+                match['archer_1'] = None
+        match['archer_2'] = qualifiers[number + 1]
+        score_attr = 'final_match_%s_score' % (number + 1)
+        if match['archer_1']:
+            match['score_1'] = getattr(match['archer_1'], score_attr)
+        else:
+            match['score_1'] = None
+        match['score_2'] = getattr(match['archer_2'], score_attr)
+        if match['archer_1'] is not None:
+            match['form'] = FinalMatchForm(category=self, match=match)
+        return match
+
+    def record_final_result(self, match, data):
+        attr = 'final_match_%s_score' % (match['index'] + 1)
+        setattr(match['archer_1'], attr, data['archer_1'])
+        setattr(match['archer_2'], attr, data['archer_2'])
+        match['archer_1'].save()
+        match['archer_2'].save()
 
 
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'
     slug = 'gents-recurve'
-    first_round_target = 1
-    second_round_target = 15
+    first_round_target = 35
+    second_round_target = 49
 
 
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
     max_entries = 24
-    first_round_target = 16
-    second_round_target = 22
+    first_round_target = 50
+    second_round_target = 56
     first_round_high_scores = 4
     second_round_layout = [
         0, 1, 1, 0,  # Winners
@@ -140,16 +169,16 @@ class LadiesRecurve(BaseCategory):
 class GentsCompound(BaseCategory):
     name = 'Gents Compound'
     slug = 'gents-compound'
-    first_round_target = 1
-    second_round_target = 1
+    first_round_target = 35
+    second_round_target = 35
 
 
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
     max_entries = 24
-    first_round_target = 16
-    second_round_target = 8
+    first_round_target = 50
+    second_round_target = 42
     first_round_high_scores = 4
     second_round_layout = [
         0, 1, 1, 0,  # Winners
@@ -240,6 +269,8 @@ class Group(object):
             results.append({'entry': entry, 'matches': [None, None, None, None, None, None]})
         for time in matches:
             for match in time['matches']:
+                if match['archer_1'] == BYE or match['archer_2'] == BYE:
+                    continue
                 if self.stage == 'first-round':
                     index_1 = match['archer_1'].first_group_index
                     index_2 = match['archer_2'].first_group_index

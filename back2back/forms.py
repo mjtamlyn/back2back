@@ -45,3 +45,22 @@ class MatchForm(forms.Form):
 
     def save(self):
         self.group.record_result(self.match, self.cleaned_data)
+
+
+class FinalMatchForm(MatchForm):
+    archer_1 = forms.IntegerField(required=False)
+    archer_2 = forms.IntegerField(required=False)
+
+    def __init__(self, category, match, **kwargs):
+        self.category = category
+        self.match = match
+        forms.Form.__init__(self, **kwargs)
+        self.fields['archer_1'].label = match['archer_1']
+        if match['score_1']:
+            self.fields['archer_1'].initial = match['score_1']
+        self.fields['archer_2'].label = match['archer_2']
+        if match['score_2']:
+            self.fields['archer_2'].initial = match['score_2']
+
+    def save(self):
+        self.category.record_final_result(self.match, self.cleaned_data)
