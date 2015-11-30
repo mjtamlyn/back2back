@@ -155,15 +155,8 @@ class GentsRecurve(BaseCategory):
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
-    max_entries = 24
     first_round_target = 50
     second_round_target = 56
-    first_round_high_scores = 4
-    second_round_layout = [
-        0, 1, 1, 0,  # Winners
-        1, 0, 0, 1,  # Runners up
-        1, 0, 0, 1,  # High scores
-    ]
 
 
 class GentsCompound(BaseCategory):
@@ -176,15 +169,8 @@ class GentsCompound(BaseCategory):
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
-    max_entries = 24
     first_round_target = 50
     second_round_target = 42
-    first_round_high_scores = 4
-    second_round_layout = [
-        0, 1, 1, 0,  # Winners
-        1, 0, 0, 1,  # Runners up
-        1, 0, 0, 1,  # High scores
-    ]
 
 
 class Group(object):

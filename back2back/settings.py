@@ -7,8 +7,8 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Deployment settings
-SECRET_KEY = os.environ.get('SECRET_KEY', '')
-DEBUG = os.environ.get('DEBUG', False)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'ASDFJOIqo3r892p938huidnw')
+DEBUG = not os.environ.get('PRODUCTION', False) == 'True'
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['back-2-back.herokuapp.com']
@@ -16,9 +16,6 @@ ALLOWED_HOSTS = ['back-2-back.herokuapp.com']
 # Application definition
 INSTALLED_APPS = (
     'back2back',
-
-    'rest_framework',
-    'south',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,7 +66,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.NullHandler',
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
