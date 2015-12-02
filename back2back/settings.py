@@ -11,7 +11,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'ASDFJOIqo3r892p938huidnw')
 DEBUG = not os.environ.get('PRODUCTION', False) == 'True'
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['back-2-back.herokuapp.com']
+ALLOWED_HOSTS = [
+    'back-2-back.herokuapp.com',
+    'back2back.mjtamlyn.co.uk',
+]
 
 # Application definition
 INSTALLED_APPS = (
