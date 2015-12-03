@@ -17,7 +17,7 @@ class TexPDFView(TemplateView):
     def render_tex(self, tex):
         with open('/tmp/tmp.tex', 'w') as f:
             f.write(tex)
-        subprocess.call(['texi2pdf', '/tmp/tmp.tex', '-o', '/tmp/tmp.pdf'])
+        subprocess.call(['pdflatex', '-output-directory=/tmp/', '/tmp/tmp.tex'])
         with open('/tmp/tmp.pdf', 'rb') as f:
             content = f.read()
         return content
