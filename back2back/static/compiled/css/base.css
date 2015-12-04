@@ -1,0 +1,77 @@
+/* line 1, ../../../sass/base.sass */
+.inline {
+  display: inline-block;
+}
+
+@keyframes three-quarters-loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fadered {
+  0% {
+    background-color: #f9f9f9;
+  }
+  100% {
+    background-color: #ff7777;
+  }
+}
+/* line 25, ../../../sass/base.sass */
+table.table caption {
+  font-weight: bold;
+  font-size: 16px;
+  padding: 2px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+}
+/* line 32, ../../../sass/base.sass */
+table.table input[type=number] {
+  max-width: 60px;
+}
+
+/* line 36, ../../../sass/base.sass */
+table.table-matches td.winner {
+  font-weight: bold;
+}
+/* line 38, ../../../sass/base.sass */
+table.table-matches td.error {
+  animation: fadered 1250ms normal forwards;
+}
+/* line 41, ../../../sass/base.sass */
+table.table-matches form:after {
+  content: "";
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+}
+/* line 46, ../../../sass/base.sass */
+table.table-matches form.saving:after {
+  animation: three-quarters-loader 1250ms infinite linear;
+  border: 3px solid #5cb85c;
+  border-right-color: transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  text-indent: -9999px;
+}
+/* line 55, ../../../sass/base.sass */
+table.table-matches form.saved:after {
+  content: "OK!";
+  animation: fadeout 1250ms normal forwards;
+}
