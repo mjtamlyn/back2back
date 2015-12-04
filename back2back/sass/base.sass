@@ -1,6 +1,26 @@
 .inline
   display: inline-block
 
+@keyframes three-quarters-loader
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)
+
+@keyframes fadeout
+  0%
+    opacity: 1
+  70%
+    opacity: 1
+  100%
+    opacity: 0
+
+@keyframes fadered
+  0%
+    background-color: #f9f9f9
+  100%
+    background-color: #ff7777
+
 table.table
   caption
     font-weight: bold
@@ -11,3 +31,24 @@ table.table
     border-bottom: 0
   input[type=number]
     max-width: 60px
+
+  td.error
+    animation: fadered 1250ms normal forwards
+  form
+    &:after
+      content: ""
+      width: 15px
+      height: 15px
+      display: inline-block
+    &.saving:after
+      animation: three-quarters-loader 1250ms infinite linear
+      border: 3px solid #38e
+      border-right-color: transparent
+      border-radius: 16px
+      box-sizing: border-box
+      position: relative
+      overflow: hidden
+      text-indent: -9999px
+    &.saved:after
+      content: "OK!"
+      animation: fadeout 1250ms normal forwards

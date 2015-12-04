@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}compiled/css/base.css">
+        <title>Back2Back</title>
     </head>
     <body>
         <div class="container">
@@ -46,6 +47,7 @@
             <h2>{% block heading %}{% endblock %}</h2>
             {% block content %}{% endblock %}
         </div>
+        {% block extra_script %}{% endblock %}
     </body>
 </html>
 

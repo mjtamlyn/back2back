@@ -1,7 +1,7 @@
 import subprocess
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, FormView, DeleteView
 
@@ -168,7 +168,14 @@ class FirstRoundMatchRecord(FormView):
 
     def form_valid(self, form):
         form.save()
+        if self.request.is_ajax():
+            return HttpResponse('ok')
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return HttpResponseBadRequest(form.errors.as_json())
+        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse(self.success_url_name, kwargs={'category': self.kwargs['category']}) + '#match-' + self.kwargs['time']

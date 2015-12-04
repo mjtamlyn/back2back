@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block heading %}{{ round }} round matches for {{ category }}{% endblock %}
 
 {% block content %}
@@ -44,4 +46,9 @@
     {% endfor %}
 </div>
 {% endfor %}
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script src="{% static 'js/ajaxForms.js' %}"></script>
 {% endblock %}
