@@ -44,7 +44,7 @@ class MatchForm(forms.Form):
         return self.cleaned_data
 
     def save(self):
-        self.group.record_result(self.match, self.cleaned_data)
+        return self.group.record_result(self.match, self.cleaned_data)
 
 
 class FinalMatchForm(MatchForm):

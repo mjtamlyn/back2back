@@ -1,3 +1,4 @@
+import json
 import subprocess
 
 from django.core.urlresolvers import reverse
@@ -167,9 +168,9 @@ class FirstRoundMatchRecord(FormView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        form.save()
+        result = form.save()
         if self.request.is_ajax():
-            return HttpResponse('ok')
+            return HttpResponse(json.dumps(result))
         return super().form_valid(form)
 
     def form_invalid(self, form):

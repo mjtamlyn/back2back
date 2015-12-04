@@ -359,6 +359,7 @@ class Group(object):
                 score_2.points = result['archer_2']
                 score_2.save()
         self.denorm_group_data()
+        return result
 
     def leaderboard(self, scores=False):
         """If you don't pass scores=True this will use the denormed placing field."""

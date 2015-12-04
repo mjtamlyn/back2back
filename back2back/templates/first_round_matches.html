@@ -10,14 +10,12 @@
 <div class="row" id="match-{{ forloop.counter0 }}">
     {% for group in time %}
     <div class="col-sm-6">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-matches">
             <caption>{{ group.group }}</caption>
             {% for match in group.matches %}
             <tr>
-                <td>
-                    {% if match.score_1.is_win %}<strong>{% endif %}
+                <td {% if match.score_1.is_win %}class="winner"{% endif %} data-archer="1">
                     {{ match.archer_1 }}
-                    {% if match.score_1.is_win %}</strong>{% endif %}
                 </td>
                 <td>
                     <form action="{% url match_url_name category=category.slug group=group.group.number match=match.index time=match.time %}" method="POST" class="form-inline inline" role="form">
@@ -34,10 +32,8 @@
                         </div>
                     </form>
                 </td>
-                <td>
-                    {% if match.score_2.is_win %}<strong>{% endif %}
+                <td {% if match.score_2.is_win %}class="winner"{% endif %} data-archer="2">
                     {{ match.archer_2 }}
-                    {% if match.score_2.is_win %}</strong>{% endif %}
                 </td>
             </tr>
             {% endfor %}
@@ -50,5 +46,5 @@
 
 {% block extra_script %}
 <script src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
-<script src="{% static 'js/ajaxForms.js' %}"></script>
+<script src="{% static 'js/matchForms.js' %}"></script>
 {% endblock %}

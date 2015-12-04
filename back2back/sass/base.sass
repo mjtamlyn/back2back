@@ -32,6 +32,9 @@ table.table
   input[type=number]
     max-width: 60px
 
+table.table-matches
+  td.winner
+    font-weight: bold
   td.error
     animation: fadered 1250ms normal forwards
   form
@@ -42,9 +45,9 @@ table.table
       display: inline-block
     &.saving:after
       animation: three-quarters-loader 1250ms infinite linear
-      border: 3px solid #38e
+      border: 3px solid #5cb85c
       border-right-color: transparent
-      border-radius: 16px
+      border-radius: 50%
       box-sizing: border-box
       position: relative
       overflow: hidden
