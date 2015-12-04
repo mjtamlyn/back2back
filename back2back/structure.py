@@ -148,29 +148,29 @@ class BaseCategory(object):
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'
     slug = 'gents-recurve'
-    first_round_target = 32
-    second_round_target = 46
+    first_round_target = 34
+    second_round_target = 48
 
 
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
-    first_round_target = 47
-    second_round_target = 53
+    first_round_target = 49
+    second_round_target = 55
 
 
 class GentsCompound(BaseCategory):
     name = 'Gents Compound'
     slug = 'gents-compound'
-    first_round_target = 32
-    second_round_target = 32
+    first_round_target = 34
+    second_round_target = 34
 
 
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
-    first_round_target = 47
-    second_round_target = 39
+    first_round_target = 49
+    second_round_target = 41
 
 
 class Group(object):
