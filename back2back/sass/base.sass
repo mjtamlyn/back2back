@@ -58,9 +58,9 @@ table.table-matches
 
 @keyframes slideup
   0%
-    bottom: -100%
+    transform: translateY(50%)
   100%
-    bottom: 200%
+    transform: translateY(-100%)
 
 .scrolling-container
   overflow: hidden
@@ -68,7 +68,6 @@ table.table-matches
 
   .scrolling
     animation: slideup 30s infinite linear
-    position: relative
 
   .flex.three-col
     display: flex
