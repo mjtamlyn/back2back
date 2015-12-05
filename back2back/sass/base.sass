@@ -55,3 +55,25 @@ table.table-matches
     &.saved:after
       content: "OK!"
       animation: fadeout 1250ms normal forwards
+
+@keyframes slideup
+  0%
+    bottom: -100%
+  100%
+    bottom: 200%
+
+.scrolling-container
+  overflow: hidden
+  height: 80vh
+
+  .scrolling
+    animation: slideup 30s infinite linear
+    position: relative
+
+  .flex.three-col
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    table
+      max-width: 30%
+      margin: 20px 10px

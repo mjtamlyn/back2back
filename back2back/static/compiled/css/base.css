@@ -75,3 +75,33 @@ table.table-matches form.saved:after {
   content: "OK!";
   animation: fadeout 1250ms normal forwards;
 }
+
+@keyframes slideup {
+  0% {
+    bottom: -100%;
+  }
+  100% {
+    bottom: 200%;
+  }
+}
+/* line 65, ../../../sass/base.sass */
+.scrolling-container {
+  overflow: hidden;
+  height: 80vh;
+}
+/* line 69, ../../../sass/base.sass */
+.scrolling-container .scrolling {
+  animation: slideup 30s infinite linear;
+  position: relative;
+}
+/* line 73, ../../../sass/base.sass */
+.scrolling-container .flex.three-col {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* line 77, ../../../sass/base.sass */
+.scrolling-container .flex.three-col table {
+  max-width: 30%;
+  margin: 20px 10px;
+}
