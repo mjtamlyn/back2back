@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/second-round/judges/$', views.SecondRoundJudges.as_view(), name='second-round-judges'),
     url(r'^second-round/leaderboard/$', views.SecondRoundLeaderboardExport.as_view(), name='second-round-leaderboard-export'),
 
+    url(r'^(?P<category>[a-z-]+)/finals/set-seeds/$', views.FinalsSetSeeds.as_view(), name='finals-set-seeds'),
     url(r'^finals/$', views.Finals.as_view(), name='finals'),
     url(r'^finals/(?P<category>[a-z-]+)/(?P<match>\d+)/$', views.FinalsMatchRecord.as_view(), name='finals-match-record'),
     url(r'^finals/scoresheets/$', views.FinalsScoresheets.as_view(), name='finals-scoresheets'),

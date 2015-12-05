@@ -103,12 +103,19 @@ class BaseCategory(object):
         entries = sorted(entries, key=lambda e: e.second_group_score, reverse=True)
         left_to_qualify = self.second_round_high_scores - (len(direct_qs) - 4)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.second_group_score, label='q')
-        return direct_qs + other_qs
+        all_qs = direct_qs + other_qs
+        all_qs = sorted(all_qs, key=lambda e: (-e.second_group_placing, e.second_group_score))
+        return all_qs
+
+    def set_finals_seeds(self, qualifiers):
+        for i, qualifier in enumerate(qualifiers):
+            qualifier.final_round_seed = i + 1
+            qualifier.save()
 
     def finals_matches(self, qualifiers):
         seeded_qualifiers = sorted(qualifiers, key=lambda e: (
             e.final_round_seed,
-        ), reverse=True)
+        ))
         return [self.get_finals_match(seeded_qualifiers, i) for i in range(5)]
 
     def get_finals_match(self, qualifiers, number):

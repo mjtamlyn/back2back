@@ -16,6 +16,7 @@
                             <th rowspan="2">Manage Entries</th>
                             <th colspan="4">First round</th>
                             <th colspan="4">Second round</th>
+                            <th colspan="1">Finals</th>
                         </tr>
                         <tr>
                             <th>Groups</th>
@@ -26,6 +27,7 @@
                             <th>Matches</th>
                             <th>Leaderboard</th>
                             <th>Scoresheets</th>
+                            <th>Set seeds</th>
                         </tr>
                     </thead>
                     {% for category in CATEGORIES %}
@@ -39,6 +41,7 @@
                             <td><a href="{% url 'second-round-matches' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'second-round-leaderboard' category=category.slug %}">{{ category }}</a></td>
                             <td><a href="{% url 'second-round-scoresheets' category=category.slug %}">{{ category }}</a></td>
+                            <td><a href="{% url 'finals-set-seeds' category=category.slug %}">{{ category }}</a></td>
                         </tr>
                     {% endfor %}
                 </table>

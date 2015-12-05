@@ -370,6 +370,26 @@ class SecondRoundJudges(TexPDFView):
         }
 
 
+class FinalsSetSeeds(TemplateView):
+    template_name = 'finals_set_seeds.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_second_round_qualifiers(entries=entries)
+        return {
+            'category': category,
+            'qualifiers': reversed(qualifiers),
+        }
+
+    def post(self, request, *args, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_second_round_qualifiers(entries=entries)
+        category.set_finals_seeds(qualifiers)
+        return HttpResponseRedirect(reverse('index'))
+
+
 class Finals(TemplateView):
     template_name = 'finals.html'
 

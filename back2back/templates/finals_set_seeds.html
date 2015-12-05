@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block heading %}Confirm final seedings for {{ category }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-4">
+        <table class="table">
+            {% for entry in qualifiers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ entry.qualified }}</td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.second_group_points }}</td>
+                <td>{{ entry.second_group_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Confirm" class="btn btn-large btn-success">
+</form>
+{% endblock %}
+
