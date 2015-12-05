@@ -17,8 +17,13 @@
                     <tr>
                         <td>{{ entry.qualified }}</td>
                         <td>{{ entry }}</td>
-                        <td>{{ entry.second_group_points }}</td>
-                        <td>{{ entry.second_group_score }}</td>
+                        {% if round == 'First' %}
+                            <td>{{ entry.first_group_points }}</td>
+                            <td>{{ entry.first_group_score }}</td>
+                        {% else %}
+                            <td>{{ entry.second_group_points }}</td>
+                            <td>{{ entry.second_group_score }}</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </table>

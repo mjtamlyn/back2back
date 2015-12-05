@@ -208,6 +208,7 @@ class FirstRoundLeaderboardExportRecurve(TemplateView):
             category.get_first_round_qualifiers(entries=entries)
             leaderboards.append({'category': category, 'groups': groups})
         return {
+            'round': 'First',
             'leaderboards': leaderboards,
         }
 
@@ -222,6 +223,7 @@ class FirstRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
             category.get_first_round_qualifiers(entries=entries)
             leaderboards.append({'category': category, 'groups': groups})
         return {
+            'round': 'First',
             'leaderboards': leaderboards,
         }
 
@@ -329,6 +331,7 @@ class SecondRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
             category.get_second_round_qualifiers(entries=entries)
             leaderboards.append({'category': category, 'groups': groups})
         return {
+            'round': 'Second',
             'leaderboards': leaderboards,
         }
 
