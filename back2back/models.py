@@ -11,6 +11,7 @@ CATEGORY_CHOICES = (
 STAGE_CHOICES = (
     ('first-round', 'First Round'),
     ('second-round', 'Second Round'),
+    ('third-round', 'Third Round'),
 )
 
 
@@ -29,6 +30,11 @@ class Entry(models.Model):
     second_group_placing = models.PositiveIntegerField(blank=True, null=True)
     second_group_points = models.PositiveIntegerField(default=0)
     second_group_score = models.PositiveIntegerField(default=0)
+    third_group_number = models.PositiveIntegerField(blank=True, null=True)
+    third_group_index = models.PositiveIntegerField(blank=True, null=True, help_text='indexed 0-5 to do the match layout')
+    third_group_placing = models.PositiveIntegerField(blank=True, null=True)
+    third_group_points = models.PositiveIntegerField(default=0)
+    third_group_score = models.PositiveIntegerField(default=0)
     final_round_seed = models.PositiveIntegerField(blank=True, null=True)
     final_match_1_score = models.PositiveIntegerField(blank=True, null=True)
     final_match_2_score = models.PositiveIntegerField(blank=True, null=True)

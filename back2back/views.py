@@ -370,6 +370,114 @@ class SecondRoundJudges(TexPDFView):
         }
 
 
+class ThirdRoundSetGroups(TemplateView):
+    template_name = 'third_round_set_groups.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_first_round_qualifiers(entries=entries)
+        groups = category.get_third_round_groups(qualifiers)
+        return {
+            'category': category,
+            'groups': groups,
+        }
+
+    def post(self, request, *args, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_first_round_qualifiers(entries=entries)
+        category.set_third_round_groups(qualifiers)
+        return HttpResponseRedirect(reverse('index'))
+
+
+class ThirdRoundMatches(FirstRoundMatches):
+    template_name = 'first_round_matches.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = category.get_third_round_groups()
+        matches = self.rearrange_matches(groups)
+        return {
+            'round': 'Third',
+            'match_url_name': 'third-round-match-record',
+            'category': category,
+            'groups': groups,
+            'matches': matches,
+        }
+
+
+class ThirdRoundMatchRecord(FirstRoundMatchRecord):
+    success_url_name = 'third-round-matches'
+
+    def get_groups(self):
+        return self.category.get_third_round_groups()
+
+
+class ThirdRoundLeaderboard(TemplateView):
+    template_name = 'third_round_leaderboard.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_third_round_groups(entries=entries)
+        category.get_third_round_qualifiers(entries=entries)
+        return {
+            'round': 'Third',
+            'category': category,
+            'groups': groups,
+        }
+
+
+class ThirdRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
+
+    def get_context_data(self, **kwargs):
+        leaderboards = []
+        for category in CATEGORIES:
+            entries = category.get_entries()
+            groups = category.get_third_round_groups(entries=entries)
+            category.get_third_round_qualifiers(entries=entries)
+            leaderboards.append({'category': category, 'groups': groups})
+        return {
+            'round': 'Third',
+            'leaderboards': leaderboards,
+        }
+
+
+class ThirdRoundScoresheets(TexPDFView):
+    template_name = 'scoresheets.tex'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_third_round_groups(entries=entries)
+        return {
+            'category': category,
+            'groups': groups,
+        }
+
+
+class ThirdRoundJudges(TexPDFView):
+    template_name = 'judges.tex'
+
+    def rearrange_matches(self, groups):
+        """Rearrange the matches so they're ordered by time not group."""
+        times = [[], [], [], [], []]
+        for group in groups:
+            for matches in group.matches():
+                times[matches['index']].append({'group': group, 'matches': matches['matches']})
+        return times
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_third_round_groups(entries=entries)
+        return {
+            'category': category,
+            'matches': self.rearrange_matches(groups),
+        }
+
+
 class FinalsSetSeeds(TemplateView):
     template_name = 'finals_set_seeds.html'
 
