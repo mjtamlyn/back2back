@@ -238,6 +238,17 @@ class GentsCompound(BaseCategory):
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
+    max_entries = 36
+    first_round_groups = 6
+    second_round_layout = [
+        0, 3,  # Winner, runner up for each group
+        1, 2,
+        1, 3,
+        2, 0,
+        2, 1,
+        3, 0,
+        0, 3, 2, 1, 2, 0, 3, 1, 1, 2, 3, 0,  # High scores
+    ]
     first_round_target = 49
     second_round_target = 41
     third_round_target = 48
