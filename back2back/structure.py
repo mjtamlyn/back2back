@@ -83,8 +83,8 @@ class BaseCategory(object):
             groups = [
                 Group(category=self, stage='second-round', number=0, entries=[], start_target=self.second_round_target),
                 Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 3),
-                Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 7),
-                Group(category=self, stage='second-round', number=3, entries=[], start_target=self.second_round_target + 11),
+                Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 6),
+                Group(category=self, stage='second-round', number=3, entries=[], start_target=self.second_round_target + 9),
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
@@ -98,8 +98,8 @@ class BaseCategory(object):
         return [
             Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
             Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 3),
-            Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 7),
-            Group(category=self, stage='second-round', number=3, entries=entries, start_target=self.second_round_target + 11),
+            Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 6),
+            Group(category=self, stage='second-round', number=3, entries=entries, start_target=self.second_round_target + 9),
         ]
 
     def set_second_round_groups(self, qualifiers):
@@ -127,7 +127,7 @@ class BaseCategory(object):
         if qualifiers is not None:
             groups = [
                 Group(category=self, stage='third-round', number=0, entries=[], start_target=self.third_round_target),
-                Group(category=self, stage='third-round', number=1, entries=[], start_target=self.third_round_target + 3),
+                Group(category=self, stage='third-round', number=1, entries=[], start_target=self.third_round_target + 4),
             ]
             layout = self.third_round_layout
             for i, entry in enumerate(qualifiers):
@@ -140,7 +140,7 @@ class BaseCategory(object):
             entries = self.get_entries()
         return [
             Group(category=self, stage='third-round', number=0, entries=entries, start_target=self.third_round_target),
-            Group(category=self, stage='third-round', number=1, entries=entries, start_target=self.third_round_target + 3),
+            Group(category=self, stage='third-round', number=1, entries=entries, start_target=self.third_round_target + 4),
         ]
 
     def set_third_round_groups(self, qualifiers):
@@ -214,25 +214,25 @@ class BaseCategory(object):
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'
     slug = 'gents-recurve'
-    first_round_target = 34
-    second_round_target = 48
-    third_round_target = 48
+    first_round_target = 37
+    second_round_target = 61
+    third_round_target = 68
 
 
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
-    first_round_target = 49
-    second_round_target = 55
-    third_round_target = 48
+    first_round_target = 61
+    second_round_target = 73
+    third_round_target = 76
 
 
 class GentsCompound(BaseCategory):
     name = 'Gents Compound'
     slug = 'gents-compound'
-    first_round_target = 34
-    second_round_target = 34
-    third_round_target = 48
+    first_round_target = 37
+    second_round_target = 49
+    third_round_target = 59
 
 
 class LadiesCompound(BaseCategory):
@@ -249,9 +249,9 @@ class LadiesCompound(BaseCategory):
         3, 0,
         0, 3, 2, 1, 2, 0, 3, 1, 1, 2, 3, 0,  # High scores
     ]
-    first_round_target = 49
-    second_round_target = 41
-    third_round_target = 48
+    first_round_target = 61
+    second_round_target = 37
+    third_round_target = 51
 
 
 class Group(object):
