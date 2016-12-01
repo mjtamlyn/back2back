@@ -568,7 +568,7 @@ class ResultsPDF(TexPDFView):
 
     def get_context_data(self, **kwargs):
         results = []
-        for category in CATEGORIES[-1:]:
+        for category in CATEGORIES:
             entries = category.get_entries()
             first_groups = category.get_first_round_groups(entries=entries)
             category.get_first_round_qualifiers(entries=entries)
