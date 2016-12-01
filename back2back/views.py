@@ -376,7 +376,7 @@ class ThirdRoundSetGroups(TemplateView):
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
-        qualifiers = category.get_first_round_qualifiers(entries=entries)
+        qualifiers = category.get_second_round_qualifiers(entries=entries)
         groups = category.get_third_round_groups(qualifiers)
         return {
             'category': category,
@@ -386,7 +386,7 @@ class ThirdRoundSetGroups(TemplateView):
     def post(self, request, *args, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
-        qualifiers = category.get_first_round_qualifiers(entries=entries)
+        qualifiers = category.get_second_round_qualifiers(entries=entries)
         category.set_third_round_groups(qualifiers)
         return HttpResponseRedirect(reverse('index'))
 
@@ -484,7 +484,7 @@ class FinalsSetSeeds(TemplateView):
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
-        qualifiers = category.get_second_round_qualifiers(entries=entries)
+        qualifiers = category.get_third_round_qualifiers(entries=entries)
         return {
             'category': category,
             'qualifiers': reversed(qualifiers),
@@ -493,7 +493,7 @@ class FinalsSetSeeds(TemplateView):
     def post(self, request, *args, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
-        qualifiers = category.get_second_round_qualifiers(entries=entries)
+        qualifiers = category.get_third_round_qualifiers(entries=entries)
         category.set_finals_seeds(qualifiers)
         return HttpResponseRedirect(reverse('index'))
 
@@ -506,7 +506,7 @@ class Finals(TemplateView):
         finalists = []
         for category in CATEGORIES:
             entries = category.get_entries()
-            qualifiers = category.get_second_round_qualifiers(entries=entries)
+            qualifiers = category.get_third_round_qualifiers(entries=entries)
             matches = category.finals_matches(qualifiers)
             finalists.append({
                 'category': category,
@@ -528,7 +528,7 @@ class FinalsMatchRecord(FormView):
     def get_form_kwargs(self):
         self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = self.category.get_entries()
-        qualifiers = self.category.get_second_round_qualifiers(entries=entries)
+        qualifiers = self.category.get_third_round_qualifiers(entries=entries)
         matches = self.category.finals_matches(qualifiers)
         self.match = matches[int(self.kwargs['match'])]
         kwargs = super().get_form_kwargs()
@@ -568,18 +568,23 @@ class ResultsPDF(TexPDFView):
 
     def get_context_data(self, **kwargs):
         results = []
-        for category in CATEGORIES:
+        for category in CATEGORIES[:1]:
             entries = category.get_entries()
             first_groups = category.get_first_round_groups(entries=entries)
             category.get_first_round_qualifiers(entries=entries)
             # hack - deliberately reload entries here
             entries = category.get_entries()
             second_groups = category.get_second_round_groups(entries=entries)
-            qualifiers = category.get_second_round_qualifiers(entries=entries)
+            category.get_second_round_qualifiers(entries=entries)
+            # hack - deliberately reload entries here again
+            entries = category.get_entries()
+            third_groups = category.get_third_round_groups(entries=entries)
+            qualifiers = category.get_third_round_qualifiers(entries=entries)
             results.append({
                 'category': category,
                 'first_groups': first_groups,
                 'second_groups': second_groups,
+                'third_groups': third_groups,
                 'finals': category.finals_matches(qualifiers)
             })
         return {'results': results}

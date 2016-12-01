@@ -11,17 +11,25 @@ BYE = 'BYE'
 
 class BaseCategory(object):
     max_entries = 48
-    first_round_high_scores = 8
-    second_round_high_scores = 4
-    third_round_high_scores = 2
+    first_round_groups = 8
+    second_round_groups = 4
+    third_round_groups = 2
     second_round_layout = [
-        0, 0, 1, 1, 2, 2, 3, 3,  # Winners
-        1, 1, 0, 0, 3, 3, 2, 2,  # Runners up
+        0, 1,  # Winner, runner up for each group
+        0, 1,
+        1, 0,
+        1, 0,
+        2, 3,
+        2, 3,
+        3, 2,
+        3, 2,
         1, 2, 3, 0, 0, 3, 2, 1,  # High scores
     ]
     third_round_layout = [
-        0, 0, 1, 1,  # Winners
-        1, 1, 0, 0,  # Runners up
+        0, 1,  # Winner, runner up for each group
+        0, 1,
+        1, 0,
+        1, 0,
         1, 0, 0, 1,  # High scores
     ]
 
@@ -35,7 +43,7 @@ class BaseCategory(object):
         Entry.objects.create(category=self.slug, name=name, agb_number=agb_number, seeding=seeding)
 
     def get_first_round_groups(self, entries=None):
-        num_groups = int(self.max_entries / 6)
+        num_groups = self.first_round_groups
         if entries is None:
             entries = self.get_entries()
         return [Group(category=self, stage='first-round', number=i, entries=entries, start_target=i * 3 + self.first_round_target) for i in range(num_groups)]
@@ -66,7 +74,7 @@ class BaseCategory(object):
             direct_qs += top_ranked
         entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
         entries = sorted(entries, key=lambda e: e.first_group_score, reverse=True)
-        left_to_qualify = self.first_round_high_scores - (len(direct_qs) - self.max_entries / 6 * 2)
+        left_to_qualify = self.second_round_groups * 6 - len(direct_qs)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.first_group_score, label='q')
         return direct_qs + other_qs
 
@@ -80,7 +88,7 @@ class BaseCategory(object):
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
-                if entry.qualified in ['Q', 'q']:
+                if entry.qualified:
                     group_number = layout[i]
                     entry.second_group_number = group_number
                     groups[group_number].all_entries.append(entry)
@@ -90,8 +98,8 @@ class BaseCategory(object):
         return [
             Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
             Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 3),
-            Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 7),
-            Group(category=self, stage='second-round', number=3, entries=[], start_target=self.second_round_target + 11),
+            Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 7),
+            Group(category=self, stage='second-round', number=3, entries=entries, start_target=self.second_round_target + 11),
         ]
 
     def set_second_round_groups(self, qualifiers):
@@ -111,11 +119,9 @@ class BaseCategory(object):
             direct_qs += top_ranked
         entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
         entries = sorted(entries, key=lambda e: e.second_group_score, reverse=True)
-        left_to_qualify = self.second_round_high_scores - (len(direct_qs) - 4)
+        left_to_qualify = self.third_round_groups * 6 - len(direct_qs)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.second_group_score, label='q')
-        all_qs = direct_qs + other_qs
-        all_qs = sorted(all_qs, key=lambda e: (-e.second_group_placing, e.second_group_score))
-        return all_qs
+        return direct_qs + other_qs
 
     def get_third_round_groups(self, qualifiers=None, entries=None):
         if qualifiers is not None:
@@ -125,7 +131,7 @@ class BaseCategory(object):
             ]
             layout = self.third_round_layout
             for i, entry in enumerate(qualifiers):
-                if entry.qualified in ['Q', 'q']:
+                if entry.qualified:
                     group_number = layout[i]
                     entry.third_group_number = group_number
                     groups[group_number].all_entries.append(entry)
@@ -154,10 +160,10 @@ class BaseCategory(object):
             direct_qs += top_ranked
         entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
         entries = sorted(entries, key=lambda e: e.third_group_score, reverse=True)
-        left_to_qualify = self.third_round_high_scores - (len(direct_qs) - 4)
+        left_to_qualify = 6 - len(direct_qs)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.third_group_score, label='q')
         all_qs = direct_qs + other_qs
-        all_qs = sorted(all_qs, key=lambda e: (-e.third_group_placing, e.third_group_score))
+        all_qs = sorted(all_qs, key=lambda e: (-(e.third_group_placing or 0), e.third_group_score))
         return all_qs
 
     def set_finals_seeds(self, qualifiers):
@@ -252,15 +258,20 @@ class Group(object):
     def label(self):
         if self.stage == 'first-round':
             return '1' + 'ABCDEFGH'[self.number]
-        if self.stage == 'second-round':
+        elif self.stage == 'second-round':
             return '2' + 'ABCD'[self.number]
-        return '3' + 'AB'[self.number]
+        elif self.stage == 'third-round':
+            return '3' + 'AB'[self.number]
+        raise ValueError('Unknown round %s' % self.stage)
 
     def entries(self):
         if self.stage == 'first-round':
             return [e for e in self.all_entries if e.first_group_number == self.number]
-        else:
+        elif self.stage == 'second-round':
             return [e for e in self.all_entries if e.second_group_number == self.number]
+        elif self.stage == 'third-round':
+            return [e for e in self.all_entries if e.third_group_number == self.number]
+        raise ValueError('Unknown round %s' % self.stage)
 
     def load_entries(self):
         return self.category.get_entries().filter(first_group_number=self.number)
@@ -285,8 +296,12 @@ class Group(object):
         entries = self.entries()
         if self.stage == 'first-round':
             entries = sorted(entries, key=lambda e: e.first_group_index)
-        else:
+        elif self.stage == 'second-round':
             entries = sorted(entries, key=lambda e: e.second_group_index)
+        elif self.stage == 'third-round':
+            entries = sorted(entries, key=lambda e: e.third_group_index)
+        else:
+            raise ValueError('Unknown round %s' % self.stage)
         scores = Score.objects.filter(entry__in=entries, stage=self.stage)
         scores_by_entry = {}
         for score in scores:
@@ -308,8 +323,11 @@ class Group(object):
     def entries_by_index(self):
         if self.stage == 'first-round':
             return sorted(self.entries(), key=lambda e: e.first_group_index)
-        else:
+        elif self.stage == 'second-round':
             return sorted(self.entries(), key=lambda e: e.second_group_index)
+        elif self.stage == 'third-round':
+            return sorted(self.entries(), key=lambda e: e.third_group_index)
+        raise ValueError('Unknown round %s' % self.stage)
 
     def entries_with_matches(self):
         """Used for results tables."""
@@ -325,9 +343,14 @@ class Group(object):
                 if self.stage == 'first-round':
                     index_1 = match['archer_1'].first_group_index
                     index_2 = match['archer_2'].first_group_index
-                else:
+                elif self.stage == 'second-round':
                     index_1 = match['archer_1'].second_group_index
                     index_2 = match['archer_2'].second_group_index
+                elif self.stage == 'third-round':
+                    index_1 = match['archer_1'].third_group_index
+                    index_2 = match['archer_2'].third_group_index
+                else:
+                    raise ValueError('Unknown round %s' % self.stage)
                 results[index_1]['matches'][index_2] = '{} - {}'.format(match['score_1'].score, match['score_2'].score)
                 results[index_2]['matches'][index_1] = '{} - {}'.format(match['score_2'].score, match['score_1'].score)
         return results
@@ -393,16 +416,25 @@ class Group(object):
             if self.stage == 'first-round':
                 entry.first_group_points = totals['points'] or 0
                 entry.first_group_score = totals['score'] or 0
-            else:
+            elif self.stage == 'second-round':
                 entry.second_group_points = totals['points'] or 0
                 entry.second_group_score = totals['score'] or 0
+            elif self.stage == 'third-round':
+                entry.third_group_points = totals['points'] or 0
+                entry.third_group_score = totals['score'] or 0
+            else:
+                raise ValueError('Unknown round %s' % self.stage)
             entry.save()
         entries = self.leaderboard(scores=True)
         for i, entry in enumerate(entries, 1):
             if self.stage == 'first-round':
                 entry.first_group_placing = i
-            else:
+            elif self.stage == 'second-round':
                 entry.second_group_placing = i
+            elif self.stage == 'third-round':
+                entry.third_group_placing = i
+            else:
+                raise ValueError('Unknown round %s' % self.stage)
             entry.save()
 
     def record_result(self, match, data):
@@ -434,11 +466,17 @@ class Group(object):
                 return sorted(entries, key=lambda e: (e.first_group_points, e.first_group_score), reverse=True)
             else:
                 return sorted(entries, key=lambda e: (e.first_group_placing or 10))
-        else:
+        elif self.stage == 'second-round':
             if scores:
                 return sorted(entries, key=lambda e: (e.second_group_points, e.second_group_score), reverse=True)
             else:
                 return sorted(entries, key=lambda e: (e.second_group_placing or 10))
+        elif self.stage == 'third-round':
+            if scores:
+                return sorted(entries, key=lambda e: (e.third_group_points, e.third_group_score), reverse=True)
+            else:
+                return sorted(entries, key=lambda e: (e.third_group_placing or 10))
+        raise ValueError('Unknown round %s' % self.stage)
 
 
 CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]

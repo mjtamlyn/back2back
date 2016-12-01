@@ -1,26 +1,23 @@
 {% extends 'base.html' %}
 
-{% block heading %}Confirm final seedings for {{ category }}{% endblock %}
+{% block heading %}{{ round }} round leaderboard for {{ category }}{% endblock %}
 
 {% block content %}
 <div class="row">
+    {% for group in groups %}
     <div class="col-sm-4">
         <table class="table">
-            {% for entry in qualifiers %}
+            <caption>{{ group }}</caption>
+            {% for entry in group.leaderboard %}
             <tr>
-                <td>{{ forloop.counter }}</td>
                 <td>{{ entry.qualified }}</td>
-                <td>{{ entry.name }}</td>
+                <td>{{ entry }}</td>
                 <td>{{ entry.third_group_points }}</td>
                 <td>{{ entry.third_group_score }}</td>
             </tr>
             {% endfor %}
         </table>
     </div>
+    {% endfor %}
 </div>
-<form method="POST">
-    {% csrf_token %}
-    <input type="submit" value="Confirm" class="btn btn-large btn-success">
-</form>
 {% endblock %}
-

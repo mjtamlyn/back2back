@@ -5,14 +5,14 @@
 
 \begin{document}
 
-\part*{\LARGE Back2Back 2015 Results}
+\part*{\LARGE Back2Back 2016 Results}
 
 {% for category in results %}
 \section*{% templatetag openbrace %}{{ category.category }}}
 
 \subsection*{First group stage}
 
-Top two in each group qualify, plus highest scoring losers so that there are 12 in the next round.\\
+Top two in each group qualify, plus highest scoring losers so that there are 24 in the next round.\\
 
 {% for group in category.first_groups %}
     \begin{tabular}{ l | c | c | c | c | c | c }
@@ -46,7 +46,7 @@ Top two in each group qualify, plus highest scoring losers so that there are 12 
 
 \subsection*{Second group stage}
 
-Top two in each group qualify for the shoot up, plus two highest losers.\\
+Top two in each group qualify, plus highest scoring losers so that there are 12 in the next round.\\
 
 {% for group in category.second_groups %}
     \begin{tabular}{ l | c | c | c | c | c | c }
@@ -73,6 +73,40 @@ Top two in each group qualify for the shoot up, plus two highest losers.\\
         & \textbf{ {{ group }} } & \\
         {% for entry in group.leaderboard %}
         {{ entry.qualified }} & {{ entry|safe }} & {{ entry.second_group_points }} & {{ entry.second_group_score }} \\
+        {% endfor %}
+    \end{tabular}\\
+    \\
+{% endfor %}
+
+\subsection*{Third group stage}
+
+Top two in each group qualify for the shoot up, plus two highest losers.\\
+
+{% for group in category.third_groups %}
+    \begin{tabular}{ l | c | c | c | c | c | c }
+        \textbf{% templatetag openbrace %}{{ group }}{% templatetag closebrace %}
+        {% for entry in group.entries_by_index %}& 
+        \begin{sideways}
+        {{ entry|safe }}
+        \end{sideways}
+        {% endfor %} \\
+        {% for entry in group.entries_with_matches %}
+        \hline
+            {{ entry.entry|safe }} 
+            {% for match in entry.matches %}& 
+                {% if match %}{{ match }}{% endif %}
+            {% endfor %} \\
+        {% endfor %}
+    \end{tabular}\\
+    \\
+{% endfor %}
+
+\textbf{Standings}\\
+{% for group in category.third_groups %}
+    \begin{tabular}{ r l c c }
+        & \textbf{ {{ group }} } & \\
+        {% for entry in group.leaderboard %}
+        {{ entry.qualified }} & {{ entry|safe }} & {{ entry.third_group_points }} & {{ entry.third_group_score }} \\
         {% endfor %}
     \end{tabular}\\
     \\
