@@ -1,5 +1,6 @@
 import os
 
+from django.core.urlresolvers import reverse_lazy
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as DEFAULT_TEMPLATE_CONTEXT_PROCESSORS
 import dj_database_url
 
@@ -55,6 +56,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+
+# Auth
+LOGIN_URL = reverse_lazy('admin:login')
 
 # Logging
 LOGGING = {

@@ -8,7 +8,8 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-    url(r'^$', views.Index.as_view(), name='index'),
+    url(r'^$', views.PublicIndex.as_view(), name='public-index'),
+    url(r'^scorers/$', views.ScorersIndex.as_view(), name='index'),
     url(r'^(?P<category>[a-z-]+)/entries/$', views.EntryList.as_view(), name='entry-list'),
     url(r'^(?P<category>[a-z-]+)/entries/add/$', views.EntryAdd.as_view(), name='entry-add'),
     url(r'^(?P<category>[a-z-]+)/entries/edit/(?P<entry>\d+)/$', views.EntryEdit.as_view(), name='entry-edit'),
@@ -19,11 +20,14 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/first-round/set-groups/remove/$', views.FirstRoundGroupRemove.as_view(), name='first-round-group-remove'),
     url(r'^(?P<category>[a-z-]+)/first-round/matches/$', views.FirstRoundMatches.as_view(), name='first-round-matches'),
     url(r'^(?P<category>[a-z-]+)/first-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.FirstRoundMatchRecord.as_view(), name='first-round-match-record'),
+
     url(r'^(?P<category>[a-z-]+)/first-round/leaderboard/$', views.FirstRoundLeaderboard.as_view(), name='first-round-leaderboard'),
     url(r'^(?P<category>[a-z-]+)/first-round/scoresheets/$', views.FirstRoundScoresheets.as_view(), name='first-round-scoresheets'),
     url(r'^(?P<category>[a-z-]+)/first-round/judges/$', views.FirstRoundJudges.as_view(), name='first-round-judges'),
     url(r'^first-round/leaderboard/recurve/$', views.FirstRoundLeaderboardExportRecurve.as_view(), name='first-round-leaderboard-export-recurve'),
     url(r'^first-round/leaderboard/compound/$', views.FirstRoundLeaderboardExportCompound.as_view(), name='first-round-leaderboard-export-compound'),
+
+    url(r'^(?P<category>[a-z-]+)/first-round/$', views.PublicFirstRound.as_view(), name='public-first-round'),
 
     url(r'^(?P<category>[a-z-]+)/second-round/set-groups/$', views.SecondRoundSetGroups.as_view(), name='second-round-set-groups'),
     url(r'^(?P<category>[a-z-]+)/second-round/matches/$', views.SecondRoundMatches.as_view(), name='second-round-matches'),

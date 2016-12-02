@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+    <h1><a href="{% url 'index' %}">Back2Back 2016</a></h1>
+    <nav>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>First round</th>
+                    <th>Second round</th>
+                    <th>Third round</th>
+                    <th>Finals</th>
+                </tr>
+            </thead>
+            {% for category in CATEGORIES %}
+                <tr>
+                    <td><a href="{% url 'public-first-round' category=category.slug %}">{{ category }}</a></td>
+                    <td>{{ category }}</td>
+                    <td>{{ category }}</td>
+                    <td>{{ category }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </nav>
+{% endblock %}
