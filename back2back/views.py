@@ -32,7 +32,7 @@ class TexPDFView(TemplateView):
         return self.response_class(content, **response_kwargs)
 
 
-class PublicIndex(LoginRequiredMixin, TemplateView):
+class PublicIndex(TemplateView):
     template_name = 'public_index.html'
 
 
