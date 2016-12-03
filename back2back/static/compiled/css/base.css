@@ -91,7 +91,7 @@ table.table-matches form.saved:after {
 }
 /* line 69, ../../../sass/base.sass */
 .scrolling-container .scrolling {
-  animation: slideup 30s infinite linear;
+  animation: slideup 60s infinite linear;
 }
 /* line 72, ../../../sass/base.sass */
 .scrolling-container .flex.three-col {
