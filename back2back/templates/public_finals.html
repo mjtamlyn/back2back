@@ -1,0 +1,20 @@
+{% extends 'public_index.html' %}
+
+{% block heading %}Finals for {{ category }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <table class="table">
+        {% for match in matches %}
+        <tr>
+            <td>{{ match.archer_1|default:"" }}</td>
+            <td>{{ match.form.archer_1.value|default:"" }}</td>
+            <td>V</td>
+            <td>{{ match.form.archer_2.value|default:"" }}</td>
+            <td>{{ match.archer_2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+

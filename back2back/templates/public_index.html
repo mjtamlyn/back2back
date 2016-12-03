@@ -17,7 +17,7 @@
                     <td><a href="{% url 'public-first-round' category=category.slug %}">{{ category }}</a></td>
                     <td><a href="{% url 'public-second-round' category=category.slug %}">{{ category }}</a></td>
                     <td><a href="{% url 'public-third-round' category=category.slug %}">{{ category }}</a></td>
-                    <td>{{ category }}</td>
+                    <td><a href="{% url 'public-finals' category=category.slug %}">{{ category }}</a></td>
                 </tr>
             {% endfor %}
         </table>

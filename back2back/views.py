@@ -566,6 +566,20 @@ class Finals(LoginRequiredMixin, TemplateView):
         }
 
 
+class PublicFinals(TemplateView):
+    template_name = 'public_finals.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        qualifiers = category.get_third_round_qualifiers(entries=entries)
+        matches = category.finals_matches(qualifiers)
+        return {
+            'category': category,
+            'matches': matches,
+        }
+
+
 class FinalsMatchRecord(LoginRequiredMixin, FormView):
     template_name = 'finals_match_record.html'
     form_class = FinalMatchForm

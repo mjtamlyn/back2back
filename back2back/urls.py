@@ -54,6 +54,8 @@ urlpatterns = patterns('',
     url(r'^finals/(?P<category>[a-z-]+)/(?P<match>\d+)/$', views.FinalsMatchRecord.as_view(), name='finals-match-record'),
     url(r'^finals/scoresheets/$', views.FinalsScoresheets.as_view(), name='finals-scoresheets'),
 
+    url(r'^(?P<category>[a-z-]+)/finals/$', views.PublicFinals.as_view(), name='public-finals'),
+
     url(r'^results/$', views.ResultsPDF.as_view(), name='results-pdf'),
 
     url(r'^admin/', include(admin.site.urls)),
