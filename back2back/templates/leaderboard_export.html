@@ -22,9 +22,12 @@
                         {% if round == 'First' %}
                             <td>{{ entry.first_group_points }}</td>
                             <td>{{ entry.first_group_score }}</td>
-                        {% else %}
+                        {% elif round == 'Second' %}
                             <td>{{ entry.second_group_points }}</td>
                             <td>{{ entry.second_group_score }}</td>
+                        {% elif round == 'Third' %}
+                            <td>{{ entry.third_group_points }}</td>
+                            <td>{{ entry.third_group_score }}</td>
                         {% endif %}
                     </tr>
                     {% endfor %}
