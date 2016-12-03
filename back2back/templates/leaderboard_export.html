@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block nav %}{% endblock %}
 
 {% block heading %}Leaderboard <small class="pull-right">Live scores at <a href="https://back2back.mjtamlyn.co.uk">https://back2back.mjtamlyn.co.uk</a></small>{% endblock %}
@@ -29,7 +31,12 @@
                 </table>
             {% endfor %}
         </div>
+        <div>
+            <img style="max-width: 100%" src="{% static 'img/banner_2016.png' %}">
+        </div>
         {% endfor %}
     </div>
 </div>
 {% endblock %}
+
+{% block after_content %}{% endblock %}
