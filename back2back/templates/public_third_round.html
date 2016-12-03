@@ -1,0 +1,24 @@
+{% extends 'public_index.html' %}
+
+{% block heading %}Third round for {{ category }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% for group in groups %}
+    <div class="col-sm-4">
+        <table class="table">
+            <caption>{{ group }}</caption>
+            {% for entry in group.leaderboard %}
+            <tr>
+                <td>{{ entry.qualified }}</td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.third_group_points }}</td>
+                <td>{{ entry.third_group_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

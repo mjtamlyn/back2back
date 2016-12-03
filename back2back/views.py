@@ -390,6 +390,20 @@ class SecondRoundJudges(LoginRequiredMixin, TexPDFView):
         }
 
 
+class PublicSecondRound(TemplateView):
+    template_name = 'public_second_round.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_second_round_groups(entries=entries)
+        category.get_second_round_qualifiers(entries=entries)
+        return {
+            'category': category,
+            'groups': groups,
+        }
+
+
 class ThirdRoundSetGroups(LoginRequiredMixin, TemplateView):
     template_name = 'third_round_set_groups.html'
 
@@ -495,6 +509,20 @@ class ThirdRoundJudges(LoginRequiredMixin, TexPDFView):
         return {
             'category': category,
             'matches': self.rearrange_matches(groups),
+        }
+
+
+class PublicThirdRound(TemplateView):
+    template_name = 'public_third_round.html'
+
+    def get_context_data(self, **kwargs):
+        category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        entries = category.get_entries()
+        groups = category.get_third_round_groups(entries=entries)
+        category.get_third_round_qualifiers(entries=entries)
+        return {
+            'category': category,
+            'groups': groups,
         }
 
 

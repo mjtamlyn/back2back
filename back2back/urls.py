@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/second-round/judges/$', views.SecondRoundJudges.as_view(), name='second-round-judges'),
     url(r'^second-round/leaderboard/$', views.SecondRoundLeaderboardExport.as_view(), name='second-round-leaderboard-export'),
 
+    url(r'^(?P<category>[a-z-]+)/second-round/$', views.PublicSecondRound.as_view(), name='public-second-round'),
+
     url(r'^(?P<category>[a-z-]+)/third-round/set-groups/$', views.ThirdRoundSetGroups.as_view(), name='third-round-set-groups'),
     url(r'^(?P<category>[a-z-]+)/third-round/matches/$', views.ThirdRoundMatches.as_view(), name='third-round-matches'),
     url(r'^(?P<category>[a-z-]+)/third-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.ThirdRoundMatchRecord.as_view(), name='third-round-match-record'),
@@ -44,6 +46,8 @@ urlpatterns = patterns('',
     url(r'^(?P<category>[a-z-]+)/third-round/scoresheets/$', views.ThirdRoundScoresheets.as_view(), name='third-round-scoresheets'),
     url(r'^(?P<category>[a-z-]+)/third-round/judges/$', views.ThirdRoundJudges.as_view(), name='third-round-judges'),
     url(r'^third-round/leaderboard/$', views.ThirdRoundLeaderboardExport.as_view(), name='third-round-leaderboard-export'),
+
+    url(r'^(?P<category>[a-z-]+)/third-round/$', views.PublicThirdRound.as_view(), name='public-third-round'),
 
     url(r'^(?P<category>[a-z-]+)/finals/set-seeds/$', views.FinalsSetSeeds.as_view(), name='finals-set-seeds'),
     url(r'^finals/$', views.Finals.as_view(), name='finals'),
