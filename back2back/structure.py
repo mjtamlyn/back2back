@@ -164,7 +164,7 @@ class BaseCategory(object):
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.third_group_score, label='q')
         all_qs = direct_qs + other_qs
         all_qs = sorted(all_qs, key=lambda e: (-(e.third_group_placing or 0), e.third_group_score))
-        return all_qs
+        return all_qs[:6]
 
     def set_finals_seeds(self, qualifiers):
         for i, qualifier in enumerate(qualifiers):
