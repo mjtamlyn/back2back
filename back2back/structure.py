@@ -10,27 +10,16 @@ BYE = 'BYE'
 
 
 class BaseCategory(object):
-    max_entries = 48
-    first_round_groups = 8
-    second_round_groups = 4
-    third_round_groups = 2
+    max_entries = 30
+    first_round_groups = 5
+    second_round_groups = 3
     second_round_layout = [
-        0, 1,  # Winner, runner up for each group
-        0, 1,
+        0, 2,  # Winner, runner up for each group
         1, 0,
-        1, 0,
-        2, 3,
-        2, 3,
-        3, 2,
-        3, 2,
-        1, 2, 3, 0, 0, 3, 2, 1,  # High scores
-    ]
-    third_round_layout = [
-        0, 1,  # Winner, runner up for each group
-        0, 1,
-        1, 0,
-        1, 0,
-        1, 0, 0, 1,  # High scores
+        2, 1,
+        2, 0,
+        1, 2,
+        0, 1, 2, 0, 0, 1, 1, 2,  # High scores
     ]
 
     def __str__(self):
@@ -119,51 +108,10 @@ class BaseCategory(object):
             direct_qs += top_ranked
         entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
         entries = sorted(entries, key=lambda e: e.second_group_score, reverse=True)
-        left_to_qualify = self.third_round_groups * 6 - len(direct_qs)
+        left_to_qualify = 8 - len(direct_qs)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.second_group_score, label='q')
-        return direct_qs + other_qs
-
-    def get_third_round_groups(self, qualifiers=None, entries=None):
-        if qualifiers is not None:
-            groups = [
-                Group(category=self, stage='third-round', number=0, entries=[], start_target=self.third_round_target),
-                Group(category=self, stage='third-round', number=1, entries=[], start_target=self.third_round_target + 4),
-            ]
-            layout = self.third_round_layout
-            for i, entry in enumerate(qualifiers):
-                if entry.qualified:
-                    group_number = layout[i]
-                    entry.third_group_number = group_number
-                    groups[group_number].all_entries.append(entry)
-            return groups
-        if entries is None:
-            entries = self.get_entries()
-        return [
-            Group(category=self, stage='third-round', number=0, entries=entries, start_target=self.third_round_target),
-            Group(category=self, stage='third-round', number=1, entries=entries, start_target=self.third_round_target + 4),
-        ]
-
-    def set_third_round_groups(self, qualifiers):
-        groups = self.get_third_round_groups(qualifiers)
-        for i, group in enumerate(groups):
-            for j, entry in enumerate(group.entries()):
-                entry.third_group_number = i
-                entry.third_group_index = j
-                entry.save()
-
-    def get_third_round_qualifiers(self, entries):
-        groups = self.get_third_round_groups(entries=entries)
-        direct_qs = []
-        for group in groups:
-            group_entries = group.leaderboard()
-            top_ranked = self.get_top_entries(group_entries, number=2, key=lambda e: (e.third_group_points, e.third_group_score), label='Q')
-            direct_qs += top_ranked
-        entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
-        entries = sorted(entries, key=lambda e: e.third_group_score, reverse=True)
-        left_to_qualify = 6 - len(direct_qs)
-        other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.third_group_score, label='q')
         all_qs = direct_qs + other_qs
-        all_qs = sorted(all_qs, key=lambda e: (-(e.third_group_placing or 0), e.third_group_score))
+        all_qs = sorted(all_qs, key=lambda e: (-(e.second_group_placing or 0), e.second_group_score))
         return all_qs
 
     def set_finals_seeds(self, qualifiers):
@@ -214,44 +162,29 @@ class BaseCategory(object):
 class GentsRecurve(BaseCategory):
     name = 'Gents Recurve'
     slug = 'gents-recurve'
-    first_round_target = 37
-    second_round_target = 61
-    third_round_target = 68
+    first_round_target = 1
+    second_round_target = 19
 
 
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
-    first_round_target = 61
-    second_round_target = 73
-    third_round_target = 76
+    first_round_target = 16
+    second_round_target = 7
 
 
 class GentsCompound(BaseCategory):
     name = 'Gents Compound'
     slug = 'gents-compound'
-    first_round_target = 37
-    second_round_target = 49
-    third_round_target = 59
+    first_round_target = 1
+    second_round_target = 19
 
 
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
-    max_entries = 36
-    first_round_groups = 6
-    second_round_layout = [
-        0, 3,  # Winner, runner up for each group
-        1, 2,
-        1, 3,
-        2, 0,
-        2, 1,
-        3, 0,
-        0, 3, 2, 1, 2, 0, 3, 1, 1, 2, 3, 0,  # High scores
-    ]
-    first_round_target = 61
-    second_round_target = 37
-    third_round_target = 51
+    first_round_target = 16
+    second_round_target = 7
 
 
 class Group(object):

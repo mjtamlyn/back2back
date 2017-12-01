@@ -532,7 +532,7 @@ class FinalsSetSeeds(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
-        qualifiers = category.get_third_round_qualifiers(entries=entries)
+        qualifiers = category.get_second_round_qualifiers(entries=entries)
         return {
             'category': category,
             'qualifiers': reversed(qualifiers),
