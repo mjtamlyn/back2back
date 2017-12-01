@@ -73,7 +73,6 @@ class BaseCategory(object):
                 Group(category=self, stage='second-round', number=0, entries=[], start_target=self.second_round_target),
                 Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 3),
                 Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 6),
-                Group(category=self, stage='second-round', number=3, entries=[], start_target=self.second_round_target + 9),
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
@@ -88,7 +87,6 @@ class BaseCategory(object):
             Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
             Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 3),
             Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 6),
-            Group(category=self, stage='second-round', number=3, entries=entries, start_target=self.second_round_target + 9),
         ]
 
     def set_second_round_groups(self, qualifiers):
@@ -126,7 +124,7 @@ class BaseCategory(object):
         return [self.get_finals_match(seeded_qualifiers, i) for i in range(5)]
 
     def get_finals_match(self, qualifiers, number):
-        match_names = ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final']
+        match_names = ['Match 1', 'Match 2', 'Match 3', 'Match 4', 'Match 5', 'Semi-final', 'Final']
         match = {
             'index': number,
             'name': match_names[number],

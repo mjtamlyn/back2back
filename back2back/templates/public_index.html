@@ -8,7 +8,6 @@
                 <tr>
                     <th>First round</th>
                     <th>Second round</th>
-                    <th>Third round</th>
                     <th>Finals</th>
                 </tr>
             </thead>
@@ -16,7 +15,6 @@
                 <tr>
                     <td><a href="{% url 'public-first-round' category=category.slug %}">{{ category }}</a></td>
                     <td><a href="{% url 'public-second-round' category=category.slug %}">{{ category }}</a></td>
-                    <td><a href="{% url 'public-third-round' category=category.slug %}">{{ category }}</a></td>
                     <td><a href="{% url 'public-finals' category=category.slug %}">{{ category }}</a></td>
                 </tr>
             {% endfor %}
