@@ -341,11 +341,26 @@ class SecondRoundLeaderboard(LoginRequiredMixin, TemplateView):
         }
 
 
-class SecondRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
+class SecondRoundLeaderboardExportRecurve(FirstRoundLeaderboardExportRecurve):
 
     def get_context_data(self, **kwargs):
         leaderboards = []
-        for category in CATEGORIES:
+        for category in CATEGORIES[:2]:
+            entries = category.get_entries()
+            groups = category.get_second_round_groups(entries=entries)
+            category.get_second_round_qualifiers(entries=entries)
+            leaderboards.append({'category': category, 'groups': groups})
+        return {
+            'round': 'Second',
+            'leaderboards': leaderboards,
+        }
+
+
+class SecondRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
+
+    def get_context_data(self, **kwargs):
+        leaderboards = []
+        for category in CATEGORIES[2:]:
             entries = category.get_entries()
             groups = category.get_second_round_groups(entries=entries)
             category.get_second_round_qualifiers(entries=entries)
