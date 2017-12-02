@@ -41,6 +41,8 @@ class Entry(models.Model):
     final_match_3_score = models.PositiveIntegerField(blank=True, null=True)
     final_match_4_score = models.PositiveIntegerField(blank=True, null=True)
     final_match_5_score = models.PositiveIntegerField(blank=True, null=True)
+    final_match_6_score = models.PositiveIntegerField(blank=True, null=True)
+    final_match_7_score = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
