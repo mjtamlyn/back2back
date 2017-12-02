@@ -605,7 +605,7 @@ class FinalsMatchRecord(LoginRequiredMixin, FormView):
     def get_form_kwargs(self):
         self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = self.category.get_entries()
-        qualifiers = self.category.get_third_round_qualifiers(entries=entries)
+        qualifiers = self.category.get_second_round_qualifiers(entries=entries)
         matches = self.category.finals_matches(qualifiers)
         self.match = matches[int(self.kwargs['match'])]
         kwargs = super().get_form_kwargs()
