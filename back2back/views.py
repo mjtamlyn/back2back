@@ -569,7 +569,7 @@ class Finals(LoginRequiredMixin, TemplateView):
         finalists = []
         for category in CATEGORIES:
             entries = category.get_entries()
-            qualifiers = category.get_third_round_qualifiers(entries=entries)
+            qualifiers = category.get_second_round_qualifiers(entries=entries)
             matches = category.finals_matches(qualifiers)
             finalists.append({
                 'category': category,
