@@ -203,7 +203,7 @@ class FirstRoundLeaderboard(LoginRequiredMixin, TemplateView):
         }
 
 
-class FirstRoundLeaderboardExportRecurve(LoginRequiredMixin, TemplateView):
+class FirstRoundLeaderboardExportRecurve(TemplateView):
     template_name = 'leaderboard_export.html'
 
     def get_context_data(self, **kwargs):
