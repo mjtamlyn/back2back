@@ -652,16 +652,13 @@ class ResultsPDF(LoginRequiredMixin, TexPDFView):
             # hack - deliberately reload entries here
             entries = category.get_entries()
             second_groups = category.get_second_round_groups(entries=entries)
-            category.get_second_round_qualifiers(entries=entries)
+            qualifiers = category.get_second_round_qualifiers(entries=entries)
             # hack - deliberately reload entries here again
             entries = category.get_entries()
-            third_groups = category.get_third_round_groups(entries=entries)
-            qualifiers = category.get_third_round_qualifiers(entries=entries)
             results.append({
                 'category': category,
                 'first_groups': first_groups,
                 'second_groups': second_groups,
-                'third_groups': third_groups,
                 'finals': category.finals_matches(qualifiers)
             })
         return {'results': results}
