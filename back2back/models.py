@@ -56,10 +56,10 @@ class Entry(models.Model):
 
 
 class Score(models.Model):
-    entry = models.ForeignKey(Entry)
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     stage = models.CharField(max_length=255, choices=STAGE_CHOICES)
     time = models.PositiveIntegerField()
-    opponent = models.ForeignKey(Entry, blank=True, null=True, related_name='opponent_score_set')
+    opponent = models.ForeignKey(Entry, blank=True, null=True, related_name='opponent_score_set', on_delete=models.CASCADE)
     score = models.PositiveIntegerField()
     points = models.PositiveIntegerField()
 

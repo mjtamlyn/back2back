@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 from django.contrib import admin
 
 from . import views
@@ -7,7 +7,7 @@ from . import views
 admin.autodiscover()
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.PublicIndex.as_view(), name='public-index'),
     url(r'^scorers/$', views.ScorersIndex.as_view(), name='index'),
     url(r'^(?P<category>[a-z-]+)/entries/$', views.EntryList.as_view(), name='entry-list'),
@@ -59,5 +59,5 @@ urlpatterns = patterns('',
 
     url(r'^results/$', views.ResultsPDF.as_view(), name='results-pdf'),
 
-    url(r'^admin/', include(admin.site.urls)),
-)
+    url(r'^admin/', admin.site.urls),
+]

@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
                 ('time', models.PositiveIntegerField()),
                 ('score', models.PositiveIntegerField()),
                 ('points', models.PositiveIntegerField()),
-                ('entry', models.ForeignKey(to='back2back.Entry')),
-                ('opponent', models.ForeignKey(null=True, related_name='opponent_score_set', to='back2back.Entry', blank=True)),
+                ('entry', models.ForeignKey(to='back2back.Entry', on_delete=models.CASCADE)),
+                ('opponent', models.ForeignKey(null=True, related_name='opponent_score_set', to='back2back.Entry', blank=True, on_delete=models.CASCADE)),
             ],
         ),
     ]

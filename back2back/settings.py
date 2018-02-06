@@ -1,7 +1,6 @@
 import os
 
-from django.core.urlresolvers import reverse_lazy
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as DEFAULT_TEMPLATE_CONTEXT_PROCESSORS
+from django.urls import reverse_lazy
 import dj_database_url
 
 
@@ -12,10 +11,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'ASDFJOIqo3r892p938huidnw')
 DEBUG = not os.environ.get('PRODUCTION', False) == 'True'
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = [
-    'back-2-back.herokuapp.com',
-    'back2back.mjtamlyn.co.uk',
-]
+if not DEBUG:
+    ALLOWED_HOSTS = [
+        'back-2-back.herokuapp.com',
+        'back2back.mjtamlyn.co.uk',
+    ]
 
 # Application definition
 INSTALLED_APPS = (
@@ -29,7 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -41,7 +41,19 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'back2back.urls'
 WSGI_APPLICATION = 'back2back.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_TEMPLATE_CONTEXT_PROCESSORS + ('back2back.context_processors.categories',)
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+            'back2back.context_processors.categories',
+        ]
+    },
+}]
 
 # Database
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost/back2back')}

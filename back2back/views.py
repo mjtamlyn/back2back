@@ -1,10 +1,10 @@
 import json
 import subprocess
 
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, FormView, DeleteView
+from django.urls import reverse
 
 from braces.views import LoginRequiredMixin
 
