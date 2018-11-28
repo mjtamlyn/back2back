@@ -7,7 +7,7 @@ class EntryForm(forms.ModelForm):
 
     class Meta:
         model = Entry
-        fields = ('name', 'agb_number', 'seeding')
+        fields = ('name', 'agb_number')
 
     def __init__(self, category, **kwargs):
         self.category = category

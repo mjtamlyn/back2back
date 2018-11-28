@@ -10,7 +10,6 @@
             <caption>{{ group }}</caption>
             {% for entry in group.entries %}
             <tr>
-                <td>{{ entry.seeding }}</td>
                 <td>{{ entry.name }}</td>
                 <td>
                     <form method="POST" action="{% url 'first-round-group-remove' category=category.slug %}">
@@ -30,7 +29,6 @@
 <table class="table">
     {% for entry in unprocessed %}
     <tr>
-        <td>{{ entry.seeding }}</td>
         <td>{{ entry.name }}</td>
         <td>Add to:
             {% for group in groups %}

@@ -26,10 +26,10 @@ class BaseCategory(object):
         return self.name
 
     def get_entries(self):
-        return Entry.objects.filter(category=self.slug).order_by('seeding', 'name')
+        return Entry.objects.filter(category=self.slug).order_by('name')
 
-    def create_entry(self, name, agb_number='', seeding=None):
-        Entry.objects.create(category=self.slug, name=name, agb_number=agb_number, seeding=seeding)
+    def create_entry(self, name, agb_number=''):
+        Entry.objects.create(category=self.slug, name=name, agb_number=agb_number)
 
     def get_first_round_groups(self, entries=None):
         num_groups = self.first_round_groups
@@ -71,8 +71,8 @@ class BaseCategory(object):
         if qualifiers is not None:
             groups = [
                 Group(category=self, stage='second-round', number=0, entries=[], start_target=self.second_round_target),
-                Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 3),
-                Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 6),
+                Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 4),
+                Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 8),
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
@@ -85,8 +85,8 @@ class BaseCategory(object):
             entries = self.get_entries()
         return [
             Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
-            Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 3),
-            Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 6),
+            Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 4),
+            Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 8),
         ]
 
     def set_second_round_groups(self, qualifiers):
@@ -168,7 +168,7 @@ class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
     first_round_target = 16
-    second_round_target = 7
+    second_round_target = 5
 
 
 class GentsCompound(BaseCategory):
@@ -182,7 +182,7 @@ class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
     first_round_target = 16
-    second_round_target = 7
+    second_round_target = 5
 
 
 class Group(object):
