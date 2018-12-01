@@ -636,7 +636,7 @@ class FinalsScoresheets(LoginRequiredMixin, TexPDFView):
     def get_context_data(self, **kwargs):
         return {
             'categories': CATEGORIES,
-            'rounds': ['Match 1', 'Match 2', 'Match 3', 'Match 4', 'Match 5', 'Semi-final', 'Final'],
+            'rounds': ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final'],
         }
 
 

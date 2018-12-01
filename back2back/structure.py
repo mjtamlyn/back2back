@@ -108,11 +108,11 @@ class BaseCategory(object):
             top_ranked = self.get_top_entries(group_entries, number=2, key=lambda e: (e.second_group_points, e.second_group_score), label='Q')
             direct_qs += top_ranked
         entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
-        entries = sorted(entries, key=lambda e: e.second_group_score, reverse=True)
+        entries = sorted(entries, key=lambda e: (e.second_group_score, e.second_group_points), reverse=True)
         left_to_qualify = 6 - len(direct_qs)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.second_group_score, label='q')
         all_qs = direct_qs + other_qs
-        all_qs = sorted(all_qs, key=lambda e: (-(e.second_group_placing or 0), e.second_group_score))
+        all_qs = sorted(all_qs, key=lambda e: (-(e.second_group_placing or 0), e.second_group_score, e.second_group_points))
         return all_qs
 
     def set_finals_seeds(self, qualifiers):
