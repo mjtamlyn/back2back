@@ -15,6 +15,7 @@ if not DEBUG:
     ALLOWED_HOSTS = [
         'back-2-back.herokuapp.com',
         'back2back.mjtamlyn.co.uk',
+        'back2back.tamlynscore.co.uk',
     ]
 
 # Application definition
