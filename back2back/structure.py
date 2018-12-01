@@ -126,7 +126,7 @@ class BaseCategory(object):
         ))
         if not seeded_qualifiers:
             return []
-        return [self.get_finals_match(seeded_qualifiers, i) for i in range(7)]
+        return [self.get_finals_match(seeded_qualifiers, i) for i in range(5)]
 
     def get_finals_match(self, qualifiers, number):
         match_names = ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final']
