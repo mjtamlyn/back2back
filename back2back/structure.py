@@ -109,7 +109,7 @@ class BaseCategory(object):
             direct_qs += top_ranked
         entries = filter(lambda e: not hasattr(e, 'qualified'), entries)
         entries = sorted(entries, key=lambda e: e.second_group_score, reverse=True)
-        left_to_qualify = 8 - len(direct_qs)
+        left_to_qualify = 6 - len(direct_qs)
         other_qs = self.get_top_entries(entries, number=left_to_qualify, key=lambda e: e.second_group_score, label='q')
         all_qs = direct_qs + other_qs
         all_qs = sorted(all_qs, key=lambda e: (-(e.second_group_placing or 0), e.second_group_score))
@@ -129,7 +129,7 @@ class BaseCategory(object):
         return [self.get_finals_match(seeded_qualifiers, i) for i in range(7)]
 
     def get_finals_match(self, qualifiers, number):
-        match_names = ['Match 1', 'Match 2', 'Match 3', 'Match 4', 'Match 5', 'Semi-final', 'Final']
+        match_names = ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final']
         match = {
             'index': number,
             'name': match_names[number],
