@@ -28,6 +28,8 @@
             </td>
             <td>{{ match.archer_2 }}</td>
         </tr>
+        {% empty %}
+        <div class="col-sm-6"><p>Matches to be confirmed.</p></div>
         {% endfor %}
     </table>
 </div>

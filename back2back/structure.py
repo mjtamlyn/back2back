@@ -121,6 +121,8 @@ class BaseCategory(object):
         seeded_qualifiers = sorted((q for q in qualifiers if q.final_round_seed), key=lambda e: (
             e.final_round_seed,
         ))
+        if not seeded_qualifiers:
+            return []
         return [self.get_finals_match(seeded_qualifiers, i) for i in range(7)]
 
     def get_finals_match(self, qualifiers, number):
