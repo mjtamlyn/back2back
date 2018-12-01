@@ -77,7 +77,10 @@ class BaseCategory(object):
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
                 if entry.qualified:
-                    group_number = layout[i]
+                    try:
+                        group_number = layout[i]
+                    except IndexError:
+                        break
                     entry.second_group_number = group_number
                     groups[group_number].all_entries.append(entry)
             return groups
