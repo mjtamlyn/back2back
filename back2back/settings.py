@@ -16,6 +16,7 @@ if not DEBUG:
         'back-2-back.herokuapp.com',
         'back2back.mjtamlyn.co.uk',
         'back2back.tamlynscore.co.uk',
+        'back2back.archerygb.org',
     ]
 
 # Application definition
