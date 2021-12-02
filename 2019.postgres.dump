@@ -1,0 +1,2637 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.1
+-- Dumped by pg_dump version 13.1
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO marc;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO marc;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO marc;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO marc;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO marc;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO marc;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO marc;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO marc;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO marc;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_user_groups_id_seq OWNED BY public.auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO marc;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO marc;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO marc;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_user_user_permissions.id;
+
+
+--
+-- Name: back2back_entry; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.back2back_entry (
+    id integer NOT NULL,
+    category character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    agb_number character varying(20) NOT NULL,
+    first_group_number integer,
+    first_group_index integer,
+    first_group_placing integer,
+    first_group_points integer NOT NULL,
+    first_group_score integer NOT NULL,
+    second_group_number integer,
+    second_group_index integer,
+    second_group_placing integer,
+    second_group_points integer NOT NULL,
+    second_group_score integer NOT NULL,
+    final_round_seed integer,
+    final_match_1_score integer,
+    final_match_2_score integer,
+    final_match_3_score integer,
+    final_match_4_score integer,
+    final_match_5_score integer,
+    third_group_index integer,
+    third_group_number integer,
+    third_group_placing integer,
+    third_group_points integer NOT NULL,
+    third_group_score integer NOT NULL,
+    final_match_6_score integer,
+    final_match_7_score integer,
+    CONSTRAINT back2back_entry_final_match_1_score_check CHECK ((final_match_1_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_2_score_check CHECK ((final_match_2_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_3_score_check CHECK ((final_match_3_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_4_score_check CHECK ((final_match_4_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_5_score_check CHECK ((final_match_5_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_6_score_check CHECK ((final_match_6_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_7_score_check CHECK ((final_match_7_score >= 0)),
+    CONSTRAINT back2back_entry_final_round_seed_check CHECK ((final_round_seed >= 0)),
+    CONSTRAINT back2back_entry_first_group_index_check CHECK ((first_group_index >= 0)),
+    CONSTRAINT back2back_entry_first_group_number_check CHECK ((first_group_number >= 0)),
+    CONSTRAINT back2back_entry_first_group_placing_check CHECK ((first_group_placing >= 0)),
+    CONSTRAINT back2back_entry_first_group_points_check CHECK ((first_group_points >= 0)),
+    CONSTRAINT back2back_entry_first_group_score_check CHECK ((first_group_score >= 0)),
+    CONSTRAINT back2back_entry_second_group_index_check CHECK ((second_group_index >= 0)),
+    CONSTRAINT back2back_entry_second_group_number_check CHECK ((second_group_number >= 0)),
+    CONSTRAINT back2back_entry_second_group_placing_check CHECK ((second_group_placing >= 0)),
+    CONSTRAINT back2back_entry_second_group_points_check CHECK ((second_group_points >= 0)),
+    CONSTRAINT back2back_entry_second_group_score_check CHECK ((second_group_score >= 0)),
+    CONSTRAINT back2back_entry_third_group_index_check CHECK ((third_group_index >= 0)),
+    CONSTRAINT back2back_entry_third_group_number_check CHECK ((third_group_number >= 0)),
+    CONSTRAINT back2back_entry_third_group_placing_check CHECK ((third_group_placing >= 0)),
+    CONSTRAINT back2back_entry_third_group_points_check CHECK ((third_group_points >= 0)),
+    CONSTRAINT back2back_entry_third_group_score_check CHECK ((third_group_score >= 0))
+);
+
+
+ALTER TABLE public.back2back_entry OWNER TO marc;
+
+--
+-- Name: back2back_entry_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.back2back_entry_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.back2back_entry_id_seq OWNER TO marc;
+
+--
+-- Name: back2back_entry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.back2back_entry_id_seq OWNED BY public.back2back_entry.id;
+
+
+--
+-- Name: back2back_score; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.back2back_score (
+    id integer NOT NULL,
+    stage character varying(255) NOT NULL,
+    "time" integer NOT NULL,
+    score integer NOT NULL,
+    points integer NOT NULL,
+    entry_id integer NOT NULL,
+    opponent_id integer,
+    CONSTRAINT back2back_score_points_check CHECK ((points >= 0)),
+    CONSTRAINT back2back_score_score_check CHECK ((score >= 0)),
+    CONSTRAINT back2back_score_time_check CHECK (("time" >= 0))
+);
+
+
+ALTER TABLE public.back2back_score OWNER TO marc;
+
+--
+-- Name: back2back_score_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.back2back_score_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.back2back_score_id_seq OWNER TO marc;
+
+--
+-- Name: back2back_score_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.back2back_score_id_seq OWNED BY public.back2back_score.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO marc;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO marc;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO marc;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO marc;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO marc;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO marc;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO marc;
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups ALTER COLUMN id SET DEFAULT nextval('public.auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: back2back_entry id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_entry ALTER COLUMN id SET DEFAULT nextval('public.back2back_entry_id_seq'::regclass);
+
+
+--
+-- Name: back2back_score id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score ALTER COLUMN id SET DEFAULT nextval('public.back2back_score_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add entry	1	add_entry
+2	Can change entry	1	change_entry
+3	Can delete entry	1	delete_entry
+4	Can add score	2	add_score
+5	Can change score	2	change_score
+6	Can delete score	2	delete_score
+7	Can add log entry	3	add_logentry
+8	Can change log entry	3	change_logentry
+9	Can delete log entry	3	delete_logentry
+10	Can add permission	4	add_permission
+11	Can change permission	4	change_permission
+12	Can delete permission	4	delete_permission
+13	Can add group	5	add_group
+14	Can change group	5	change_group
+15	Can delete group	5	delete_group
+16	Can add user	6	add_user
+17	Can change user	6	change_user
+18	Can delete user	6	delete_user
+19	Can add content type	7	add_contenttype
+20	Can change content type	7	change_contenttype
+21	Can delete content type	7	delete_contenttype
+22	Can add session	8	add_session
+23	Can change session	8	change_session
+24	Can delete session	8	delete_session
+\.
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+2	pbkdf2_sha256$100000$WwjGsn2G6frX$DRj1draz10dgrLuqc4OuJtluqwB9MuWxU+glDD/YHaU=	2019-11-30 07:52:51.207513+00	t	team				t	t	2017-12-02 07:53:17+00
+1	pbkdf2_sha256$100000$ANt0cWYTJxOJ$bFA3bCWu6wsLkeq5ib01z5bsnyAHOk7YRAg/kFNCtjM=	2019-11-30 12:09:50.796937+00	t	marc			marc.tamlyn@gmail.com	t	t	2016-12-03 07:42:31.803234+00
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: back2back_entry; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.back2back_entry (id, category, name, agb_number, first_group_number, first_group_index, first_group_placing, first_group_points, first_group_score, second_group_number, second_group_index, second_group_placing, second_group_points, second_group_score, final_round_seed, final_match_1_score, final_match_2_score, final_match_3_score, final_match_4_score, final_match_5_score, third_group_index, third_group_number, third_group_placing, third_group_points, third_group_score, final_match_6_score, final_match_7_score) FROM stdin;
+813	gents-compound	Tapani Kalmaru		0	5	4	4	576	1	5	4	4	576	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+861	gents-recurve	Thomas Susca		3	23	3	7	565	1	3	3	6	570	3	117	111	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+849	gents-recurve	Stuart Barby		1	11	2	6	562	0	1	4	5	557	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+831	gents-compound	Nathan MacQueen		3	23	3	6	581	0	3	6	1	568	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+819	gents-compound	Mads Knudsen		1	11	1	9	584	1	0	2	6	586	3	\N	129	129	\N	\N	\N	\N	\N	0	0	\N	\N
+856	gents-recurve	Allan Horne		3	18	5	2	525	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+824	gents-compound	Sam Baldwin		2	16	4	4	570	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+826	gents-compound	Adam Ravenscroft		3	18	2	7	586	0	2	3	5	585	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+859	gents-recurve	Keith Harding		3	21	4	6	564	2	4	5	2	565	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+869	ladies-compound	Ella Gibson		0	1	1	10	581	0	0	1	10	582	5	\N	\N	\N	125	\N	\N	\N	\N	0	0	\N	\N
+811	gents-compound	Mike Aubrey		0	3	3	5	567	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+862	gents-recurve	Alex Wise		4	24	1	10	574	1	2	1	8	582	6	\N	\N	\N	115	\N	\N	\N	\N	0	0	\N	\N
+878	ladies-compound	Iulia Petre		2	0	3	8	566	0	4	3	5	563	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+822	gents-compound	James Mason		2	14	1	10	586	2	1	4	5	584	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+830	gents-compound	Luke Frearson		3	22	5	3	565	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+821	gents-compound	Christopher Cassells		2	13	5	4	559	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+877	ladies-compound	Susan Corless		1	9	3	7	561	1	5	4	4	562	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+848	gents-recurve	Michael Klein		1	10	5	2	530	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+829	gents-compound	Louis Perkins		3	21	6	1	561	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+827	gents-compound	James Howell		3	19	4	5	578	0	4	4	4	578	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+881	ladies-compound	Marion Sambridge		2	2	4	4	544	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+825	gents-compound	Thomas Turner		2	17	6	0	538	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+820	gents-compound	Adam Shaw		2	12	2	8	579	1	1	5	3	572	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+828	gents-compound	Kai Thomas-Prause		3	20	1	8	585	2	2	6	1	574	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+818	gents-compound	Luke Ralls		1	10	4	5	576	1	4	3	5	582	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+809	gents-compound	James Beckett		0	1	6	1	568	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+874	ladies-compound	Amy Bode		1	6	4	5	551	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+860	gents-recurve	Mark Nesbitt		3	22	2	7	568	0	2	5	3	555	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+883	ladies-compound	Bayley Sargeant		3	15	1	9	577	2	2	5	3	572	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+854	gents-recurve	Ryan Holden		2	16	5	2	552	1	5	2	6	570	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+823	gents-compound	Matthew Wong		2	15	3	4	577	0	5	5	4	577	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+882	ladies-compound	Sarah Prieels		2	3	1	8	584	2	1	1	9	587	6	\N	\N	\N	\N	128	\N	\N	\N	0	0	\N	\N
+844	gents-recurve	Chris Avins		1	6	3	6	548	2	5	6	2	540	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+816	gents-compound	Duncan Busby		1	8	2	8	584	0	1	2	6	585	2	129	128	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+875	ladies-compound	Phoebe Pine		1	7	1	8	571	1	0	1	9	576	4	\N	\N	123	\N	\N	\N	\N	\N	0	0	\N	\N
+853	gents-recurve	Patrick Huston		2	15	4	4	558	0	4	2	8	560	2	111	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+871	ladies-compound	Stephanie Clason		0	3	3	6	566	0	5	4	4	562	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+855	gents-recurve	Sean Evans		2	17	6	1	554	0	5	6	0	560	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+851	gents-recurve	Austin Whitmarsh		2	13	2	8	569	1	1	4	4	576	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+845	gents-recurve	Daniel Thompson		1	7	6	2	501	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+857	gents-recurve	Andy Caine		3	19	6	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+815	gents-compound	Chris White		1	7	3	5	578	2	4	1	7	585	4	\N	\N	130	128	\N	\N	\N	\N	0	0	\N	\N
+858	gents-recurve	James Woodgate		3	20	1	8	565	2	2	2	7	574	4	\N	115	121	123	117	\N	\N	\N	0	0	\N	\N
+841	gents-recurve	Kevin McInerney		0	3	3	6	531	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+850	gents-recurve	Antony Wood		2	12	3	6	567	0	3	3	6	562	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+812	gents-compound	Stephan Hansen		0	4	1	10	596	0	0	1	10	596	6	\N	\N	\N	\N	132	\N	\N	\N	0	0	\N	\N
+842	gents-recurve	Thomas Nairn		0	4	4	4	533	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+843	gents-recurve	Tom Hall		0	5	1	10	584	0	0	1	8	584	7	\N	\N	\N	\N	121	\N	\N	\N	0	0	\N	\N
+879	ladies-compound	Jessica Nilsson		2	1	2	8	574	1	1	6	1	559	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+865	gents-recurve	Matthew Munro		4	27	4	4	536	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+876	ladies-compound	Sarah Moon		1	8	2	7	567	0	1	2	5	570	2	125	125	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+839	gents-recurve	Gilbert Jamieson		0	1	5	2	531	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+846	gents-recurve	Jacob Reid		1	8	4	6	546	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+852	gents-recurve	Conor Hall		2	14	1	9	575	2	1	3	6	569	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+808	gents-compound	Jake Walsh		0	0	5	4	575	2	5	3	6	577	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+838	gents-recurve	Cameron Donaldson		0	0	2	8	570	2	0	4	4	565	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+863	gents-recurve	Charlie Medhurst		4	25	5	2	485	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+890	ladies-compound	Kara Abraham		\N	22	\N	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+908	ladies-recurve	Yulia Larkins		2	15	2	8	566	1	1	2	8	566	2	114	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+902	ladies-recurve	Wendy Aubrey		1	9	5	2	484	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+868	ladies-compound	Elizabeth Martel		0	0	5	2	557	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+893	ladies-recurve	Bryony Pitman		0	0	1	10	582	0	0	1	10	587	6	\N	\N	\N	\N	126	\N	\N	\N	0	0	\N	\N
+903	ladies-recurve	Amelia Chumber		2	10	6	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+888	ladies-compound	Elizabeth Foster		4	1	3	6	573	0	3	5	3	566	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+834	gents-compound	Domagoj Buden		4	26	1	10	592	1	2	1	10	593	5	\N	\N	\N	132	130	\N	\N	\N	0	0	\N	\N
+911	ladies-recurve	Natasha Homer		3	18	4	6	526	1	4	6	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+832	gents-compound	Adam Carpenter		4	24	3	7	578	1	3	6	2	583	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+894	ladies-recurve	Jackie Fisher		0	1	3	6	556	2	4	3	6	543	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+880	ladies-compound	Lucy O'Sullivan		\N	12	\N	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+885	ladies-compound	Jessica Stretton		3	17	4	6	557	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+884	ladies-compound	Holly Clifford		3	16	2	7	561	0	2	6	3	559	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+886	ladies-compound	Jodie Taylor		3	18	5	2	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+836	gents-compound	Jason Sargeant		4	28	4	4	569	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+835	gents-compound	Jack Kelly		4	27	5	2	558	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+899	ladies-recurve	Gillian Imrie		1	6	4	4	539	0	5	6	2	528	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+833	gents-compound	David Bramley		4	25	6	0	558	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+898	ladies-recurve	Eleanor Piper		1	5	2	9	569	0	1	2	6	562	1	122	110	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+866	gents-recurve	Ryan Pinder		4	28	2	8	559	2	3	1	9	577	5	\N	\N	119	\N	\N	\N	\N	\N	0	0	\N	\N
+847	gents-recurve	Michael Judd		1	9	1	8	575	1	0	5	4	572	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+873	ladies-compound	Amanda Davidson		1	5	5	3	547	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+900	ladies-recurve	Jaspreet Sagoo		1	7	1	9	578	1	0	1	10	573	4	\N	\N	115	115	\N	\N	\N	\N	0	0	\N	\N
+904	ladies-recurve	Izabela Booth		2	11	3	8	559	1	3	3	6	559	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+897	ladies-recurve	Sophie Castle		0	4	4	4	542	0	4	3	6	532	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+864	gents-recurve	Frank Hynds		4	26	3	6	553	1	4	6	2	553	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+817	gents-compound	Lewis Haslam		1	9	5	2	570	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+918	ladies-recurve	Rebecca Stephenson		4	25	3	6	521	1	5	4	4	524	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+814	gents-compound	Ajay Scott		1	6	6	1	564	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+913	ladies-recurve	Sofia Hursham		3	20	5	2	341	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+914	ladies-recurve	Alice Harding		4	21	5	2	441	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+840	gents-recurve	Jakob Barrett-Rees		0	2	6	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+919	ladies-recurve	Shauna Punjabi		4	26	6	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+872	ladies-compound	Victoria Duncan		0	4	4	4	561	2	5	3	5	561	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+909	ladies-recurve	Heather Hughes		3	16	2	6	531	0	2	4	4	519	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+870	ladies-compound	Hope Greenwood		0	2	2	8	565	2	0	2	6	551	1	121	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+920	ladies-compound	Anne Rutland	12345	4	0	5	4	572	2	4	4	4	572	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+892	ladies-compound	Victoria Loader		4	4	2	6	577	2	3	6	3	567	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+895	ladies-recurve	Rachel Moon		0	2	2	8	548	2	0	4	4	556	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+906	ladies-recurve	Melanie B-Trengove		2	13	4	4	497	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+917	ladies-recurve	Nicole Burdett		4	24	2	8	541	0	3	5	2	537	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+905	ladies-recurve	Kayleigh Ivanov		2	12	5	2	509	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+916	ladies-recurve	Naomi Folkard		4	23	1	10	567	2	3	5	4	551	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+889	ladies-compound	Isabelle Carpenter		4	2	4	5	573	1	3	3	6	573	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+867	gents-recurve	Shane Brown		4	29	6	0	292	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+912	ladies-recurve	Rebekah Tipping		3	19	3	6	531	1	2	5	2	549	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+915	ladies-recurve	Christie Ravenscroft		4	22	4	4	510	2	5	6	0	499	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+907	ladies-recurve	Sarah Bettles		2	14	1	8	583	2	1	2	6	578	3	\N	121	112	\N	\N	\N	\N	\N	0	0	\N	\N
+901	ladies-recurve	Robin Burton		1	8	3	6	509	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+910	ladies-recurve	Louisa Piper		3	17	1	10	567	2	2	1	10	578	5	\N	\N	\N	117	114	\N	\N	\N	0	0	\N	\N
+810	gents-compound	Martin Laursen		0	2	2	6	575	2	0	5	4	575	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+896	ladies-recurve	Siri Vennela Mantravadi		0	3	5	2	373	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+887	ladies-compound	Kirsty Robb		3	19	3	6	563	1	4	5	2	553	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+837	gents-compound	Simon Scott		4	29	2	7	585	2	3	2	7	577	1	121	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N
+891	ladies-compound	Layla Annison		4	3	1	9	575	1	2	2	8	574	3	\N	126	125	127	126	\N	\N	\N	0	0	\N	\N
+\.
+
+
+--
+-- Data for Name: back2back_score; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.back2back_score (id, stage, "time", score, points, entry_id, opponent_id) FROM stdin;
+3474	first-round	0	111	0	868	870
+3475	first-round	0	112	2	870	868
+3476	first-round	0	113	0	808	810
+3477	first-round	0	115	2	810	808
+3480	first-round	0	112	1	883	885
+3481	first-round	0	112	1	885	883
+3482	first-round	0	110	0	811	812
+3483	first-round	0	119	2	812	811
+3484	first-round	0	114	2	871	872
+3485	first-round	0	112	0	872	871
+3486	first-round	0	0	0	886	887
+3487	first-round	0	114	2	887	886
+3488	first-round	0	110	1	829	830
+3489	first-round	0	110	1	830	829
+3490	first-round	0	113	2	884	\N
+3491	first-round	0	113	2	869	\N
+3492	first-round	0	112	2	813	809
+3493	first-round	0	110	0	809	813
+3494	first-round	0	115	0	831	827
+3495	first-round	0	117	2	827	831
+3496	first-round	0	114	2	920	889
+3497	first-round	0	113	0	889	920
+3498	first-round	0	114	2	891	892
+3499	first-round	0	112	0	892	891
+3500	first-round	0	115	0	832	834
+3501	first-round	0	119	2	834	832
+3502	first-round	0	111	0	814	816
+3503	first-round	0	116	2	816	814
+3504	first-round	0	109	0	873	875
+3505	first-round	0	117	2	875	873
+3508	first-round	0	112	2	888	\N
+3506	first-round	0	101	0	835	836
+3507	first-round	0	112	2	836	835
+3509	first-round	0	113	1	876	877
+3510	first-round	0	113	1	877	876
+3478	first-round	0	116	2	826	828
+3479	first-round	0	115	0	828	826
+3511	first-round	0	112	0	817	818
+3512	first-round	0	116	2	818	817
+3513	first-round	0	115	2	837	833
+3514	first-round	0	109	0	833	837
+3515	first-round	0	110	2	874	\N
+3516	first-round	0	114	1	819	815
+3517	first-round	0	114	1	815	819
+3518	first-round	0	112	2	878	881
+3519	first-round	0	108	0	881	878
+3520	first-round	0	115	0	820	822
+3521	first-round	0	117	2	822	820
+3522	first-round	0	117	2	882	\N
+3523	first-round	0	113	0	823	824
+3524	first-round	0	115	2	824	823
+3525	first-round	0	115	2	879	\N
+3526	first-round	0	108	0	825	821
+3527	first-round	0	115	2	821	825
+3528	first-round	1	0	0	886	884
+3529	first-round	1	112	2	884	886
+3530	first-round	1	113	0	887	883
+3531	first-round	1	116	2	883	887
+3532	first-round	1	110	2	885	\N
+3533	first-round	1	116	2	891	888
+3534	first-round	1	115	0	888	891
+3535	first-round	1	118	2	892	920
+3536	first-round	1	116	0	920	892
+3537	first-round	1	113	2	889	\N
+3538	first-round	1	116	0	871	869
+3539	first-round	1	117	2	869	871
+3540	first-round	1	115	2	811	809
+3541	first-round	1	114	0	809	811
+3542	first-round	1	114	2	872	868
+3543	first-round	1	111	0	868	872
+3544	first-round	1	120	2	812	808
+3545	first-round	1	116	0	808	812
+3546	first-round	1	114	2	870	\N
+3547	first-round	1	112	0	810	813
+3548	first-round	1	114	2	813	810
+3549	first-round	1	117	2	823	821
+3550	first-round	1	100	0	821	823
+3551	first-round	1	114	2	876	874
+3552	first-round	1	111	0	874	876
+3553	first-round	1	113	0	817	815
+3554	first-round	1	116	2	815	817
+3555	first-round	1	112	2	877	873
+3556	first-round	1	109	0	873	877
+3557	first-round	1	113	1	818	814
+3558	first-round	1	113	1	814	818
+3559	first-round	1	114	0	824	820
+3560	first-round	1	116	2	820	824
+3561	first-round	1	112	2	875	\N
+3562	first-round	1	119	2	822	825
+3563	first-round	1	101	0	825	822
+3564	first-round	1	117	2	882	879
+3565	first-round	1	112	0	879	882
+3566	first-round	1	114	0	829	827
+3567	first-round	1	115	2	827	829
+3568	first-round	1	117	2	878	\N
+3569	first-round	1	111	0	830	826
+3570	first-round	1	119	2	826	830
+3571	first-round	1	109	2	881	\N
+3572	first-round	1	118	2	828	831
+3573	first-round	1	115	0	831	828
+3574	first-round	1	116	2	835	833
+3575	first-round	1	113	0	833	835
+3576	first-round	1	114	0	836	832
+3577	first-round	1	115	2	832	836
+3578	first-round	1	120	2	834	837
+3579	first-round	1	116	0	837	834
+3580	first-round	1	114	0	816	819
+3581	first-round	1	116	2	819	816
+3582	first-round	2	114	0	827	828
+3583	first-round	2	116	2	828	827
+3584	first-round	2	111	2	872	\N
+3587	first-round	2	111	2	887	\N
+3585	first-round	2	117	2	826	829
+3586	first-round	2	112	0	829	826
+3588	first-round	2	114	2	869	870
+3589	first-round	2	111	0	870	869
+3590	first-round	2	112	1	884	885
+3591	first-round	2	112	1	885	884
+3592	first-round	2	118	0	813	812
+3593	first-round	2	119	2	812	813
+3594	first-round	2	120	2	837	836
+3595	first-round	2	113	0	836	837
+3596	first-round	2	118	2	883	886
+3597	first-round	2	0	0	886	883
+3598	first-round	2	114	0	833	834
+3599	first-round	2	119	2	834	833
+3600	first-round	2	111	0	868	871
+3601	first-round	2	112	2	871	868
+3602	first-round	2	116	2	892	\N
+3603	first-round	2	117	2	888	889
+3604	first-round	2	114	0	889	888
+3605	first-round	2	114	0	809	810
+3606	first-round	2	116	2	810	809
+3607	first-round	2	111	2	877	\N
+3608	first-round	2	112	0	920	891
+3609	first-round	2	114	2	891	920
+3610	first-round	2	113	2	874	875
+3611	first-round	2	112	0	875	874
+3614	first-round	2	108	0	873	876
+3615	first-round	2	114	2	876	873
+3612	first-round	2	114	1	808	811
+3613	first-round	2	114	1	811	808
+3616	first-round	2	118	2	819	818
+3617	first-round	2	114	0	818	819
+3618	first-round	2	116	2	879	881
+3619	first-round	2	107	0	881	879
+3620	first-round	2	116	2	878	882
+3621	first-round	2	115	0	882	878
+3622	first-round	2	116	0	815	816
+3623	first-round	2	117	2	816	815
+3624	first-round	2	111	0	814	817
+3625	first-round	2	117	2	817	814
+3626	first-round	2	109	0	825	824
+3627	first-round	2	114	2	824	825
+3628	first-round	2	114	0	821	822
+3629	first-round	2	115	2	822	821
+3630	first-round	2	116	2	820	823
+3631	first-round	2	115	0	823	820
+3632	first-round	2	115	2	831	830
+3633	first-round	2	113	0	830	831
+3634	first-round	2	117	2	832	835
+3635	first-round	2	116	0	835	832
+3636	first-round	3	114	2	876	\N
+3637	first-round	3	112	0	877	875
+3638	first-round	3	115	2	875	877
+3639	first-round	3	117	2	879	878
+3640	first-round	3	108	0	878	879
+3641	first-round	3	117	2	882	\N
+3642	first-round	3	113	1	809	808
+3643	first-round	3	113	1	808	809
+3644	first-round	3	108	2	881	\N
+3645	first-round	3	117	2	869	868
+3646	first-round	3	113	0	868	869
+3647	first-round	3	111	0	884	883
+3648	first-round	3	116	2	883	884
+3649	first-round	3	0	2	886	\N
+3650	first-round	3	114	0	813	811
+3651	first-round	3	116	2	811	813
+3652	first-round	3	113	2	871	\N
+3653	first-round	3	115	2	887	885
+3654	first-round	3	111	0	885	887
+3655	first-round	3	116	2	888	920
+3656	first-round	3	114	0	920	888
+3657	first-round	3	112	0	872	870
+3658	first-round	3	115	2	870	872
+3659	first-round	3	118	2	812	810
+3660	first-round	3	117	0	810	812
+3661	first-round	3	116	2	891	\N
+3662	first-round	3	116	0	892	889
+3663	first-round	3	118	2	889	892
+3664	first-round	3	110	1	874	873
+3665	first-round	3	110	1	873	874
+3666	first-round	3	117	2	815	814
+3667	first-round	3	116	0	814	815
+3670	first-round	3	117	2	819	817
+3671	first-round	3	112	0	817	819
+3668	first-round	3	117	1	827	826
+3669	first-round	3	117	1	826	827
+3672	first-round	3	118	2	831	829
+3673	first-round	3	113	0	829	831
+3674	first-round	3	115	0	818	816
+3675	first-round	3	118	2	816	818
+3676	first-round	3	114	0	830	828
+3677	first-round	3	118	2	828	830
+3678	first-round	3	114	0	821	820
+3679	first-round	3	116	2	820	821
+3680	first-round	3	109	0	833	832
+3681	first-round	3	114	2	832	833
+3682	first-round	3	117	2	837	835
+3683	first-round	3	112	0	835	837
+3684	first-round	3	108	0	825	823
+3685	first-round	3	117	2	823	825
+3686	first-round	3	116	0	836	834
+3687	first-round	3	118	2	834	836
+3688	first-round	3	113	0	824	822
+3689	first-round	3	116	2	822	824
+3690	first-round	4	107	0	874	877
+3691	first-round	4	113	2	877	874
+3692	first-round	4	112	0	881	882
+3693	first-round	4	118	2	882	881
+3694	first-round	4	115	2	810	811
+3695	first-round	4	112	0	811	810
+3696	first-round	4	113	2	878	\N
+3697	first-round	4	114	2	879	\N
+3698	first-round	4	119	2	808	813
+3699	first-round	4	118	0	813	808
+3700	first-round	4	112	2	885	886
+3701	first-round	4	0	0	886	885
+3702	first-round	4	115	2	883	\N
+3703	first-round	4	117	0	809	812
+3704	first-round	4	120	2	812	809
+3705	first-round	4	113	2	884	887
+3706	first-round	4	110	0	887	884
+3707	first-round	4	119	2	816	817
+3708	first-round	4	116	0	817	816
+3709	first-round	4	115	1	889	891
+3710	first-round	4	115	1	891	889
+3711	first-round	4	116	2	920	\N
+3712	first-round	4	113	0	814	819
+3713	first-round	4	119	2	819	814
+3714	first-round	4	113	0	888	892
+3715	first-round	4	115	2	892	888
+3716	first-round	4	115	0	815	818
+3717	first-round	4	118	2	818	815
+3718	first-round	4	111	2	868	\N
+3719	first-round	4	119	2	822	823
+3720	first-round	4	115	0	823	822
+3721	first-round	4	120	2	869	872
+3722	first-round	4	112	0	872	869
+3723	first-round	4	115	2	875	876
+3724	first-round	4	112	0	876	875
+3725	first-round	4	116	2	820	825
+3726	first-round	4	112	0	825	820
+3727	first-round	4	116	2	821	824
+3728	first-round	4	114	0	824	821
+3729	first-round	4	113	2	870	871
+3730	first-round	4	111	0	871	870
+3731	first-round	4	118	2	828	829
+3732	first-round	4	112	0	829	828
+3733	first-round	4	117	0	826	831
+3734	first-round	4	118	2	831	826
+3735	first-round	4	115	0	827	830
+3736	first-round	4	117	2	830	827
+3737	first-round	4	116	2	834	835
+3738	first-round	4	113	0	835	834
+3739	first-round	4	117	1	832	837
+3740	first-round	4	117	1	837	832
+3741	first-round	4	113	0	833	836
+3742	first-round	4	114	2	836	833
+3743	first-round	4	111	2	873	\N
+3744	first-round	0	112	2	899	\N
+3745	first-round	0	0	0	903	905
+3746	first-round	0	97	2	905	903
+3747	first-round	0	97	0	906	907
+3748	first-round	0	117	2	907	906
+3749	first-round	0	113	2	908	904
+3750	first-round	0	109	0	904	908
+3751	first-round	0	97	0	909	911
+3752	first-round	0	110	2	911	909
+3753	first-round	0	107	2	912	913
+3754	first-round	0	81	0	913	912
+3755	first-round	0	111	2	910	\N
+3756	first-round	0	86	0	914	916
+3757	first-round	0	114	2	916	914
+3758	first-round	0	104	2	917	918
+3759	first-round	0	101	0	918	917
+3760	first-round	0	0	0	919	915
+3761	first-round	0	105	2	915	919
+3762	first-round	0	115	2	838	840
+3763	first-round	0	0	0	840	838
+3764	first-round	0	100	2	841	842
+3765	first-round	0	85	0	842	841
+3766	first-round	0	102	0	856	858
+3767	first-round	0	114	2	858	856
+3768	first-round	0	116	1	859	860
+3769	first-round	0	116	1	860	859
+3770	first-round	0	117	2	843	839
+3771	first-round	0	114	0	839	843
+3772	first-round	0	108	2	861	857
+3773	first-round	0	0	0	857	861
+3774	first-round	0	107	0	844	846
+3775	first-round	0	114	2	846	844
+3776	first-round	0	114	2	862	864
+3777	first-round	0	110	0	864	862
+3778	first-round	0	114	2	847	848
+3779	first-round	0	106	0	848	847
+3780	first-round	0	99	0	865	866
+3781	first-round	0	106	2	866	865
+3782	first-round	0	116	2	849	845
+3783	first-round	0	106	0	845	849
+3784	first-round	0	115	2	893	895
+3785	first-round	0	108	0	895	893
+3786	first-round	0	50	0	867	863
+3787	first-round	0	99	2	863	867
+3788	first-round	0	72	0	896	897
+3789	first-round	0	110	2	897	896
+3790	first-round	0	112	0	850	852
+3791	first-round	0	115	2	852	850
+3792	first-round	0	111	2	894	\N
+3793	first-round	0	114	2	853	854
+3794	first-round	0	111	0	854	853
+3795	first-round	0	118	1	898	900
+3796	first-round	0	118	1	900	898
+3797	first-round	0	113	0	855	851
+3798	first-round	0	117	2	851	855
+3799	first-round	0	105	2	901	902
+3800	first-round	0	94	0	902	901
+3801	first-round	1	109	2	841	839
+3802	first-round	1	101	0	839	841
+3803	first-round	1	113	0	842	838
+3804	first-round	1	114	2	838	842
+3805	first-round	1	98	0	906	904
+3806	first-round	1	112	2	904	906
+3807	first-round	1	0	0	840	843
+3808	first-round	1	116	2	843	840
+3809	first-round	1	117	2	907	903
+3810	first-round	1	0	0	903	907
+3811	first-round	1	70	0	896	894
+3812	first-round	1	111	2	894	896
+3813	first-round	1	109	0	905	908
+3814	first-round	1	113	2	908	905
+3815	first-round	1	116	2	847	845
+3816	first-round	1	97	0	845	847
+3817	first-round	1	106	0	912	910
+3818	first-round	1	110	2	910	912
+3819	first-round	1	112	2	859	857
+3820	first-round	1	0	0	857	859
+3821	first-round	1	104	0	897	893
+3822	first-round	1	117	2	893	897
+3823	first-round	1	94	0	913	909
+3824	first-round	1	112	2	909	913
+3825	first-round	1	105	2	911	\N
+3826	first-round	1	106	0	848	844
+3827	first-round	1	112	2	844	848
+3828	first-round	1	116	2	860	856
+3829	first-round	1	98	0	856	860
+3830	first-round	1	110	2	917	915
+3831	first-round	1	101	0	915	917
+3832	first-round	1	103	2	918	914
+3833	first-round	1	90	0	914	918
+3834	first-round	1	113	2	895	\N
+3835	first-round	1	108	0	858	861
+3836	first-round	1	115	2	861	858
+3837	first-round	1	112	0	846	849
+3838	first-round	1	115	2	849	846
+3841	first-round	1	112	2	916	919
+3842	first-round	1	0	0	919	916
+3843	first-round	1	107	2	901	899
+3844	first-round	1	104	0	899	901
+3845	first-round	1	112	0	853	851
+3846	first-round	1	113	2	851	853
+3839	first-round	1	111	2	865	863
+3840	first-round	1	109	0	863	865
+3847	first-round	1	99	0	902	898
+3848	first-round	1	109	2	898	902
+3849	first-round	1	112	0	866	862
+3850	first-round	1	117	2	862	866
+3851	first-round	1	109	0	854	850
+3852	first-round	1	113	2	850	854
+3853	first-round	1	116	2	900	\N
+3854	first-round	1	113	2	864	867
+3855	first-round	1	53	0	867	864
+3856	first-round	1	112	1	852	855
+3857	first-round	1	112	1	855	852
+3858	first-round	2	115	2	843	842
+3859	first-round	2	107	0	842	843
+3860	first-round	2	112	2	839	840
+3861	first-round	2	0	0	840	839
+3862	first-round	2	114	2	838	841
+3863	first-round	2	105	0	841	838
+3864	first-round	2	110	2	849	848
+3865	first-round	2	107	0	848	849
+3866	first-round	2	102	2	845	846
+3867	first-round	2	94	0	846	845
+3868	first-round	2	112	2	897	\N
+3869	first-round	2	112	2	898	901
+3870	first-round	2	92	0	901	898
+3871	first-round	2	110	0	894	895
+3872	first-round	2	114	2	895	894
+3873	first-round	2	110	0	844	847
+3874	first-round	2	116	2	847	844
+3875	first-round	2	112	0	908	907
+3876	first-round	2	118	2	907	908
+3877	first-round	2	110	2	904	905
+3878	first-round	2	107	0	905	904
+3879	first-round	2	117	2	893	896
+3880	first-round	2	95	0	896	893
+3881	first-round	2	0	0	903	906
+3882	first-round	2	94	2	906	903
+3883	first-round	2	109	0	855	854
+3884	first-round	2	115	2	854	855
+3885	first-round	2	50	2	913	\N
+3886	first-round	2	112	0	851	852
+3887	first-round	2	117	2	852	851
+3888	first-round	2	116	2	910	911
+3889	first-round	2	103	0	911	910
+3890	first-round	2	97	2	902	\N
+3891	first-round	2	107	2	909	912
+3892	first-round	2	105	0	912	909
+3893	first-round	2	117	2	850	853
+3894	first-round	2	100	0	853	850
+3895	first-round	2	106	0	899	900
+3896	first-round	2	113	2	900	899
+3897	first-round	2	0	0	919	918
+3898	first-round	2	101	2	918	919
+3899	first-round	2	106	0	915	916
+3900	first-round	2	113	2	916	915
+3901	first-round	2	112	0	861	860
+3902	first-round	2	117	2	860	861
+3903	first-round	2	84	0	914	917
+3904	first-round	2	110	2	917	914
+3905	first-round	2	0	0	857	858
+3906	first-round	2	117	2	858	857
+3907	first-round	2	111	0	856	859
+3908	first-round	2	112	2	859	856
+3909	first-round	2	77	0	867	866
+3910	first-round	2	113	2	866	867
+3911	first-round	2	95	0	863	864
+3912	first-round	2	111	2	864	863
+3913	first-round	2	116	2	862	865
+3914	first-round	2	107	0	865	862
+3915	first-round	3	112	2	904	903
+3916	first-round	3	0	0	903	904
+3917	first-round	3	113	2	908	906
+3918	first-round	3	104	0	906	908
+3919	first-round	3	104	0	839	838
+3920	first-round	3	113	2	838	839
+3921	first-round	3	112	0	894	893
+3922	first-round	3	119	2	893	894
+3923	first-round	3	117	2	907	905
+3924	first-round	3	96	0	905	907
+3925	first-round	3	72	2	896	\N
+3926	first-round	3	115	2	910	909
+3927	first-round	3	102	0	909	910
+3928	first-round	3	119	2	843	841
+3929	first-round	3	109	0	841	843
+3930	first-round	3	102	2	912	\N
+3931	first-round	3	109	0	897	895
+3932	first-round	3	113	2	895	897
+3933	first-round	3	112	2	842	840
+3934	first-round	3	0	0	840	842
+3935	first-round	3	26	0	913	911
+3936	first-round	3	102	2	911	913
+3937	first-round	3	106	0	899	898
+3938	first-round	3	112	2	898	899
+3939	first-round	3	102	2	915	914
+3940	first-round	3	87	0	914	915
+3941	first-round	3	101	0	845	844
+3942	first-round	3	108	2	844	845
+3943	first-round	3	102	2	901	\N
+3944	first-round	3	0	0	919	917
+3945	first-round	3	107	2	917	919
+3946	first-round	3	111	0	849	847
+3947	first-round	3	116	2	847	849
+3948	first-round	3	104	0	918	916
+3949	first-round	3	113	2	916	918
+3950	first-round	3	97	0	902	900
+3951	first-round	3	113	2	900	902
+3952	first-round	3	104	0	848	846
+3953	first-round	3	112	2	846	848
+3954	first-round	3	112	2	851	850
+3955	first-round	3	111	0	850	851
+3956	first-round	3	110	0	855	853
+3957	first-round	3	117	2	853	855
+3958	first-round	3	106	0	854	852
+3959	first-round	3	115	2	852	854
+3960	first-round	3	0	0	857	856
+3961	first-round	3	111	2	856	857
+3962	first-round	3	112	1	861	859
+3963	first-round	3	112	1	859	861
+3964	first-round	3	106	0	860	858
+3965	first-round	3	113	2	858	860
+3966	first-round	3	95	0	863	862
+3967	first-round	3	116	2	862	863
+3968	first-round	3	69	0	867	865
+3969	first-round	3	116	2	865	867
+3970	first-round	3	115	2	866	864
+3971	first-round	3	109	0	864	866
+3972	first-round	4	118	2	900	901
+3973	first-round	4	103	0	901	900
+3974	first-round	4	118	2	898	\N
+3975	first-round	4	111	2	899	902
+3976	first-round	4	97	0	902	899
+3977	first-round	4	100	0	905	906
+3978	first-round	4	104	2	906	905
+3979	first-round	4	0	0	840	841
+3980	first-round	4	108	2	841	840
+3981	first-round	4	0	0	903	908
+3982	first-round	4	115	2	908	903
+3983	first-round	4	113	2	858	859
+3984	first-round	4	112	0	859	858
+3985	first-round	4	116	2	904	907
+3986	first-round	4	114	0	907	904
+3987	first-round	4	106	0	911	912
+3988	first-round	4	111	2	912	911
+3989	first-round	4	114	0	838	843
+3990	first-round	4	117	2	843	838
+3991	first-round	4	113	2	909	\N
+3992	first-round	4	103	0	856	861
+3993	first-round	4	118	2	861	856
+3994	first-round	4	115	2	910	913
+3995	first-round	4	90	0	913	910
+3996	first-round	4	100	0	839	842
+3997	first-round	4	116	2	842	839
+3998	first-round	4	115	2	916	917
+3999	first-round	4	110	0	917	916
+4000	first-round	4	94	2	914	919
+4001	first-round	4	0	0	919	914
+4002	first-round	4	0	0	857	860
+4003	first-round	4	113	2	860	857
+4004	first-round	4	110	2	864	865
+4005	first-round	4	103	0	865	864
+4006	first-round	4	114	2	846	847
+4007	first-round	4	113	0	847	846
+4008	first-round	4	96	0	915	918
+4009	first-round	4	112	2	918	915
+4010	first-round	4	111	2	862	867
+4011	first-round	4	43	0	867	862
+4012	first-round	4	111	2	844	849
+4013	first-round	4	110	0	849	844
+4014	first-round	4	87	0	863	866
+4015	first-round	4	113	2	866	863
+4016	first-round	4	95	0	845	848
+4017	first-round	4	107	2	848	845
+4018	first-round	4	116	2	852	853
+4019	first-round	4	115	0	853	852
+4020	first-round	4	100	2	895	896
+4021	first-round	4	64	0	896	895
+4022	first-round	4	114	2	850	855
+4023	first-round	4	110	0	855	850
+4024	first-round	4	114	2	893	\N
+4025	first-round	4	112	2	894	897
+4026	first-round	4	107	0	897	894
+4027	first-round	4	115	2	851	854
+4028	first-round	4	111	0	854	851
+4029	second-round	0	117	2	869	884
+4030	second-round	0	111	0	884	869
+4031	second-round	0	111	0	888	878
+4032	second-round	0	114	2	878	888
+4033	second-round	0	115	2	871	876
+4034	second-round	0	114	0	876	871
+4035	second-round	0	120	2	812	826
+4036	second-round	0	116	0	826	812
+4037	second-round	0	115	0	831	827
+4038	second-round	0	119	2	827	831
+4039	second-round	0	114	1	875	891
+4040	second-round	0	114	1	891	875
+4041	second-round	0	116	1	823	816
+4042	second-round	0	116	1	816	823
+4043	second-round	0	115	2	870	883
+4044	second-round	0	113	0	883	870
+4045	second-round	0	116	2	889	887
+4046	second-round	0	108	0	887	889
+4047	second-round	0	115	0	892	920
+4048	second-round	0	116	2	920	892
+4049	second-round	0	117	0	819	834
+4050	second-round	0	119	2	834	819
+4051	second-round	0	113	2	877	879
+4052	second-round	0	112	0	879	877
+4053	second-round	0	113	0	872	882
+4054	second-round	0	118	2	882	872
+4055	second-round	0	118	2	832	818
+4056	second-round	0	116	0	818	832
+4057	second-round	0	115	2	813	820
+4058	second-round	0	114	0	820	813
+4059	second-round	0	115	2	810	828
+4060	second-round	0	113	0	828	810
+4061	second-round	0	116	1	837	815
+4062	second-round	0	116	1	815	837
+4063	second-round	0	112	0	808	822
+4064	second-round	0	120	2	822	808
+4065	second-round	1	115	1	888	876
+4066	second-round	1	115	1	876	888
+4067	second-round	1	113	0	878	869
+4068	second-round	1	117	2	869	878
+4069	second-round	1	113	0	884	871
+4070	second-round	1	114	2	871	884
+4071	second-round	1	116	2	889	879
+4072	second-round	1	113	0	879	889
+4073	second-round	1	111	0	831	816
+4074	second-round	1	116	2	816	831
+4075	second-round	1	112	0	887	875
+4076	second-round	1	115	2	875	887
+4077	second-round	1	116	0	827	812
+4078	second-round	1	119	2	812	827
+4079	second-round	1	112	1	891	877
+4080	second-round	1	112	1	877	891
+4081	second-round	1	116	0	826	823
+4082	second-round	1	117	2	823	826
+4083	second-round	1	116	0	832	820
+4084	second-round	1	117	2	820	832
+4085	second-round	1	112	0	892	882
+4086	second-round	1	117	2	882	892
+4087	second-round	1	116	1	818	819
+4088	second-round	1	116	1	819	818
+4089	second-round	1	120	2	834	813
+4090	second-round	1	118	0	813	834
+4091	second-round	1	117	2	837	822
+4092	second-round	1	116	0	822	837
+4093	second-round	1	113	0	920	870
+4094	second-round	1	115	2	870	920
+4095	second-round	1	117	2	815	810
+4096	second-round	1	116	0	810	815
+4097	second-round	1	115	2	883	872
+4098	second-round	1	111	0	872	883
+4099	second-round	1	115	0	828	808
+4100	second-round	1	116	2	808	828
+4101	second-round	2	113	0	871	878
+4102	second-round	2	114	2	878	871
+4103	second-round	2	112	2	876	884
+4104	second-round	2	111	0	884	876
+4105	second-round	2	118	2	869	888
+4106	second-round	2	116	0	888	869
+4107	second-round	2	111	1	877	887
+4108	second-round	2	111	1	887	877
+4109	second-round	2	113	0	823	827
+4110	second-round	2	115	2	827	823
+4111	second-round	2	112	0	879	891
+4112	second-round	2	117	2	891	879
+4113	second-round	2	119	1	816	826
+4114	second-round	2	119	1	826	816
+4115	second-round	2	116	2	875	889
+4116	second-round	2	113	0	889	875
+4117	second-round	2	118	2	812	831
+4118	second-round	2	114	0	831	812
+4119	second-round	2	116	0	813	818
+4120	second-round	2	117	2	818	813
+4121	second-round	2	115	2	872	920
+4122	second-round	2	114	0	920	872
+4123	second-round	2	114	0	820	834
+4124	second-round	2	116	2	834	820
+4125	second-round	2	119	2	882	883
+4126	second-round	2	115	0	883	882
+4127	second-round	2	118	2	819	832
+4128	second-round	2	117	0	832	819
+4129	second-round	2	118	2	808	815
+4130	second-round	2	117	0	815	808
+4131	second-round	2	114	1	822	828
+4132	second-round	2	114	1	828	822
+4133	second-round	2	114	2	870	892
+4134	second-round	2	113	0	892	870
+4135	second-round	2	113	0	810	837
+4136	second-round	2	115	2	837	810
+4137	second-round	3	114	0	876	869
+4138	second-round	3	116	2	869	876
+4139	second-round	3	110	0	871	888
+4140	second-round	3	113	2	888	871
+4141	second-round	3	111	1	878	884
+4142	second-round	3	111	1	884	878
+4143	second-round	3	111	0	879	875
+4144	second-round	3	115	2	875	879
+4145	second-round	3	117	0	816	812
+4146	second-round	3	120	2	812	816
+4147	second-round	3	117	1	823	831
+4148	second-round	3	117	1	831	823
+4149	second-round	3	113	0	877	889
+4150	second-round	3	114	2	889	877
+4151	second-round	3	115	0	827	826
+4152	second-round	3	117	2	826	827
+4153	second-round	3	116	1	820	819
+4154	second-round	3	116	1	819	820
+4155	second-round	3	116	2	813	832
+4156	second-round	3	115	0	832	813
+4157	second-round	3	111	0	887	891
+4158	second-round	3	116	2	891	887
+4159	second-round	3	116	0	818	834
+4160	second-round	3	120	2	834	818
+4161	second-round	3	119	2	882	870
+4162	second-round	3	109	0	870	882
+4163	second-round	3	119	2	822	810
+4164	second-round	3	114	0	810	822
+4165	second-round	3	112	1	872	892
+4166	second-round	3	112	1	892	872
+4167	second-round	3	117	2	808	837
+4168	second-round	3	113	0	837	808
+4169	second-round	3	115	1	920	883
+4170	second-round	3	115	1	883	920
+4171	second-round	3	118	2	815	828
+4172	second-round	3	117	0	828	815
+4173	second-round	4	113	2	884	888
+4174	second-round	4	111	0	888	884
+4175	second-round	4	114	2	869	871
+4176	second-round	4	110	0	871	869
+4177	second-round	4	115	2	876	878
+4178	second-round	4	111	0	878	876
+4179	second-round	4	115	2	891	889
+4180	second-round	4	114	0	889	891
+4181	second-round	4	116	2	875	877
+4182	second-round	4	113	0	877	875
+4183	second-round	4	117	2	826	831
+4184	second-round	4	111	0	831	826
+4185	second-round	4	111	1	879	887
+4186	second-round	4	111	1	887	879
+4187	second-round	4	119	2	812	823
+4188	second-round	4	114	0	823	812
+4189	second-round	4	114	0	883	892
+4190	second-round	4	115	2	892	883
+4191	second-round	4	117	2	816	827
+4192	second-round	4	113	0	827	816
+4193	second-round	4	98	0	870	872
+4194	second-round	4	110	2	872	870
+4197	second-round	4	114	1	882	920
+4198	second-round	4	114	1	920	882
+4199	second-round	4	118	2	834	832
+4200	second-round	4	117	0	832	834
+4301	second-round	2	94	2	918	911
+4302	second-round	2	0	0	911	918
+4195	second-round	4	119	2	819	813
+4196	second-round	4	111	0	813	819
+4201	second-round	4	111	0	820	818
+4202	second-round	4	117	2	818	820
+4203	second-round	4	115	0	828	837
+4204	second-round	4	116	2	837	828
+4205	second-round	4	117	2	810	808
+4206	second-round	4	114	0	808	810
+4207	second-round	4	115	0	822	815
+4208	second-round	4	117	2	815	822
+4209	second-round	0	115	2	893	909
+4210	second-round	0	107	0	909	893
+4211	second-round	0	104	0	917	897
+4212	second-round	0	110	2	897	917
+4213	second-round	0	117	2	843	860
+4214	second-round	0	107	0	860	843
+4215	second-round	0	110	0	850	853
+4216	second-round	0	113	2	853	850
+4217	second-round	0	106	0	899	898
+4218	second-round	0	110	2	898	899
+4219	second-round	0	111	0	855	849
+4220	second-round	0	112	2	849	855
+4221	second-round	0	112	0	847	862
+4222	second-round	0	116	2	862	847
+4223	second-round	0	116	2	900	912
+4224	second-round	0	111	0	912	900
+4225	second-round	0	115	2	861	864
+4226	second-round	0	108	0	864	861
+4227	second-round	0	117	2	854	851
+4228	second-round	0	114	0	851	854
+4229	second-round	0	112	0	838	858
+4230	second-round	0	116	2	858	838
+4231	second-round	0	115	2	866	859
+4232	second-round	0	113	0	859	866
+4233	second-round	0	114	2	904	911
+4234	second-round	0	0	0	911	904
+4235	second-round	0	107	0	844	852
+4236	second-round	0	112	2	852	844
+4237	second-round	0	107	0	918	908
+4238	second-round	0	111	2	908	918
+4239	second-round	0	110	0	895	910
+4240	second-round	0	115	2	910	895
+4241	second-round	0	107	0	916	894
+4242	second-round	0	111	2	894	916
+4243	second-round	0	98	0	915	907
+4244	second-round	0	118	2	907	915
+4245	second-round	1	112	1	850	849
+4246	second-round	1	112	1	849	850
+4247	second-round	1	111	0	853	843
+4248	second-round	1	117	2	843	853
+4249	second-round	1	117	2	860	855
+4250	second-round	1	112	0	855	860
+4251	second-round	1	110	0	917	898
+4252	second-round	1	114	2	898	917
+4253	second-round	1	116	2	861	851
+4254	second-round	1	115	0	851	861
+4255	second-round	1	108	0	897	893
+4256	second-round	1	120	2	893	897
+4257	second-round	1	115	2	864	847
+4258	second-round	1	114	0	847	864
+4259	second-round	1	100	2	909	899
+4260	second-round	1	95	0	899	909
+4261	second-round	1	117	2	862	854
+4262	second-round	1	113	0	854	862
+4263	second-round	1	108	0	904	908
+4264	second-round	1	112	2	908	904
+4265	second-round	1	117	2	866	852
+4266	second-round	1	114	0	852	866
+4267	second-round	1	0	0	911	900
+4268	second-round	1	113	2	900	911
+4269	second-round	1	109	0	859	838
+4270	second-round	1	114	2	838	859
+4271	second-round	1	105	0	912	918
+4272	second-round	1	106	2	918	912
+4273	second-round	1	111	0	858	844
+4274	second-round	1	112	2	844	858
+4275	second-round	1	113	0	916	907
+4276	second-round	1	116	2	907	916
+4277	second-round	1	105	0	894	895
+4278	second-round	1	110	2	895	894
+4279	second-round	1	116	2	910	915
+4280	second-round	1	102	0	915	910
+4281	second-round	2	112	0	855	853
+4282	second-round	2	113	2	853	855
+4283	second-round	2	113	2	849	860
+4284	second-round	2	110	0	860	849
+4285	second-round	2	115	0	843	850
+4286	second-round	2	116	2	850	843
+4287	second-round	2	108	2	899	897
+4288	second-round	2	93	0	897	899
+4289	second-round	2	114	2	854	864
+4290	second-round	2	111	0	864	854
+4291	second-round	2	114	2	898	909
+4292	second-round	2	98	0	909	898
+4293	second-round	2	116	0	851	862
+4294	second-round	2	117	2	862	851
+4295	second-round	2	118	2	893	917
+4296	second-round	2	107	0	917	893
+4297	second-round	2	115	2	847	861
+4298	second-round	2	110	0	861	847
+4299	second-round	2	105	0	844	859
+4300	second-round	2	117	2	859	844
+4303	second-round	2	114	0	852	858
+4304	second-round	2	117	2	858	852
+4305	second-round	2	111	2	908	912
+4306	second-round	2	107	0	912	908
+4307	second-round	2	114	2	900	904
+4308	second-round	2	107	0	904	900
+4309	second-round	2	114	0	838	866
+4310	second-round	2	117	2	866	838
+4311	second-round	2	102	0	915	894
+4312	second-round	2	103	2	894	915
+4313	second-round	2	115	0	907	910
+4314	second-round	2	116	2	910	907
+4315	second-round	2	111	0	895	916
+4316	second-round	2	113	2	916	895
+4317	second-round	3	114	0	898	893
+4318	second-round	3	117	2	893	898
+4319	second-round	3	108	0	899	917
+4320	second-round	3	115	2	917	899
+4321	second-round	3	110	2	897	909
+4322	second-round	3	106	0	909	897
+4323	second-round	3	109	0	849	843
+4324	second-round	3	118	2	843	849
+4325	second-round	3	113	0	908	900
+4326	second-round	3	115	2	900	908
+4327	second-round	3	111	0	855	850
+4328	second-round	3	112	2	850	855
+4329	second-round	3	111	0	918	904
+4330	second-round	3	114	2	904	918
+4331	second-round	3	111	2	853	860
+4332	second-round	3	109	0	860	853
+4333	second-round	3	0	0	911	912
+4334	second-round	3	112	2	912	911
+4335	second-round	3	115	2	851	847
+4336	second-round	3	113	0	847	851
+4337	second-round	3	117	2	907	895
+4338	second-round	3	115	0	895	907
+4339	second-round	3	113	2	854	861
+4340	second-round	3	111	0	861	854
+4341	second-round	3	106	0	864	862
+4342	second-round	3	115	2	862	864
+4343	second-round	3	102	0	915	916
+4344	second-round	3	108	2	916	915
+4345	second-round	3	115	2	852	838
+4346	second-round	3	114	0	838	852
+4347	second-round	3	111	0	844	866
+4348	second-round	3	113	2	866	844
+4349	second-round	3	109	0	894	910
+4350	second-round	3	116	2	910	894
+4351	second-round	3	113	0	859	858
+4352	second-round	3	115	2	858	859
+4353	second-round	4	112	1	860	850
+4354	second-round	4	112	1	850	860
+4355	second-round	4	117	2	843	855
+4356	second-round	4	114	0	855	843
+4357	second-round	4	111	0	849	853
+4358	second-round	4	112	2	853	849
+4359	second-round	4	117	0	862	861
+4360	second-round	4	118	2	861	862
+4361	second-round	4	118	2	847	854
+4362	second-round	4	113	0	854	847
+4363	second-round	4	116	2	851	864
+4364	second-round	4	113	0	864	851
+4365	second-round	4	115	1	858	866
+4366	second-round	4	115	1	866	858
+4367	second-round	4	111	2	838	844
+4368	second-round	4	105	0	844	838
+4371	second-round	4	108	2	909	917
+4372	second-round	4	101	0	917	909
+4373	second-round	4	117	2	893	899
+4374	second-round	4	111	0	899	893
+4375	second-round	4	110	0	898	897
+4376	second-round	4	111	2	897	898
+4377	second-round	4	114	0	912	904
+4378	second-round	4	116	2	904	912
+4369	second-round	4	114	2	852	859
+4370	second-round	4	113	0	859	852
+4379	second-round	4	115	2	900	918
+4380	second-round	4	106	0	918	900
+4381	second-round	4	119	2	908	911
+4382	second-round	4	0	0	911	908
+4383	second-round	4	115	2	910	916
+4384	second-round	4	110	0	916	910
+4385	second-round	4	110	2	895	915
+4386	second-round	4	95	0	915	895
+4387	second-round	4	112	0	907	894
+4388	second-round	4	115	2	894	907
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2016-12-03 16:39:00.417992+00	488	Alex Smith	2	Changed final_round_seed.	1	1
+2	2016-12-03 16:39:33.989465+00	512	Tom Hall	2	Changed final_round_seed.	1	1
+3	2016-12-03 16:39:53.677749+00	471	Alex Wise	2	Changed final_round_seed.	1	1
+4	2016-12-03 16:40:03.344973+00	482	Ashe Morgan 	2	Changed final_round_seed.	1	1
+5	2016-12-03 16:40:12.295481+00	495	Sean Evans	2	Changed final_round_seed.	1	1
+6	2016-12-03 16:40:49.240887+00	489	Mark Nesbitt	2	Changed final_round_seed.	1	1
+7	2017-12-01 16:34:40.417905+00	569	Rodney Groom	3		1	1
+8	2017-12-01 16:34:40.425978+00	568	Neil Laszkowicz	3		1	1
+9	2017-12-01 16:34:40.428913+00	567	Robert Hall	3		1	1
+10	2017-12-01 16:34:40.431817+00	566	Rebekah Tipping	3		1	1
+11	2017-12-01 16:34:40.434442+00	565	Jessica Stretton	3		1	1
+12	2017-12-01 16:34:40.437242+00	564	Emma Davies	3		1	1
+13	2017-12-01 16:34:40.440148+00	563	Abigail Fowler	3		1	1
+14	2017-12-01 16:34:40.443216+00	562	Emma Downie	3		1	1
+15	2017-12-01 16:34:40.446323+00	561	Neringa Siugzdinyte	3		1	1
+16	2017-12-01 16:34:40.450836+00	560	Gabriela Bayardo	3		1	1
+17	2017-12-01 16:34:40.453778+00	559	Monique Pascall	3		1	1
+18	2017-12-01 16:34:40.456885+00	558	Michelle Kiddy	3		1	1
+19	2017-12-01 16:34:40.459923+00	557	Charlotte Birch	3		1	1
+20	2017-12-01 16:34:40.462831+00	549	Emily Bryant	3		1	1
+21	2017-12-01 16:34:40.465892+00	548	Alyssia Tromans-Ansell	3		1	1
+22	2017-12-01 16:34:40.46894+00	547	Kirstie Smith	3		1	1
+23	2017-12-01 16:34:40.471672+00	546	Emma Borrie	3		1	1
+24	2017-12-01 16:34:40.477978+00	545	Leah Bannister	3		1	1
+25	2017-12-01 16:34:40.483195+00	544	Johanna Meyer	3		1	1
+26	2017-12-01 16:34:40.48993+00	543	Rebecca Martin	3		1	1
+27	2017-12-01 16:34:40.495701+00	542	Amy Gott	3		1	1
+28	2017-12-01 16:34:40.49877+00	541	Petra Ginman	3		1	1
+29	2017-12-01 16:34:40.502381+00	540	Klara Fay	3		1	1
+30	2017-12-01 16:34:40.504863+00	539	Vlada Priestman	3		1	1
+31	2017-12-01 16:34:40.509911+00	538	Amy Oliver	3		1	1
+32	2017-12-01 16:34:40.512767+00	537	Alica Reynolds	3		1	1
+33	2017-12-01 16:34:40.515374+00	536	Jeanetta McLean	3		1	1
+34	2017-12-01 16:34:40.518122+00	535	Susan Agnew	3		1	1
+35	2017-12-01 16:34:40.52122+00	534	Nell Piper	3		1	1
+36	2017-12-01 16:34:40.524339+00	533	Songi Woo	3		1	1
+37	2017-12-01 16:34:40.526941+00	532	Jessie Slater	3		1	1
+38	2017-12-01 16:34:40.52987+00	531	Ruby Paul	3		1	1
+39	2017-12-01 16:34:40.532498+00	530	Lisa Kompfner	3		1	1
+40	2017-12-01 16:34:40.535133+00	529	Pip Taylor	3		1	1
+41	2017-12-01 16:34:40.53757+00	528	Bryony Pitman	3		1	1
+42	2017-12-01 16:34:40.540148+00	527	Jessica Nilsson	3		1	1
+43	2017-12-01 16:34:40.542633+00	526	Kayleigh Ivanov	3		1	1
+44	2017-12-01 16:34:40.5453+00	525	Kayleigh Griffin	3		1	1
+45	2017-12-01 16:34:40.548125+00	524	Lisa Cooper	3		1	1
+46	2017-12-01 16:34:40.550805+00	523	Sarah Bettles	3		1	1
+47	2017-12-01 16:34:40.553603+00	522	Louisa Piper	3		1	1
+48	2017-12-01 16:34:40.556352+00	521	Megan-Amy Logan	3		1	1
+49	2017-12-01 16:34:40.558902+00	520	Fiona Hirst	3		1	1
+50	2017-12-01 16:34:40.56131+00	519	Jaspreet Sagoo	3		1	1
+51	2017-12-01 16:34:40.564316+00	518	Aida Roman	3		1	1
+52	2017-12-01 16:34:40.573693+00	517	Roy Watts	3		1	1
+53	2017-12-01 16:34:40.578234+00	516	Kenneth Harper	3		1	1
+54	2017-12-01 16:34:40.581328+00	515	Ian Finlay	3		1	1
+55	2017-12-01 16:34:40.584253+00	514	Andy Caine	3		1	1
+56	2017-12-01 16:34:40.589189+00	513	Malcolm Alexander	3		1	1
+57	2017-12-01 16:34:40.59405+00	512	Tom Hall	3		1	1
+58	2017-12-01 16:34:40.599176+00	511	Paul Tittensor	3		1	1
+59	2017-12-01 16:34:40.60551+00	510	Jonathan Tate	3		1	1
+60	2017-12-01 16:34:40.608268+00	509	John Prior	3		1	1
+61	2017-12-01 16:34:40.61113+00	508	Mohammad Bilaal	3		1	1
+62	2017-12-01 16:34:40.61424+00	507	Jack Masefield	3		1	1
+63	2017-12-01 16:34:40.617048+00	506	Stuart Barby	3		1	1
+64	2017-12-01 16:34:40.621259+00	505	Tomasz Maliszewski	3		1	1
+65	2017-12-01 16:34:40.62395+00	504	Robert Lowe	3		1	1
+66	2017-12-01 16:34:40.626577+00	503	Vladimir Hurban	3		1	1
+67	2017-12-01 16:34:40.629068+00	502	Keith Harding	3		1	1
+68	2017-12-01 16:34:40.63164+00	501	Guy Matzkin	3		1	1
+69	2017-12-01 16:34:40.634591+00	500	David Timmins	3		1	1
+70	2017-12-01 16:34:40.638497+00	499	Chris Trolan	3		1	1
+71	2017-12-01 16:34:40.641508+00	498	Tony Sze	3		1	1
+72	2017-12-01 16:34:40.644267+00	497	Christian Roberts	3		1	1
+73	2017-12-01 16:34:40.647119+00	496	Jr Downey	3		1	1
+74	2017-12-01 16:34:40.649798+00	495	Sean Evans	3		1	1
+75	2017-12-01 16:34:40.652658+00	494	Michael Judd	3		1	1
+76	2017-12-01 16:34:40.65549+00	493	Callum Platt	3		1	1
+77	2017-12-01 16:34:40.658363+00	492	Thomas Nairn	3		1	1
+78	2017-12-01 16:34:40.663204+00	491	Radley Goby-Taylor	3		1	1
+79	2017-12-01 16:34:40.666971+00	490	Morgan Donaldson	3		1	1
+80	2017-12-01 16:34:40.669485+00	489	Mark Nesbitt	3		1	1
+81	2017-12-01 16:34:40.672425+00	488	Alex Smith	3		1	1
+82	2017-12-01 16:34:40.675288+00	487	Jacob Reid	3		1	1
+83	2017-12-01 16:34:40.679373+00	486	Richard Parker	3		1	1
+84	2017-12-01 16:34:40.681913+00	485	Frank Hynds	3		1	1
+85	2017-12-01 16:34:40.684567+00	484	Joe Fairburn	3		1	1
+86	2017-12-01 16:34:40.688786+00	483	Conor Hall	3		1	1
+87	2017-12-01 16:34:40.692341+00	482	Ashe Morgan 	3		1	1
+88	2017-12-01 16:34:40.697634+00	481	Ciprian Zahan	3		1	1
+89	2017-12-01 16:34:40.700157+00	480	Adam Reeks	3		1	1
+90	2017-12-01 16:34:40.703624+00	479	Alec Hodgkinson	3		1	1
+91	2017-12-01 16:34:40.706628+00	478	Sonnie Emeney	3		1	1
+92	2017-12-01 16:34:40.710624+00	477	Kieran Slater	3		1	1
+93	2017-12-01 16:34:40.715801+00	476	Colin Geenes	3		1	1
+94	2017-12-01 16:34:40.721786+00	475	Vic Wonderle	3		1	1
+95	2017-12-01 16:34:40.725414+00	474	David Phillips	3		1	1
+96	2017-12-01 16:34:40.729097+00	473	Ryan Holden	3		1	1
+97	2017-12-01 16:34:40.731892+00	472	Jamie Adams	3		1	1
+98	2017-12-01 16:34:40.734671+00	471	Alex Wise	3		1	1
+99	2017-12-01 16:34:40.737806+00	470	Patrick Huston	3		1	1
+100	2017-12-01 16:34:40.742169+00	469	Abbie Spinks	3		1	1
+101	2017-12-01 16:34:40.745074+00	468	Sarah Moon	3		1	1
+102	2017-12-01 16:34:40.748074+00	466	Bayley Sargeant	3		1	1
+103	2017-12-01 16:34:40.751065+00	465	Lucy O'Sullivan	3		1	1
+104	2017-12-01 16:34:40.754443+00	464	Hope Greenwood	3		1	1
+105	2017-12-01 16:34:40.759111+00	463	Claudine Jennings	3		1	1
+106	2017-12-01 16:34:40.763075+00	462	Emily Must	3		1	1
+107	2017-12-01 16:34:40.766241+00	461	Pauline Burfitt	3		1	1
+108	2017-12-01 16:34:40.769015+00	460	Rebecca Lennon	3		1	1
+109	2017-12-01 16:34:40.771951+00	459	Isabelle Carpenter	3		1	1
+110	2017-12-01 16:34:40.774717+00	458	Erin Prior	3		1	1
+111	2017-12-01 16:34:40.777556+00	457	Helen Neumann	3		1	1
+112	2017-12-01 16:34:40.781134+00	456	Vicci Flack	3		1	1
+113	2017-12-01 16:34:40.784121+00	455	Susan Corless	3		1	1
+114	2017-12-01 16:34:40.786959+00	454	Lucy Mason	3		1	1
+115	2017-12-01 16:34:40.79149+00	453	Gen Witham	3		1	1
+116	2017-12-01 16:34:40.795027+00	452	Julia Petre	3		1	1
+117	2017-12-01 16:34:40.798109+00	451	Maddison Codling	3		1	1
+118	2017-12-01 16:34:40.801331+00	450	Layla Annison	3		1	1
+119	2017-12-01 16:34:40.804338+00	449	Daisy Clark	3		1	1
+120	2017-12-01 16:34:40.808809+00	448	Marion Sambridge	3		1	1
+121	2017-12-01 16:34:40.812382+00	447	Stephanie Clason 	3		1	1
+122	2017-12-01 16:34:40.816266+00	446	Victoria Barby	3		1	1
+123	2017-12-01 16:34:40.826021+00	445	Andrea Gales	3		1	1
+124	2017-12-01 16:34:40.831457+00	444	Lizzie Foster	3		1	1
+125	2017-12-01 16:34:40.835086+00	443	Kirsty Robb	3		1	1
+126	2017-12-01 16:34:40.839725+00	442	Phoebe Pine	3		1	1
+127	2017-12-01 16:34:40.844519+00	441	Nat Merry	3		1	1
+128	2017-12-01 16:34:40.847521+00	440	Anna King	3		1	1
+129	2017-12-01 16:34:40.850545+00	439	Nichola Simpson	3		1	1
+130	2017-12-01 16:34:40.853175+00	438	Sarah Prieels	3		1	1
+131	2017-12-01 16:34:40.856357+00	437	Linus Stromberg	3		1	1
+132	2017-12-01 16:34:40.861639+00	436	James King	3		1	1
+133	2017-12-01 16:34:40.868805+00	435	Mark Haldane	3		1	1
+134	2017-12-01 16:34:40.874605+00	434	Samuel Baldwin	3		1	1
+135	2017-12-01 16:34:40.879926+00	433	James Mason	3		1	1
+136	2017-12-01 16:34:40.884851+00	432	Stephan Hanson	3		1	1
+137	2017-12-01 16:34:40.889072+00	431	Rhys Moore	3		1	1
+138	2017-12-01 16:34:40.891826+00	430	Matthew Hall	3		1	1
+139	2017-12-01 16:34:40.894595+00	429	John Walker	3		1	1
+140	2017-12-01 16:34:40.897963+00	428	Luke Ralls	3		1	1
+141	2017-12-01 16:34:40.900747+00	427	Hampus Borgstrom	3		1	1
+142	2017-12-01 16:34:40.908145+00	426	Adam Ravenscroft	3		1	1
+143	2017-12-01 16:34:40.916117+00	425	Chris Woodgate	3		1	1
+144	2017-12-01 16:34:40.918991+00	424	Alistair Whittingham 	3		1	1
+145	2017-12-01 16:34:40.922491+00	423	Philip Tucknott	3		1	1
+146	2017-12-01 16:34:40.926671+00	422	Mikit Sanghrajka	3		1	1
+147	2017-12-01 16:34:40.93027+00	421	Christopher White	3		1	1
+148	2017-12-01 16:34:40.933501+00	420	Jordan Mitchell	3		1	1
+149	2017-12-01 16:34:40.93655+00	419	Alfie Wilkes	3		1	1
+150	2017-12-01 16:34:40.939455+00	418	Geraint Thomas	3		1	1
+151	2017-12-01 16:34:40.942618+00	417	Adam Shaw	3		1	1
+152	2017-12-01 16:34:40.945496+00	416	Jacek Pedziwiatr	3		1	1
+153	2017-12-01 16:34:40.948351+00	415	Tapani Kalmaru	3		1	1
+154	2017-12-01 16:34:40.951167+00	414	Paul Tedford	3		1	1
+155	2017-12-01 16:34:40.954057+00	413	Liam Upfold	3		1	1
+156	2017-12-01 16:34:40.957234+00	412	Carl Richards	3		1	1
+157	2017-12-01 16:34:40.960317+00	411	Richard Morris	3		1	1
+158	2017-12-01 16:34:40.963538+00	410	Ethan Moore	3		1	1
+159	2017-12-01 16:34:40.966567+00	409	Adam Carpenter	3		1	1
+160	2017-12-01 16:34:40.969617+00	408	Domagoj Buden	3		1	1
+161	2017-12-01 16:34:40.972745+00	407	Simon Scott	3		1	1
+162	2017-12-01 16:34:40.975861+00	406	James Howell	3		1	1
+163	2017-12-01 16:34:40.978987+00	405	George Harding	3		1	1
+164	2017-12-01 16:34:40.986829+00	404	Fraser Chape	3		1	1
+165	2017-12-01 16:34:40.995045+00	403	Dean Hamilton	3		1	1
+166	2017-12-01 16:34:40.998312+00	402	Dave Cousins	3		1	1
+167	2017-12-01 16:34:41.002145+00	400	David Moore	3		1	1
+168	2017-12-01 16:34:41.009848+00	399	Thomas Howse	3		1	1
+169	2017-12-01 16:34:41.013546+00	398	Jacob Caine	3		1	1
+170	2017-12-01 16:34:41.022062+00	397	James Howse	3		1	1
+171	2017-12-01 16:34:41.026763+00	394	Brad Stewart	3		1	1
+172	2017-12-01 16:34:41.029902+00	393	Isak Carlsson	3		1	1
+173	2017-12-01 16:34:41.043711+00	392	Michael Kells	3		1	1
+174	2017-12-01 16:34:41.046511+00	391	Harrison Ooi	3		1	1
+175	2017-12-01 16:34:41.049499+00	390	Mike Schloesser	3		1	1
+176	2017-12-02 07:53:18.010652+00	2	team	1		6	1
+177	2017-12-02 07:53:57.499546+00	2	team	2	Changed password.	6	1
+178	2017-12-02 07:54:46.651043+00	2	team	2	No fields changed.	6	1
+179	2017-12-02 07:54:46.729387+00	2	team	2	No fields changed.	6	1
+180	2017-12-02 07:54:54.319888+00	2	team	2	Changed is_staff and is_superuser.	6	1
+181	2017-12-02 10:53:57.395124+00	650	Ella Gibson	2	Changed second_group_number and second_group_index.	1	1
+182	2017-12-02 10:54:32.719955+00	645	Stephanie Clason	2	Changed second_group_number and second_group_index.	1	1
+183	2017-12-02 11:48:19.218012+00	689	Jackie Fisher	2	Changed name.	1	1
+184	2017-12-02 11:50:15.769316+00	689	Jackie Fisher	2	Changed first_group_index.	1	1
+185	2017-12-02 11:50:19.772589+00	688	Melanie-Lee Bebbington-Trengove	2	Changed first_group_index.	1	1
+186	2017-12-02 11:50:26.414189+00	687	Georgia Maryon	2	Changed first_group_index.	1	1
+187	2017-12-02 11:50:29.990809+00	686	Thea Rogers	2	Changed first_group_index.	1	1
+188	2017-12-02 11:50:37.959782+00	685	Fiona Hirst	2	Changed first_group_number, first_group_index and first_group_placing.	1	1
+189	2017-12-02 11:50:42.736864+00	684	Sarah Bettles	2	Changed first_group_index.	1	1
+190	2017-12-02 11:51:16.896254+00	685	Fiona Hirst	2	Changed first_group_number, first_group_index and first_group_placing.	1	1
+191	2017-12-02 15:00:52.043449+00	578	Conor Hall	2	Changed second_group_index.	1	1
+192	2017-12-02 15:01:02.975734+00	578	Conor Hall	2	Changed second_group_number.	1	1
+193	2017-12-02 15:01:11.799859+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+194	2017-12-02 15:02:37.296037+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+195	2017-12-02 15:02:41.579259+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+196	2017-12-02 15:02:48.075063+00	585	Colin Geenes	2	Changed second_group_index.	1	1
+197	2017-12-02 15:33:23.931894+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+198	2017-12-02 15:33:47.91045+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+199	2017-12-02 15:34:28.845892+00	585	Colin Geenes	2	No fields changed.	1	1
+200	2017-12-02 15:35:07.888602+00	581	Erik Rowbotham	2	Changed second_group_index.	1	1
+201	2017-12-02 15:35:09.489354+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+202	2017-12-02 15:35:25.770475+00	575	Alex Smith	2	Changed second_group_index.	1	1
+203	2017-12-02 15:35:28.232303+00	585	Colin Geenes	2	Changed second_group_index.	1	1
+204	2017-12-02 15:50:16.290036+00	653	Isabelle Carpenter	2	Changed final_round_seed.	1	1
+205	2017-12-02 15:50:17.49768+00	642	Hope Greenwood	2	Changed final_round_seed.	1	1
+206	2017-12-02 15:50:21.988386+00	642	Hope Greenwood	2	Changed final_round_seed.	1	1
+207	2017-12-02 16:50:37.622516+00	588	Mark Nesbitt	2	Changed final_round_seed.	1	1
+208	2017-12-02 16:50:39.421769+00	594	Tom Hall	2	Changed final_round_seed.	1	1
+209	2018-11-28 11:51:40.444512+00	689	Jackie Fisher	3		1	1
+210	2018-11-28 11:51:40.456337+00	688	Melanie-Lee Bebbington-Trengove	3		1	1
+211	2018-11-28 11:51:40.464277+00	687	Georgia Maryon	3		1	1
+212	2018-11-28 11:51:40.474442+00	686	Thea Rogers	3		1	1
+213	2018-11-28 11:51:40.484277+00	685	Fiona Hirst	3		1	1
+214	2018-11-28 11:51:40.495379+00	684	Sarah Bettles	3		1	1
+215	2018-11-28 11:51:40.508308+00	683	Vici Royle	3		1	1
+216	2018-11-28 11:51:40.516891+00	682	Eleanor Piper	3		1	1
+217	2018-11-28 11:51:40.522885+00	681	Amy Bode	3		1	1
+218	2018-11-28 11:51:40.531738+00	680	Pip Taylor	3		1	1
+219	2018-11-28 11:51:40.538286+00	679	Wendy Aubrey	3		1	1
+220	2018-11-28 11:51:40.548345+00	678	Alyssia Tromans-Ansell	3		1	1
+221	2018-11-28 11:51:40.561848+00	677	Lisa  Kompfner	3		1	1
+222	2018-11-28 11:51:40.572043+00	676	Sally Gilder	3		1	1
+223	2018-11-28 11:51:40.584342+00	675	Ruby Paul	3		1	1
+224	2018-11-28 11:51:40.592584+00	674	Vlada Priestman	3		1	1
+225	2018-11-28 11:51:40.599367+00	673	Eugenia D'Arcy	3		1	1
+226	2018-11-28 11:51:40.612937+00	672	Nicola Turner	3		1	1
+227	2018-11-28 11:51:40.619544+00	671	Sophie  Castle	3		1	1
+228	2018-11-28 11:51:40.632321+00	670	Susan Agnew	3		1	1
+229	2018-11-28 11:51:40.646496+00	669	Jaspreet Sagoo	3		1	1
+230	2018-11-28 11:51:40.659255+00	668	Johanna Meyer	3		1	1
+231	2018-11-28 11:51:40.680489+00	667	Abbie Fisher	3		1	1
+232	2018-11-28 11:51:40.693236+00	666	Louisa Piper	3		1	1
+233	2018-11-28 11:51:40.725695+00	664	Lizzie Warner	3		1	1
+234	2018-11-28 11:51:40.740281+00	663	Sarah Smith	3		1	1
+235	2018-11-28 11:51:40.755372+00	662	Rebekah Tipping	3		1	1
+236	2018-11-28 11:51:40.775741+00	661	Rebecca Stephenson	3		1	1
+237	2018-11-28 11:51:40.785169+00	660	Bryony Pitman	3		1	1
+238	2018-11-28 11:51:40.799165+00	659	Claudine Jennings	3		1	1
+239	2018-11-28 11:51:40.813313+00	658	Phoebe Pine	3		1	1
+240	2018-11-28 11:51:40.8217+00	657	Jodie Grinham	3		1	1
+241	2018-11-28 11:51:40.835834+00	656	Victoria Loader	3		1	1
+242	2018-11-28 11:51:40.844896+00	655	Daisy Clark	3		1	1
+243	2018-11-28 11:51:40.8544+00	654	Lucy Mason	3		1	1
+244	2018-11-28 11:51:40.874684+00	653	Isabelle Carpenter	3		1	1
+245	2018-11-28 11:51:40.883214+00	652	Nichola Simpson	3		1	1
+246	2018-11-28 11:51:40.892002+00	651	Hannah Brown	3		1	1
+247	2018-11-28 11:51:40.908366+00	650	Ella Gibson	3		1	1
+248	2018-11-28 11:51:40.925495+00	649	Andrea Gales	3		1	1
+249	2018-11-28 11:51:40.936762+00	648	Susan Corless	3		1	1
+250	2018-11-28 11:51:40.960377+00	647	Rebecca Lennon	3		1	1
+251	2018-11-28 11:51:40.967613+00	646	Iulia Petre	3		1	1
+252	2018-11-28 11:51:40.990895+00	645	Stephanie Clason	3		1	1
+253	2018-11-28 11:51:41.002999+00	644	Rebecca Blewett	3		1	1
+254	2018-11-28 11:51:41.009118+00	643	Sarah Moon	3		1	1
+255	2018-11-28 11:51:41.015834+00	642	Hope Greenwood	3		1	1
+256	2018-11-28 11:51:41.025653+00	641	Erin Prior	3		1	1
+257	2018-11-28 11:51:41.051027+00	640	Anna King	3		1	1
+258	2018-11-28 11:51:41.059777+00	639	Gen Witham	3		1	1
+259	2018-11-28 11:51:41.087695+00	638	Jo Frith	3		1	1
+260	2018-11-28 11:51:41.109212+00	637	Elizabeth Foster	3		1	1
+261	2018-11-28 11:51:41.129675+00	636	Layla Annison	3		1	1
+262	2018-11-28 11:51:41.148977+00	635	Abbie Spinks	3		1	1
+263	2018-11-28 11:51:41.156471+00	634	Kirsty Robb	3		1	1
+264	2018-11-28 11:51:41.172006+00	633	Hollie Smith	3		1	1
+265	2018-11-28 11:51:41.188806+00	632	Marion Sambridge	3		1	1
+266	2018-11-28 11:51:41.204413+00	631	Bayley Sargeant	3		1	1
+267	2018-11-28 11:51:41.215012+00	630	Lucy O'Sullivan	3		1	1
+268	2018-11-28 11:51:41.224112+00	629	Matthew Wong	3		1	1
+269	2018-11-28 11:51:41.234772+00	628	John Walker MBE	3		1	1
+270	2018-11-28 11:51:41.245811+00	627	David Taylor	3		1	1
+271	2018-11-28 11:51:41.253965+00	626	Carl Richards	3		1	1
+272	2018-11-28 11:51:41.264246+00	625	Kai Thomas-Prause	3		1	1
+273	2018-11-28 11:51:41.274532+00	624	Chris White	3		1	1
+274	2018-11-28 11:51:41.288349+00	623	Stephen Ramdeen	3		1	1
+275	2018-11-28 11:51:41.300358+00	622	Luke Ralls	3		1	1
+276	2018-11-28 11:51:41.313074+00	621	Liam Peake	3		1	1
+277	2018-11-28 11:51:41.321119+00	620	Timothy Nash	3		1	1
+278	2018-11-28 11:51:41.336962+00	619	Jordan Mitchell	3		1	1
+279	2018-11-28 11:51:41.348953+00	618	Duncan Busby	3		1	1
+280	2018-11-28 11:51:41.356766+00	617	Rhys Moore	3		1	1
+281	2018-11-28 11:51:41.36897+00	616	Martin Krusche	3		1	1
+282	2018-11-28 11:51:41.3778+00	615	Michael Kells	3		1	1
+283	2018-11-28 11:51:41.394664+00	614	Tapani Kalmaru	3		1	1
+284	2018-11-28 11:51:41.412696+00	613	James Howell	3		1	1
+285	2018-11-28 11:51:41.423329+00	612	James Mason	3		1	1
+286	2018-11-28 11:51:41.45154+00	611	Dean Hamilton	3		1	1
+287	2018-11-28 11:51:41.479368+00	610	Mark Haldane	3		1	1
+288	2018-11-28 11:51:41.495694+00	609	Rodney Groom	3		1	1
+289	2018-11-28 11:51:41.505346+00	608	David Cousins	3		1	1
+290	2018-11-28 11:51:41.516308+00	607	James Howse	3		1	1
+291	2018-11-28 11:51:41.528277+00	606	Adam Shaw	3		1	1
+292	2018-11-28 11:51:41.538187+00	605	Adam Carpenter	3		1	1
+293	2018-11-28 11:51:41.551493+00	604	Jacob Caine	3		1	1
+294	2018-11-28 11:51:41.564287+00	603	Samuel Baldwin	3		1	1
+295	2018-11-28 11:51:41.574639+00	602	Mike Aubrey	3		1	1
+296	2018-11-28 11:51:41.58229+00	601	Simon Scott	3		1	1
+297	2018-11-28 11:51:41.591267+00	600	Adam Ravenscroft	3		1	1
+298	2018-11-28 11:51:41.603724+00	599	Ryan Holden	3		1	1
+299	2018-11-28 11:51:41.618957+00	598	Jacob Reid	3		1	1
+300	2018-11-28 11:51:41.629311+00	597	Alec Hodgkinson	3		1	1
+301	2018-11-28 11:51:41.638959+00	596	Ryan Pinder	3		1	1
+302	2018-11-28 11:51:41.647079+00	595	Sean Evans	3		1	1
+303	2018-11-28 11:51:41.658712+00	594	Tom Hall	3		1	1
+304	2018-11-28 11:51:41.680344+00	593	Ian Finlay	3		1	1
+305	2018-11-28 11:51:41.698158+00	592	Daniel  Thompson	3		1	1
+306	2018-11-28 11:51:41.704009+00	591	Andy Caine	3		1	1
+307	2018-11-28 11:51:41.709673+00	590	Kenneth Harper	3		1	1
+308	2018-11-28 11:51:41.717052+00	589	Michael Judd	3		1	1
+309	2018-11-28 11:51:41.733801+00	588	Mark Nesbitt	3		1	1
+310	2018-11-28 11:51:41.744349+00	587	Guy Matzkin	3		1	1
+311	2018-11-28 11:51:41.752312+00	586	John Prior	3		1	1
+312	2018-11-28 11:51:41.760736+00	585	Colin Geenes	3		1	1
+313	2018-11-28 11:51:41.766357+00	584	Malcolm Alexander	3		1	1
+314	2018-11-28 11:51:41.774942+00	583	Keith Harding	3		1	1
+315	2018-11-28 11:51:41.780827+00	582	Ashe  Morgan	3		1	1
+316	2018-11-28 11:51:41.787548+00	581	Erik Rowbotham	3		1	1
+317	2018-11-28 11:51:41.798636+00	580	Gilbert Jamieson	3		1	1
+318	2018-11-28 11:51:41.807907+00	579	Ciprian Zahan	3		1	1
+319	2018-11-28 11:51:41.813718+00	578	Conor Hall	3		1	1
+320	2018-11-28 11:51:41.824324+00	577	Alex Wise	3		1	1
+321	2018-11-28 11:51:41.834631+00	576	David Timmins	3		1	1
+322	2018-11-28 11:51:41.840552+00	575	Alex Smith	3		1	1
+323	2018-11-28 11:51:41.850276+00	574	Tony Sze	3		1	1
+324	2018-11-28 11:51:41.859995+00	573	Michal Twarowski	3		1	1
+325	2018-11-28 11:51:41.865952+00	572	Jonathan Tate	3		1	1
+326	2018-11-28 11:51:41.874326+00	571	Thomas Nairn	3		1	1
+327	2018-11-28 11:51:41.88625+00	570	Patrick Huston	3		1	1
+328	2018-12-01 08:14:28.246423+00	2	team	2	[{"changed": {"fields": ["password"]}}]	6	1
+329	2018-12-01 10:31:09.822428+00	751	James Howse	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+330	2018-12-01 10:31:13.355046+00	770	Tim Nash	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+331	2018-12-01 10:31:50.485081+00	748	James Mason	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+332	2018-12-01 10:31:52.599576+00	765	Luke Ralls	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+333	2018-12-01 12:14:30.770885+00	741	Imogen Newby	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+334	2018-12-01 12:14:34.204937+00	729	Eléonore Cossade	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+335	2018-12-01 13:31:23.92032+00	728	Shauna Punjabi	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+336	2018-12-01 13:31:27.063003+00	746	Eugenia D'Arcy	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+337	2019-11-29 10:08:38.061932+00	807	Andrea Gales	3		1	1
+338	2019-11-29 10:08:38.068467+00	806	Michelle Sword	3		1	1
+339	2019-11-29 10:08:38.073169+00	805	Claudine Jennings	3		1	1
+340	2019-11-29 10:08:38.077889+00	804	Lena Meynen Degryse	3		1	1
+341	2019-11-29 10:08:38.082381+00	803	Hope Greenwood	3		1	1
+342	2019-11-29 10:08:38.087101+00	802	Layla Annison	3		1	1
+343	2019-11-29 10:08:38.091858+00	801	Ruth Watson	3		1	1
+344	2019-11-29 10:08:38.099683+00	800	Stephanie Clason	3		1	1
+345	2019-11-29 10:08:38.104884+00	799	Rebbeca Lennon	3		1	1
+346	2019-11-29 10:08:38.109836+00	798	Jessica Nilsson	3		1	1
+347	2019-11-29 10:08:38.114745+00	797	Bayley Sargeant	3		1	1
+348	2019-11-29 10:08:38.119528+00	796	Mariya Shkolna	3		1	1
+349	2019-11-29 10:08:38.124001+00	795	Katrina McIntosh	3		1	1
+350	2019-11-29 10:08:38.131511+00	794	Katharina Baier	3		1	1
+351	2019-11-29 10:08:38.141802+00	793	Erin Prior	3		1	1
+352	2019-11-29 10:08:38.151051+00	792	Sarah Moon	3		1	1
+353	2019-11-29 10:08:38.159552+00	791	Ella Gibson	3		1	1
+354	2019-11-29 10:08:38.173791+00	790	Lucy Mason	3		1	1
+355	2019-11-29 10:08:38.184408+00	789	Nat Merry	3		1	1
+356	2019-11-29 10:08:38.189082+00	788	Victoria Loader	3		1	1
+357	2019-11-29 10:08:38.193265+00	787	Abbie Spinks	3		1	1
+358	2019-11-29 10:08:38.1973+00	786	Daisy Clark	3		1	1
+359	2019-11-29 10:08:38.201602+00	785	Lucy O'Sullivan	3		1	1
+360	2019-11-29 10:08:38.205909+00	784	Izzy Carpenter	3		1	1
+361	2019-11-29 10:08:38.210323+00	783	Elizabeth Foster	3		1	1
+362	2019-11-29 10:08:38.215046+00	782	Holly Clifford	3		1	1
+363	2019-11-29 10:08:38.219449+00	781	Iulia Petre	3		1	1
+364	2019-11-29 10:08:38.23025+00	780	Kirsty Robb	3		1	1
+365	2019-11-29 10:08:38.244063+00	779	Susan Corless	3		1	1
+366	2019-11-29 10:08:38.251959+00	778	Sarah Prieels	3		1	1
+367	2019-11-29 10:08:38.262439+00	777	Michael Kells	3		1	1
+368	2019-11-29 10:08:38.279351+00	776	Lewis Haslam	3		1	1
+369	2019-11-29 10:08:38.292099+00	775	Sam Jeram	3		1	1
+370	2019-11-29 10:08:38.29865+00	774	Mike Aubrey	3		1	1
+371	2019-11-29 10:08:38.304678+00	773	Adam Shaw	3		1	1
+372	2019-11-29 10:08:38.310152+00	772	Domagoj Buden	3		1	1
+373	2019-11-29 10:08:38.319467+00	771	Martyn Cotterill	3		1	1
+374	2019-11-29 10:08:38.325037+00	770	Tim Nash	3		1	1
+375	2019-11-29 10:08:38.33037+00	769	Liam Peake	3		1	1
+376	2019-11-29 10:08:38.335349+00	768	Nathan Thomas	3		1	1
+377	2019-11-29 10:08:38.340272+00	767	Kai Thomas-Prause	3		1	1
+378	2019-11-29 10:08:38.345215+00	766	Chris White	3		1	1
+379	2019-11-29 10:08:38.351705+00	765	Luke Ralls	3		1	1
+380	2019-11-29 10:08:38.363026+00	764	Tapani Kalmaru	3		1	1
+381	2019-11-29 10:08:38.375993+00	763	Matthew Wong	3		1	1
+382	2019-11-29 10:08:38.386721+00	762	Jason Sargeant	3		1	1
+383	2019-11-29 10:08:38.394489+00	761	Simon Scott	3		1	1
+384	2019-11-29 10:08:38.408612+00	760	Reginald Kools	3		1	1
+385	2019-11-29 10:08:38.416456+00	759	Sam Baldwin	3		1	1
+386	2019-11-29 10:08:38.421099+00	758	Adam Outram	3		1	1
+387	2019-11-29 10:08:38.425675+00	757	Jacob Caine	3		1	1
+388	2019-11-29 10:08:38.430934+00	756	James Howell	3		1	1
+389	2019-11-29 10:08:38.437668+00	755	Duncan Busby	3		1	1
+390	2019-11-29 10:08:38.442509+00	754	Adam Ravenscroft	3		1	1
+391	2019-11-29 10:08:38.447813+00	753	Jake Walsh	3		1	1
+392	2019-11-29 10:08:38.453046+00	752	Adam Carpenter	3		1	1
+393	2019-11-29 10:08:38.459786+00	751	James Howse	3		1	1
+394	2019-11-29 10:08:38.472106+00	750	Alistair Whittingham	3		1	1
+395	2019-11-29 10:08:38.479104+00	749	Dean Hamilton	3		1	1
+396	2019-11-29 10:08:38.483699+00	748	James Mason	3		1	1
+397	2019-11-29 10:08:38.491395+00	747	Wendy Aubrey	3		1	1
+398	2019-11-29 10:08:38.496543+00	746	Eugenia D'Arcy	3		1	1
+399	2019-11-29 10:08:38.501265+00	745	Sarah Smith	3		1	1
+400	2019-11-29 10:08:38.505841+00	744	Jaspreet Sagoo	3		1	1
+401	2019-11-29 10:08:38.510168+00	743	Naomi Folkard	3		1	1
+402	2019-11-29 10:08:38.514426+00	742	Sophie Castle	3		1	1
+403	2019-11-29 10:08:38.524069+00	741	Imogen Newby	3		1	1
+404	2019-11-29 10:08:38.536318+00	740	Johanna Meyer	3		1	1
+405	2019-11-29 10:08:38.541269+00	739	Susan Agnew	3		1	1
+406	2019-11-29 10:08:38.546032+00	738	Louisa Piper	3		1	1
+407	2019-11-29 10:08:38.552774+00	737	Yulia Larkins	3		1	1
+408	2019-11-29 10:08:38.557612+00	736	Jackie Fisher	3		1	1
+409	2019-11-29 10:08:38.566236+00	735	Kayleigh Ivanov	3		1	1
+410	2019-11-29 10:08:38.571509+00	734	Rebecca Stephenson	3		1	1
+411	2019-11-29 10:08:38.576278+00	733	Melanie-Lee Bebbington-Tengrove	3		1	1
+412	2019-11-29 10:08:38.586375+00	732	Heather Hughes	3		1	1
+413	2019-11-29 10:08:38.591503+00	731	Sarah Bettles	3		1	1
+414	2019-11-29 10:08:38.596102+00	730	Charlie Birch	3		1	1
+415	2019-11-29 10:08:38.604129+00	729	Eleonore Cossade	3		1	1
+416	2019-11-29 10:08:38.609956+00	728	Shauna Punjabi	3		1	1
+417	2019-11-29 10:08:38.616139+00	727	Lizzie Warner	3		1	1
+418	2019-11-29 10:08:38.624775+00	726	Eleanor Piper	3		1	1
+419	2019-11-29 10:08:38.629097+00	725	Hannah Burnage	3		1	1
+420	2019-11-29 10:08:38.636551+00	724	Freya Palmer	3		1	1
+421	2019-11-29 10:08:38.640602+00	723	Natasha Homer	3		1	1
+422	2019-11-29 10:08:38.64455+00	722	Rebekah Tipping	3		1	1
+423	2019-11-29 10:08:38.648414+00	720	Bryony Pitman	3		1	1
+424	2019-11-29 10:08:38.652464+00	719	Sherman Ip	3		1	1
+425	2019-11-29 10:08:38.656352+00	718	Morgan Donaldson	3		1	1
+426	2019-11-29 10:08:38.660266+00	717	Colin Geenes	3		1	1
+427	2019-11-29 10:08:38.666169+00	716	Andy Caine	3		1	1
+428	2019-11-29 10:08:38.675968+00	715	Jacob Reid	3		1	1
+429	2019-11-29 10:08:38.68032+00	714	Tom Hall	3		1	1
+430	2019-11-29 10:08:38.686656+00	713	Graeme Higgs	3		1	1
+431	2019-11-29 10:08:38.690984+00	712	Richard White	3		1	1
+432	2019-11-29 10:08:38.695644+00	711	Gilbert Jamieson	3		1	1
+433	2019-11-29 10:08:38.702189+00	710	Jonathan Tate	3		1	1
+434	2019-11-29 10:08:38.706651+00	709	Keith Harding	3		1	1
+435	2019-11-29 10:08:38.710841+00	708	Michael Judd	3		1	1
+436	2019-11-29 10:08:38.715588+00	707	Garry Partington	3		1	1
+437	2019-11-29 10:08:38.719765+00	706	Chris Avins	3		1	1
+438	2019-11-29 10:08:38.723807+00	705	Stephane Lericolais	3		1	1
+439	2019-11-29 10:08:38.728022+00	704	Daniel Thompson	3		1	1
+440	2019-11-29 10:08:38.732193+00	703	Ryan Pinder	3		1	1
+441	2019-11-29 10:08:38.736495+00	702	Alex Wise	3		1	1
+442	2019-11-29 10:08:38.740292+00	701	Ryan Holden	3		1	1
+443	2019-11-29 10:08:38.744313+00	700	Sean Evans	3		1	1
+444	2019-11-29 10:08:38.748361+00	699	Frank Hynds	3		1	1
+445	2019-11-29 10:08:38.752667+00	698	Kieran Shirley	3		1	1
+446	2019-11-29 10:08:38.75981+00	697	Mark Nesbitt	3		1	1
+447	2019-11-29 10:08:38.769355+00	696	Pit Klein	3		1	1
+448	2019-11-29 10:08:38.777759+00	695	Ken Hargreaves	3		1	1
+449	2019-11-29 10:08:38.782071+00	694	John Prior	3		1	1
+450	2019-11-29 10:08:38.786562+00	693	Antonios Katris	3		1	1
+451	2019-11-29 10:08:38.791522+00	692	Thomas Nairn	3		1	1
+452	2019-11-29 10:08:38.799443+00	691	Cameron Donaldson	3		1	1
+453	2019-11-29 10:08:38.806773+00	690	Patrick Huston	3		1	1
+454	2019-11-29 10:42:07.408158+00	2	team	2	[{"changed": {"fields": ["password"]}}]	6	1
+455	2019-11-30 16:10:06.184939+00	854	Ryan Holden	2	[{"changed": {"fields": ["final_round_seed"]}}]	1	1
+456	2019-11-30 16:10:15.624351+00	861	Thomas Susca	2	[{"changed": {"fields": ["final_round_seed"]}}]	1	1
+457	2019-11-30 17:43:19.512686+00	891	Layla Annison	2	[{"changed": {"fields": ["final_match_3_score"]}}]	1	1
+458	2019-11-30 17:43:44.276951+00	891	Layla Annison	2	[{"changed": {"fields": ["final_match_3_score"]}}]	1	1
+459	2019-11-30 17:46:01.152017+00	891	Layla Annison	2	[{"changed": {"fields": ["final_match_2_score"]}}]	1	1
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	back2back	entry
+2	back2back	score
+3	admin	logentry
+4	auth	permission
+5	auth	group
+6	auth	user
+7	contenttypes	contenttype
+8	sessions	session
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2015-11-30 21:50:24.057554+00
+2	auth	0001_initial	2015-11-30 21:50:24.157743+00
+3	admin	0001_initial	2015-11-30 21:50:24.191541+00
+4	contenttypes	0002_remove_content_type_name	2015-11-30 21:50:24.247357+00
+5	auth	0002_alter_permission_name_max_length	2015-11-30 21:50:24.269045+00
+6	auth	0003_alter_user_email_max_length	2015-11-30 21:50:24.287163+00
+7	auth	0004_alter_user_username_opts	2015-11-30 21:50:24.307684+00
+8	auth	0005_alter_user_last_login_null	2015-11-30 21:50:24.325535+00
+9	auth	0006_require_contenttypes_0002	2015-11-30 21:50:24.329121+00
+10	back2back	0001_initial	2015-11-30 21:50:24.373536+00
+11	sessions	0001_initial	2015-11-30 21:50:24.390327+00
+12	back2back	0002_auto_20161129_1358	2016-11-29 14:20:17.292978+00
+13	back2back	0003_finals_8	2017-12-02 15:49:41.729966+00
+14	admin	0002_logentry_remove_auto_add	2018-12-01 10:30:47.622758+00
+15	auth	0007_alter_validators_add_error_messages	2018-12-01 10:30:47.663128+00
+16	auth	0008_alter_user_username_max_length	2018-12-01 10:30:47.76642+00
+17	auth	0009_alter_user_last_name_max_length	2018-12-01 10:30:47.833455+00
+18	back2back	0004_remove_seedings	2018-12-01 10:30:47.926577+00
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+a0nx6rrlzq1dzogmqvu4e9dp8sns7yir	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:43:15.96495+00
+00e92czwukxf5ix9upuqqz4hv8vhi26s	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:47:10.807951+00
+ey5wyoe53qh9pi9gyloyh7glzpbj7ei5	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:48:18.616169+00
+0k61kxvgnw0y4fzf85qv8i1vs9iwsicm	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:48:49.393876+00
+d4mqd671fsy9c0xru0z6jkgv1azl9hrg	MmRjODYzZWRlNjAyYzYzMzk2NjNiY2MzMzczOTdlMTY2ZGY1ZjNjNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiMjhjMWJlMjIxYmY5NmE2NmQ4MjdkMTZkNDJhYTRjZmUxNTk2NzVhNiIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2016-12-17 08:36:51.716437+00
+pklj5bhn8sgb5s7q8nw66lkwde3ovdc6	NGNjZDczNmJkZjhlYjhmNDhlYWIxNzZjZTgwZDBhZjVhZTMwM2U4MTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNTBkNzMzYzkyMmNkNGFhZGE4NGY3M2RmOTYzMjEyNjdkZGM1MTY0MCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2017-12-15 16:34:02.8219+00
+ne6spvgqit4b00y5r9gd71xtlceju4pp	NzQ0YWE3YTVmNDY3YmM4MTRkOTQ5N2RiMGVkYzBkNmUxZWIzNzQwNjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjIiLCJfYXV0aF91c2VyX2hhc2giOiI2OWJhODVjNzQ4Y2VlMTZkODk1NTg3NmI3NDJkZjgxYWIyNTMzMjI3In0=	2017-12-16 07:55:00.497966+00
+hnwp3iik37x99ul8ckj6g9c1ezqw3g0a	NGNjZDczNmJkZjhlYjhmNDhlYWIxNzZjZTgwZDBhZjVhZTMwM2U4MTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNTBkNzMzYzkyMmNkNGFhZGE4NGY3M2RmOTYzMjEyNjdkZGM1MTY0MCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2018-01-19 12:08:57.513296+00
+c3aze3d9n31q6oakvu5nay9uo2942zyh	OGM4NDdlOWY1NTVjMTJiMmYxOWJiNzIxOGY3MTgzOWVkMjhhZWRhMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzYjQyMDRiMTdhMTBlMWFlODQ0MzAxZTQ1MmNhNjVmMTNjYmU4OWYwIn0=	2018-12-15 08:14:28.346891+00
+2oslbu2znpo2qr6kmquia0s7fhs9vr31	OGM4NDdlOWY1NTVjMTJiMmYxOWJiNzIxOGY3MTgzOWVkMjhhZWRhMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzYjQyMDRiMTdhMTBlMWFlODQ0MzAxZTQ1MmNhNjVmMTNjYmU4OWYwIn0=	2019-12-13 10:42:07.426137+00
+11581k2z5e7vevby8zxuuowqpcl2grrg	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 08:14:40.623261+00
+wenfiquqou99nesws7lbigg5zx9uoibd	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 08:31:39.177164+00
+qx4jl7nr5sn59hsywazxmvsv5qoixebj	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-13 14:24:49.43238+00
+hca299d50gmd4xi13cfhg0vpbazgkxry	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 08:40:55.218008+00
+0bmbnz0p7n6ag8s0lza1d59hey2hrl9w	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 10:39:58.583845+00
+xiaaare6zvcf2jemxahhyxmrrhqylh1x	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-14 07:50:45.645345+00
+fzuidhgu5oh1p51oe0pdr3qkui2n13ca	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 18:24:57.409456+00
+r18jlmt1ro6yaakmbdc84g79zeyj057m	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 19:39:57.0662+00
+gsb3vpjgprg9t5xe980giabgsvhkdrk4	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-14 07:50:46.469688+00
+cggi49fr1a0mmnrkh5yl6kfvvc3olhf7	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-14 07:52:51.212279+00
+kjuey47z9gjksss21stur6f1s860pam4	OGM4NDdlOWY1NTVjMTJiMmYxOWJiNzIxOGY3MTgzOWVkMjhhZWRhMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzYjQyMDRiMTdhMTBlMWFlODQ0MzAxZTQ1MmNhNjVmMTNjYmU4OWYwIn0=	2019-12-14 12:09:50.801508+00
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 24, true);
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_user_id_seq', 2, true);
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: back2back_entry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.back2back_entry_id_seq', 920, true);
+
+
+--
+-- Name: back2back_score_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.back2back_score_id_seq', 4388, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 459, true);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 8, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 18, true);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: back2back_entry back2back_entry_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_entry
+    ADD CONSTRAINT back2back_entry_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: back2back_score back2back_score_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score
+    ADD CONSTRAINT back2back_score_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_61b963fb6b89d22a_uniq; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_61b963fb6b89d22a_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: auth_group_name_12bfde5f361c8817_like; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_group_name_12bfde5f361c8817_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_0e939a4f; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_group_permissions_0e939a4f ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_8373b171; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_group_permissions_8373b171 ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_417f1b1c; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_permission_417f1b1c ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_0e939a4f; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_groups_0e939a4f ON public.auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_e8701ad4; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_groups_e8701ad4 ON public.auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_8373b171; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_user_permissions_8373b171 ON public.auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_e8701ad4; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_user_permissions_e8701ad4 ON public.auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_658d5105f8e5faf3_like; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_username_658d5105f8e5faf3_like ON public.auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: back2back_score_3f5baa4e; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX back2back_score_3f5baa4e ON public.back2back_score USING btree (opponent_id);
+
+
+--
+-- Name: back2back_score_b64a62ea; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX back2back_score_b64a62ea ON public.back2back_score USING btree (entry_id);
+
+
+--
+-- Name: django_admin_log_417f1b1c; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_admin_log_417f1b1c ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_e8701ad4; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_admin_log_e8701ad4 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_de54fa62; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_session_de54fa62 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_59470ea1d6b13312_like; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_session_session_key_59470ea1d6b13312_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: auth_permission auth_content_type_id_44d035ecde067492_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_content_type_id_44d035ecde067492_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_group_id_26db4e036e1c3f0c_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_group_id_26db4e036e1c3f0c_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permission_id_7d1d7daaaef28b2a_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permission_id_7d1d7daaaef28b2a_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user__permission_id_2b876ef75884dc7c_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user__permission_id_2b876ef75884dc7c_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_group_id_5a51774dd221d429_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_5a51774dd221d429_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_2eb4aa86dbdad615_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_2eb4aa86dbdad615_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permiss_user_id_5e3ed8a6195e52ba_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permiss_user_id_5e3ed8a6195e52ba_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: back2back_score back2back_sc_opponent_id_68b1802d1931c1c4_fk_back2back_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score
+    ADD CONSTRAINT back2back_sc_opponent_id_68b1802d1931c1c4_fk_back2back_entry_id FOREIGN KEY (opponent_id) REFERENCES public.back2back_entry(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: back2back_score back2back_score_entry_id_65e004e5b3cc756d_fk_back2back_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score
+    ADD CONSTRAINT back2back_score_entry_id_65e004e5b3cc756d_fk_back2back_entry_id FOREIGN KEY (entry_id) REFERENCES public.back2back_entry(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log djan_content_type_id_29165ea2d2442da9_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT djan_content_type_id_29165ea2d2442da9_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
