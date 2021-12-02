@@ -1,6 +1,19 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 from .models import Entry
+
+
+class LoginForm(AuthenticationForm):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['password'].label = 'AGB number'
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        return username.upper()
 
 
 class EntryForm(forms.ModelForm):

@@ -1,6 +1,7 @@
 import json
 import subprocess
 
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, FormView, DeleteView
@@ -8,7 +9,7 @@ from django.urls import reverse
 
 from braces.views import LoginRequiredMixin
 
-from .forms import EntryForm, MatchForm, FinalMatchForm
+from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm
 from .models import Entry
 from .structure import CATEGORIES, CATEGORIES_BY_SLUG
 
@@ -34,6 +35,13 @@ class TexPDFView(TemplateView):
 
 class PublicIndex(TemplateView):
     template_name = 'public_index.html'
+
+
+class Login(LoginView):
+    form_class = LoginForm
+
+    def get_success_url(self):
+        return reverse('public-index')
 
 
 class ScorersIndex(LoginRequiredMixin, TemplateView):
