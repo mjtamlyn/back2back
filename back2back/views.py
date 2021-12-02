@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, FormView, DeleteView
 from django.urls import reverse
 
-from braces.views import StaffuserRequiredMixin
+from braces.views import StaffuserRequiredMixin, UserPassesTestMixin
 
 from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm
 from .models import Entry
@@ -680,8 +680,17 @@ class ResultsPDF(StaffuserRequiredMixin, TexPDFView):
         return {'results': results}
 
 
-class AthleteIndex(TemplateView):
+class AthleteIndex(UserPassesTestMixin, TemplateView):
     template_name = 'athlete_index.html'
+
+    def test_func(self, user):
+        if user.is_anonymous:
+            return False
+        try:
+            user.entry
+        except Entry.DoesNotExist:
+            return False
+        return True
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
