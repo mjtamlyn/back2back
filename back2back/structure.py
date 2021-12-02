@@ -48,6 +48,13 @@ class BaseCategory(object):
             entries = self.get_entries()
         return [Group(category=self, stage='first-round', number=i, entries=entries, start_target=i * 3 + self.first_round_target) for i in range(num_groups)]
 
+    def get_first_round_group_for_entry(self, entry, entries=None):
+        groups = self.get_first_round_groups(entries=entries)
+        for group in groups:
+            if entry in group.entries():
+                return group
+        return None
+
     def get_top_entries(self, entries, number, key, label):
         entries = sorted(entries, key=key, reverse=True)
         result = []
@@ -83,7 +90,6 @@ class BaseCategory(object):
             groups = [
                 Group(category=self, stage='second-round', number=0, entries=[], start_target=self.second_round_target),
                 Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 4),
-                Group(category=self, stage='second-round', number=2, entries=[], start_target=self.second_round_target + 8),
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
@@ -100,7 +106,6 @@ class BaseCategory(object):
         return [
             Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
             Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 4),
-            Group(category=self, stage='second-round', number=2, entries=entries, start_target=self.second_round_target + 8),
         ]
 
     def set_second_round_groups(self, qualifiers):
@@ -277,6 +282,14 @@ class Group(object):
             'index': i,
             'matches': [self.get_match(archer_1, archer_2, entries=entries, scores=scores_by_entry, time=i, match_number=j) for j, (archer_1, archer_2) in enumerate(row)],
         } for i, row in enumerate(arrangement)]
+
+    def matches_for_entry(self, entry):
+        matches = []
+        for time in self.matches():
+            for m in time['matches']:
+                if entry in [m['archer_1'], m['archer_2']]: 
+                    matches.append(m)
+        return matches
 
     def entries_by_index(self):
         if self.stage == 'first-round':

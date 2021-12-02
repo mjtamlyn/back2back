@@ -12,7 +12,12 @@
             {% block login %}
             <p class="pull-right">
                 {% if user.is_authenticated %}
-                Logged in as {{ user }}
+                    {% if user.is_staff %}
+                    Logged in as {{ user }} - <a href="{% url 'index' %}">Scorers admin</a>
+                    {% else %}
+                    Logged in as {{ user.entry }}
+                    {% endif %}
+                    - <a href="{% url 'logout' %}">Log out</a>
                 {% else %}
                 <a href="{% url 'login' %}">Log in</a>
                 {% endif %}

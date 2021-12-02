@@ -1,13 +1,13 @@
 import json
 import subprocess
 
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic import View, TemplateView, FormView, DeleteView
 from django.urls import reverse
 
-from braces.views import LoginRequiredMixin
+from braces.views import StaffuserRequiredMixin
 
 from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm
 from .models import Entry
@@ -41,14 +41,22 @@ class Login(LoginView):
     form_class = LoginForm
 
     def get_success_url(self):
+        if self.request.user.is_staff:
+            return reverse('index')
+        return reverse('athlete-index')
+
+
+class Logout(LogoutView):
+    def get_next_page(self):
         return reverse('public-index')
 
 
-class ScorersIndex(LoginRequiredMixin, TemplateView):
+class ScorersIndex(StaffuserRequiredMixin, TemplateView):
     template_name = 'index.html'
 
 
-class EntryList(LoginRequiredMixin, TemplateView):
+
+class EntryList(StaffuserRequiredMixin, TemplateView):
     template_name = 'entry_list.html'
 
     def get_context_data(self, **kwargs):
@@ -59,7 +67,7 @@ class EntryList(LoginRequiredMixin, TemplateView):
         }
 
 
-class EntryAdd(LoginRequiredMixin, FormView):
+class EntryAdd(StaffuserRequiredMixin, FormView):
     form_class = EntryForm
     template_name = 'entry_form.html'
 
@@ -86,7 +94,7 @@ class EntryEdit(EntryAdd):
         return kwargs
 
 
-class EntryDelete(LoginRequiredMixin, DeleteView):
+class EntryDelete(StaffuserRequiredMixin, DeleteView):
     template_name = 'entry_delete.html'
     pk_url_kwarg = 'entry'
     model = Entry
@@ -95,7 +103,7 @@ class EntryDelete(LoginRequiredMixin, DeleteView):
         return reverse('entry-list', kwargs={'category': self.kwargs['category']})
 
 
-class FirstRoundSetGroups(LoginRequiredMixin, TemplateView):
+class FirstRoundSetGroups(StaffuserRequiredMixin, TemplateView):
     template_name = 'first_round_set_groups.html'
 
     def get_context_data(self, **kwargs):
@@ -109,7 +117,7 @@ class FirstRoundSetGroups(LoginRequiredMixin, TemplateView):
         }
 
 
-class FirstRoundGroupAdd(LoginRequiredMixin, View):
+class FirstRoundGroupAdd(StaffuserRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         entry = Entry.objects.get(pk=self.request.POST['entry'])
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
@@ -119,7 +127,7 @@ class FirstRoundGroupAdd(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('first-round-set-groups', kwargs={'category': self.kwargs['category']}))
 
 
-class FirstRoundGroupRemove(LoginRequiredMixin, View):
+class FirstRoundGroupRemove(StaffuserRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         entry = Entry.objects.get(pk=self.request.POST['entry'])
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
@@ -129,7 +137,7 @@ class FirstRoundGroupRemove(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('first-round-set-groups', kwargs={'category': self.kwargs['category']}))
 
 
-class FirstRoundMatches(LoginRequiredMixin, TemplateView):
+class FirstRoundMatches(StaffuserRequiredMixin, TemplateView):
     template_name = 'first_round_matches.html'
 
     def rearrange_matches(self, groups):
@@ -153,7 +161,7 @@ class FirstRoundMatches(LoginRequiredMixin, TemplateView):
         }
 
 
-class FirstRoundMatchRecord(LoginRequiredMixin, FormView):
+class FirstRoundMatchRecord(StaffuserRequiredMixin, FormView):
     template_name = 'first_round_match_record.html'
     form_class = MatchForm
     success_url_name = 'first-round-matches'
@@ -196,7 +204,7 @@ class FirstRoundMatchRecord(LoginRequiredMixin, FormView):
         return reverse(self.success_url_name, kwargs={'category': self.kwargs['category']}) + '#match-' + self.kwargs['time']
 
 
-class FirstRoundLeaderboard(LoginRequiredMixin, TemplateView):
+class FirstRoundLeaderboard(StaffuserRequiredMixin, TemplateView):
     template_name = 'first_round_leaderboard.html'
 
     def get_context_data(self, **kwargs):
@@ -242,7 +250,7 @@ class FirstRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
         }
 
 
-class FirstRoundScoresheets(LoginRequiredMixin, TexPDFView):
+class FirstRoundScoresheets(StaffuserRequiredMixin, TexPDFView):
     template_name = 'scoresheets.tex'
 
     def get_context_data(self, **kwargs):
@@ -255,7 +263,7 @@ class FirstRoundScoresheets(LoginRequiredMixin, TexPDFView):
         }
 
 
-class FirstRoundJudges(LoginRequiredMixin, TexPDFView):
+class FirstRoundJudges(StaffuserRequiredMixin, TexPDFView):
     template_name = 'judges.tex'
 
     def rearrange_matches(self, groups):
@@ -290,7 +298,7 @@ class PublicFirstRound(TemplateView):
         }
 
 
-class SecondRoundSetGroups(LoginRequiredMixin, TemplateView):
+class SecondRoundSetGroups(StaffuserRequiredMixin, TemplateView):
     template_name = 'second_round_set_groups.html'
 
     def get_context_data(self, **kwargs):
@@ -334,7 +342,7 @@ class SecondRoundMatchRecord(FirstRoundMatchRecord):
         return self.category.get_second_round_groups()
 
 
-class SecondRoundLeaderboard(LoginRequiredMixin, TemplateView):
+class SecondRoundLeaderboard(StaffuserRequiredMixin, TemplateView):
     template_name = 'second_round_leaderboard.html'
 
     def get_context_data(self, **kwargs):
@@ -379,7 +387,7 @@ class SecondRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
         }
 
 
-class SecondRoundScoresheets(LoginRequiredMixin, TexPDFView):
+class SecondRoundScoresheets(StaffuserRequiredMixin, TexPDFView):
     template_name = 'scoresheets.tex'
 
     def get_context_data(self, **kwargs):
@@ -392,7 +400,7 @@ class SecondRoundScoresheets(LoginRequiredMixin, TexPDFView):
         }
 
 
-class SecondRoundJudges(LoginRequiredMixin, TexPDFView):
+class SecondRoundJudges(StaffuserRequiredMixin, TexPDFView):
     template_name = 'judges.tex'
 
     def rearrange_matches(self, groups):
@@ -427,7 +435,7 @@ class PublicSecondRound(TemplateView):
         }
 
 
-class ThirdRoundSetGroups(LoginRequiredMixin, TemplateView):
+class ThirdRoundSetGroups(StaffuserRequiredMixin, TemplateView):
     template_name = 'third_round_set_groups.html'
 
     def get_context_data(self, **kwargs):
@@ -471,7 +479,7 @@ class ThirdRoundMatchRecord(FirstRoundMatchRecord):
         return self.category.get_third_round_groups()
 
 
-class ThirdRoundLeaderboard(LoginRequiredMixin, TemplateView):
+class ThirdRoundLeaderboard(StaffuserRequiredMixin, TemplateView):
     template_name = 'third_round_leaderboard.html'
 
     def get_context_data(self, **kwargs):
@@ -501,7 +509,7 @@ class ThirdRoundLeaderboardExport(FirstRoundLeaderboardExportRecurve):
         }
 
 
-class ThirdRoundScoresheets(LoginRequiredMixin, TexPDFView):
+class ThirdRoundScoresheets(StaffuserRequiredMixin, TexPDFView):
     template_name = 'scoresheets.tex'
 
     def get_context_data(self, **kwargs):
@@ -514,7 +522,7 @@ class ThirdRoundScoresheets(LoginRequiredMixin, TexPDFView):
         }
 
 
-class ThirdRoundJudges(LoginRequiredMixin, TexPDFView):
+class ThirdRoundJudges(StaffuserRequiredMixin, TexPDFView):
     template_name = 'judges.tex'
 
     def rearrange_matches(self, groups):
@@ -549,7 +557,7 @@ class PublicThirdRound(TemplateView):
         }
 
 
-class FinalsSetSeeds(LoginRequiredMixin, TemplateView):
+class FinalsSetSeeds(StaffuserRequiredMixin, TemplateView):
     template_name = 'finals_set_seeds.html'
 
     def get_context_data(self, **kwargs):
@@ -569,7 +577,7 @@ class FinalsSetSeeds(LoginRequiredMixin, TemplateView):
         return HttpResponseRedirect(reverse('index'))
 
 
-class Finals(LoginRequiredMixin, TemplateView):
+class Finals(StaffuserRequiredMixin, TemplateView):
     template_name = 'finals.html'
 
     def get_context_data(self, **kwargs):
@@ -603,7 +611,7 @@ class PublicFinals(TemplateView):
         }
 
 
-class FinalsMatchRecord(LoginRequiredMixin, FormView):
+class FinalsMatchRecord(StaffuserRequiredMixin, FormView):
     template_name = 'finals_match_record.html'
     form_class = FinalMatchForm
 
@@ -638,7 +646,7 @@ class FinalsMatchRecord(LoginRequiredMixin, FormView):
         return reverse('finals')
 
 
-class FinalsScoresheets(LoginRequiredMixin, TexPDFView):
+class FinalsScoresheets(StaffuserRequiredMixin, TexPDFView):
     template_name = 'finals_scoresheets.tex'
 
     def get_context_data(self, **kwargs):
@@ -648,7 +656,7 @@ class FinalsScoresheets(LoginRequiredMixin, TexPDFView):
         }
 
 
-class ResultsPDF(LoginRequiredMixin, TexPDFView):
+class ResultsPDF(StaffuserRequiredMixin, TexPDFView):
     template_name = 'results.tex'
 
     def get_context_data(self, **kwargs):
@@ -670,3 +678,23 @@ class ResultsPDF(LoginRequiredMixin, TexPDFView):
                 'finals': category.finals_matches(qualifiers)
             })
         return {'results': results}
+
+
+class AthleteIndex(TemplateView):
+    template_name = 'athlete_index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        entry = self.request.user.entry
+        category = entry.get_category()
+        entries = category.get_entries()
+        category.get_first_round_qualifiers(entries=entries)
+        first_round_group = category.get_first_round_group_for_entry(entry, entries=entries)
+        first_round_matches = first_round_group.matches_for_entry(entry)
+        context.update(**{
+            'entry': entry,
+            'category': category,
+            'first_round_group': first_round_group,
+            'first_round_matches': first_round_matches,
+        })
+        return context

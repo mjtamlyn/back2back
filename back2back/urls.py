@@ -8,8 +8,9 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    url(r'^$', views.PublicIndex.as_view(), name='public-index'),
     url(r'^login/$', views.Login.as_view(), name='login'),
+    url(r'^logout/$', views.Logout.as_view(), name='logout'),
+    url(r'^$', views.PublicIndex.as_view(), name='public-index'),
     url(r'^scorers/$', views.ScorersIndex.as_view(), name='index'),
     url(r'^(?P<category>[a-z-]+)/entries/$', views.EntryList.as_view(), name='entry-list'),
     url(r'^(?P<category>[a-z-]+)/entries/add/$', views.EntryAdd.as_view(), name='entry-add'),
@@ -59,6 +60,8 @@ urlpatterns = [
     url(r'^(?P<category>[a-z-]+)/finals/$', views.PublicFinals.as_view(), name='public-finals'),
 
     url(r'^results/$', views.ResultsPDF.as_view(), name='results-pdf'),
+
+    url(r'^athlete/$', views.AthleteIndex.as_view(), name='athlete-index'),
 
     url(r'^admin/', admin.site.urls),
 ]

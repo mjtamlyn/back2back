@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+<h1>Athlete Info</h1>
+<h4 class="text-muted">{{ entry }} - {{ category }}</h4>
+{% endblock %}
+
+{% block content %}
+{% if first_round_group %}
+<h3>{{ first_round_group }}</h3>
+
+<table class="table table-bordered">
+    <caption>My Matches</caption>
+    {% for match in first_round_matches %}
+    <tr>
+        <td>Target {{ match.target }}</td>
+        <td {% if match.score_1.is_win %}class="winner"{% endif %}>{{ match.archer_1 }}</td>
+        <td>{{ match.score_1.score|default:"-" }} v {{ match.score_2.score|default:"-" }}</td>
+        <td {% if match.score_2.is_win %}class="winner"{% endif %}>{{ match.archer_2 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table class="table table-bordered">
+    <caption>Group Table <small class="text-muted">Verified matches only</small></caption>
+    {% for entry in first_round_group.leaderboard %}
+    <tr>
+        <td>{{ entry.qualified }}</td>
+        <td>{{ entry }}</td>
+        <td>{{ entry.first_group_points }}</td>
+        <td>{{ entry.first_group_score }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

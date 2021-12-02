@@ -19,7 +19,7 @@ class Entry(models.Model):
     category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     surname = models.CharField(max_length=255)
     forename = models.CharField(max_length=255)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     agb_number = models.CharField(max_length=20, blank=True, default='', verbose_name='AGB number')
     first_group_number = models.PositiveIntegerField(blank=True, null=True)
     first_group_index = models.PositiveIntegerField(blank=True, null=True, help_text='indexed 0-5 to do the match layout')
