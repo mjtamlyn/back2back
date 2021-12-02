@@ -67,6 +67,7 @@ class Score(models.Model):
     opponent = models.ForeignKey(Entry, blank=True, null=True, related_name='opponent_score_set', on_delete=models.CASCADE)
     score = models.PositiveIntegerField()
     points = models.PositiveIntegerField()
+    verified = models.BooleanField(default=False)
 
     def is_win(self):
         return self.points == 2

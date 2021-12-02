@@ -398,7 +398,7 @@ class Group(object):
 
     def denorm_group_data(self):
         for entry in self.entries():
-            totals = Score.objects.filter(stage=self.stage, entry=entry).aggregate(points=Sum('points'), score=Sum('score'))
+            totals = Score.objects.filter(stage=self.stage, entry=entry, verified=True).aggregate(points=Sum('points'), score=Sum('score'))
             if self.stage == 'first-round':
                 entry.first_group_points = totals['points'] or 0
                 entry.first_group_score = totals['score'] or 0
@@ -443,6 +443,16 @@ class Group(object):
                 score_2.save()
         self.denorm_group_data()
         return result
+
+    def verify_results(self, matches):
+        for match in matches:
+            score_1 = self.get_score(match['archer_1'], match['archer_2'], match['time'])
+            score_1.verified = True
+            score_1.save()
+            score_2 = self.get_score(match['archer_2'], match['archer_1'], match['time'])
+            score_2.verified = True
+            score_2.save()
+        self.denorm_group_data()
 
     def leaderboard(self, scores=False):
         """If you don't pass scores=True this will use the denormed placing field."""

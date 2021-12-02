@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from braces.views import StaffuserRequiredMixin, UserPassesTestMixin
 
-from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm
+from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm, VerifyForm
 from .models import Entry
 from .structure import CATEGORIES, CATEGORIES_BY_SLUG
 
@@ -53,7 +53,6 @@ class Logout(LogoutView):
 
 class ScorersIndex(StaffuserRequiredMixin, TemplateView):
     template_name = 'index.html'
-
 
 
 class EntryList(StaffuserRequiredMixin, TemplateView):
@@ -155,6 +154,7 @@ class FirstRoundMatches(StaffuserRequiredMixin, TemplateView):
         return {
             'round': 'First',
             'match_url_name': 'first-round-match-record',
+            'verify_url_name': 'first-round-match-verify',
             'category': category,
             'groups': groups,
             'matches': matches,
@@ -202,6 +202,22 @@ class FirstRoundMatchRecord(StaffuserRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse(self.success_url_name, kwargs={'category': self.kwargs['category']}) + '#match-' + self.kwargs['time']
+
+
+class FirstRoundMatchVerify(FirstRoundMatchRecord):
+    form_class = VerifyForm
+
+    def get_form_kwargs(self):
+        self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = self.get_groups()
+        self.group = groups[int(self.kwargs['group'])]
+        self.matches = self.group.matches()[int(self.kwargs['time'])]['matches']
+        kwargs = super(FormView, self).get_form_kwargs()
+        kwargs.update({
+            'group': self.group,
+            'matches': self.matches,
+        })
+        return kwargs
 
 
 class FirstRoundLeaderboard(StaffuserRequiredMixin, TemplateView):

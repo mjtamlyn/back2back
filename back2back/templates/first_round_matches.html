@@ -21,14 +21,16 @@
                     <form action="{% url match_url_name category=category.slug group=group.group.number match=match.index time=match.time %}" method="POST" class="form-inline inline" role="form">
                         {% csrf_token %}
                         <div class="form-group">
-                            <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" type="number" class="form-control input-sm">
+                            <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" {% if match.form.verified %}disabled="disabled"{% endif %} type="number" class="form-control input-sm">
                         </div>
                         V
                         <div class="form-group">
-                            <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" type="number" class="form-control input-sm">
+                            <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" {% if match.form.verified %}disabled="disabled"{% endif %} type="number" class="form-control input-sm">
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Save" class="btn btn-xs btn-success">
+                            {% if not match.form.verified %}
+                                <input type="submit" value="Save" class="btn btn-xs btn-success">
+                            {% endif %}
                         </div>
                     </form>
                 </td>
@@ -37,6 +39,18 @@
                 </td>
             </tr>
             {% endfor %}
+            <tr>
+                <td colspan="3">
+                    {% if not group.matches.0.score_1.verified %}
+                    <form action="{% url verify_url_name category=category.slug group=group.group.number time=group.matches.0.time %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Verify group" class="btn btn-success">
+                    </form>
+                    {% else %}
+                    <strong>Matches verified</strong>
+                    {% endif %}
+                </td>
+            </tr>
         </table>
     </div>
     {% endfor %}

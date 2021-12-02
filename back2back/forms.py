@@ -41,12 +41,17 @@ class MatchForm(forms.Form):
     def __init__(self, group, match, **kwargs):
         self.group = group
         self.match = match
+        self.verified = False
         super().__init__(**kwargs)
         self.fields['archer_1'].label = match['archer_1']
         if match['score_1']:
+            if match['score_1'].verified == True:
+                self.verified = True
             self.fields['archer_1'].initial = match['score_1'].score
         self.fields['archer_2'].label = match['archer_2']
         if match['score_2']:
+            if match['score_2'].verified == True:
+                self.verified = True
             self.fields['archer_2'].initial = match['score_2'].score
 
     def clean(self):
@@ -59,6 +64,16 @@ class MatchForm(forms.Form):
 
     def save(self):
         return self.group.record_result(self.match, self.cleaned_data)
+
+
+class VerifyForm(forms.Form):
+    def __init__(self, group, matches, **kwargs):
+        self.group = group
+        self.matches = matches
+        super().__init__(**kwargs)
+
+    def save(self):
+        return self.group.verify_results(self.matches)
 
 
 class FinalMatchForm(MatchForm):
