@@ -59,6 +59,7 @@ TEMPLATES = [{
 
 # Database
 DATABASES = {'default': dj_database_url.config(default='postgres://localhost/back2back')}
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
