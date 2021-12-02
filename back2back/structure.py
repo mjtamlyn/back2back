@@ -108,6 +108,13 @@ class BaseCategory(object):
             Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 4),
         ]
 
+    def get_second_round_group_for_entry(self, entry, entries=None):
+        groups = self.get_second_round_groups(entries=entries)
+        for group in groups:
+            if entry in group.entries():
+                return group
+        return None
+
     def set_second_round_groups(self, qualifiers):
         groups = self.get_second_round_groups(qualifiers)
         for i, group in enumerate(groups):
@@ -188,8 +195,16 @@ class GentsRecurve(BaseCategory):
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
+    max_entries = 18
     first_round_target = 13
     second_round_target = 1
+    first_round_groups = 3
+    second_round_layout = [
+        0, 1,  # Winner, runner up for each group
+        0, 1,
+        1, 0,
+        1, 0, 0, 1, 1, 0,  # High scores
+    ]
 
 
 class GentsCompound(BaseCategory):

@@ -690,11 +690,24 @@ class AthleteIndex(TemplateView):
         entries = category.get_entries()
         category.get_first_round_qualifiers(entries=entries)
         first_round_group = category.get_first_round_group_for_entry(entry, entries=entries)
-        first_round_matches = first_round_group.matches_for_entry(entry)
+        if first_round_group:
+            first_round_matches = first_round_group.matches_for_entry(entry)
+        else:
+            first_round_matches = None
+
+        second_entries = category.get_entries()
+        category.get_second_round_qualifiers(entries=second_entries)
+        second_round_group = category.get_second_round_group_for_entry(entry, entries=second_entries)
+        if second_round_group:
+            second_round_matches = second_round_group.matches_for_entry(entry)
+        else:
+            second_round_matches = None
         context.update(**{
             'entry': entry,
             'category': category,
             'first_round_group': first_round_group,
             'first_round_matches': first_round_matches,
+            'second_round_group': second_round_group,
+            'second_round_matches': second_round_matches,
         })
         return context
