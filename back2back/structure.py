@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from django.contrib.auth.models import User
 from django.db.models import Sum
 
 from .forms import MatchForm, FinalMatchForm
@@ -10,26 +11,36 @@ BYE = 'BYE'
 
 
 class BaseCategory(object):
-    max_entries = 30
-    first_round_groups = 5
-    second_round_groups = 3
+    max_entries = 24
+    first_round_groups = 4
+    second_round_groups = 2
     second_round_layout = [
-        0, 2,  # Winner, runner up for each group
+        0, 1,  # Winner, runner up for each group
+        0, 1,
         1, 0,
-        2, 1,
-        2, 0,
-        1, 2,
-        0, 1, 2, 0, 0, 1, 1, 2,  # High scores
+        1, 0,
+        1, 0, 0, 1,  # High scores
     ]
 
     def __str__(self):
         return self.name
 
     def get_entries(self):
-        return Entry.objects.filter(category=self.slug).order_by('name')
+        return Entry.objects.filter(category=self.slug).order_by('surname')
 
-    def create_entry(self, name, agb_number=''):
-        Entry.objects.create(category=self.slug, name=name, agb_number=agb_number)
+    def username_from_name(self, forename, surname):
+        return '%s%s' % (surname.upper(), forename[0].upper())
+
+    def create_entry(self, forename, surname, agb_number=''):
+        user = User.objects.create_user(self.username_from_name(forename, surname), password=agb_number)
+        Entry.objects.create(category=self.slug, forename=forename, surname=surname, agb_number=agb_number, user=user)
+
+    def update_entry(self, entry, forename, surname, agb_number=''):
+        user = entry.user
+        user.username = self.username_from_name(forename, surname)
+        user.set_password(agb_number)
+        user.save()
+        entry.save()
 
     def get_first_round_groups(self, entries=None):
         num_groups = self.first_round_groups
@@ -172,22 +183,22 @@ class GentsRecurve(BaseCategory):
 class LadiesRecurve(BaseCategory):
     name = 'Ladies Recurve'
     slug = 'ladies-recurve'
-    first_round_target = 16
-    second_round_target = 5
+    first_round_target = 13
+    second_round_target = 1
 
 
 class GentsCompound(BaseCategory):
     name = 'Gents Compound'
     slug = 'gents-compound'
     first_round_target = 1
-    second_round_target = 19
+    second_round_target = 13
 
 
 class LadiesCompound(BaseCategory):
     name = 'Ladies Compound'
     slug = 'ladies-compound'
-    first_round_target = 16
-    second_round_target = 5
+    first_round_target = 13
+    second_round_target = 7
 
 
 class Group(object):

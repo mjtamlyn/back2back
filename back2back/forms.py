@@ -7,7 +7,7 @@ class EntryForm(forms.ModelForm):
 
     class Meta:
         model = Entry
-        fields = ('name', 'agb_number')
+        fields = ('forename', 'surname', 'agb_number')
 
     def __init__(self, category, **kwargs):
         self.category = category
@@ -15,7 +15,7 @@ class EntryForm(forms.ModelForm):
 
     def save(self):
         if self.instance.pk:
-            self.instance.save()
+            self.category.update_entry(self.instance, **self.cleaned_data)
         else:
             self.category.create_entry(**self.cleaned_data)
 
