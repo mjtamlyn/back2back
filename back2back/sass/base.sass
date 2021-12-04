@@ -58,17 +58,17 @@ table.table-matches
       animation: fadeout 1250ms normal forwards
 
 @keyframes slideup
-  from
+  0%
     transform: translateY(50%)
-  to
+  100%
     transform: translateY(-100%)
 
 .scrolling-container
   overflow: hidden
-  height: 100%
+  height: 80vh
 
   .scrolling
-    animation: slideup 60 linear
+    animation: slideup 60s linear
 
   .flex.three-col
     display: flex

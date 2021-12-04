@@ -77,31 +77,34 @@ table.table-matches form.saved:after {
   animation: fadeout 1250ms normal forwards;
 }
 
-@keyframes slideup {
-  from {
-    transform: translateY(50%);
-  }
-  to {
-    transform: translateY(-100%);
-  }
-}
-/* line 66, ../../../sass/base.sass */
+/* line 60, ../../../sass/base.sass */
 .scrolling-container {
   overflow: hidden;
-  height: 100%;
+  height: 80vh;
 }
-/* line 70, ../../../sass/base.sass */
+/* line 64, ../../../sass/base.sass */
 .scrolling-container .scrolling {
-  animation: slideup 60 linear;
+  animation-name: slideup;
+  animation-duration: 60s;
+  animation-timing-function: linear;
 }
-/* line 73, ../../../sass/base.sass */
+/* line 69, ../../../sass/base.sass */
 .scrolling-container .flex.three-col {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
-/* line 77, ../../../sass/base.sass */
+/* line 73, ../../../sass/base.sass */
 .scrolling-container .flex.three-col table {
   max-width: 30%;
   margin: 20px 10px;
+}
+
+@keyframes slideup {
+  0% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
 }
