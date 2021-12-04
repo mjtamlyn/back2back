@@ -15,75 +15,30 @@
 \begin{center}
 
 {% for category in categories %}
-{% for round in rounds %}
+{% for archer in category.archers %}
 \textbf{\LARGE Back2Back 2021}\\
 \vspace{0.2in}
-{\large {{ category }} finals}\\
+{\large {{ category.category }} shoot down}\\
 \vspace{0.1in}
+{\large {{ archer|safe }}}\\
+\vspace{0.4in}
+
+{% for round in rounds %}
 {\large {{ round }}}\\
 \vspace{0.1in}
-
-\begin{multicols}{2}
-
-\begin{flushleft}
-Archer 1:\\
-\end{flushleft}
-\vspace{0.4in}
-\hrule
-\vspace{0.1in}
-
-\begin{tabular}{| j | c | c | c | c | c |}
+\begin{tabular}{| j | c | c | c | c | }
 \hline
-\textbf{J} & \multicolumn{3}{|c|}{\textbf{Arrows}} & \textbf{S} & \textbf{RT}\\
+\textbf{J} & \multicolumn{3}{|c|}{\textbf{Arrows}} & \textbf{S}\\
 \hline
-& & & & & \\
-\hline
-& & & & & \\
-\hline
-& & & & & \\
-\hline
-& & & & & \\
+& & & & \\
 \hline
 \end {tabular}
 
-\begin{flushleft}
-Signed:\\
-\end{flushleft}
 \vspace{0.4in}
-\hrule
-
-\begin{flushleft}
-Archer 2:\\
-\end{flushleft}
-\vspace{0.4in}
-\hrule
-\vspace{0.1in}
-
-\begin{tabular}{| j | c | c | c | c | c |}
-\hline
-\textbf{J} & \multicolumn{3}{|c|}{\textbf{Arrows}} & \textbf{S} & \textbf{RT}\\
-\hline
-& & & & & \\
-\hline
-& & & & & \\
-\hline
-& & & & & \\
-\hline
-& & & & & \\
-\hline
-\end {tabular}
-
-\begin{flushleft}
-Signed:\\
-\end{flushleft}
-\vspace{0.4in}
-\hrule
-
-\end{multicols}
-\vspace{0.2in}
 
 {% endfor %}
 \pagebreak
+{% endfor %}
 {% endfor %}
 
 \end{center}

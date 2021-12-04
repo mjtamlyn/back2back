@@ -725,9 +725,17 @@ class FinalsScoresheets(StaffuserRequiredMixin, TexPDFView):
     template_name = 'finals_scoresheets.tex'
 
     def get_context_data(self, **kwargs):
+        categories = []
+        for category in CATEGORIES:
+            entries = category.get_entries()
+            qualifiers = category.get_second_round_qualifiers(entries=entries)
+            categories.append({
+                'category': category,
+                'archers': qualifiers,
+            })
         return {
-            'categories': CATEGORIES,
-            'rounds': ['Match 1', 'Match 2', 'Match 3', 'Semi-final', 'Final'],
+            'categories': categories,
+            'rounds': ['End 1', 'End 2', 'End 3', 'End 4', 'Final'],
         }
 
 
