@@ -89,7 +89,7 @@ class BaseCategory(object):
         if qualifiers is not None:
             groups = [
                 Group(category=self, stage='second-round', number=0, entries=[], start_target=self.second_round_target),
-                Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 4),
+                Group(category=self, stage='second-round', number=1, entries=[], start_target=self.second_round_target + 3),
             ]
             layout = self.second_round_layout
             for i, entry in enumerate(qualifiers):
@@ -105,7 +105,7 @@ class BaseCategory(object):
             entries = self.get_entries()
         return [
             Group(category=self, stage='second-round', number=0, entries=entries, start_target=self.second_round_target),
-            Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 4),
+            Group(category=self, stage='second-round', number=1, entries=entries, start_target=self.second_round_target + 3),
         ]
 
     def get_second_round_group_for_entry(self, entry, entries=None):
