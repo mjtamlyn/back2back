@@ -15,7 +15,7 @@
                     <form method="POST" action="{% url 'first-round-group-remove' category=category.slug %}">
                         {% csrf_token %}
                         <input type="hidden" name="entry" value="{{ entry.pk }}">
-                        <input type="submit" class="btn btn-xs btn-danger" value="Remove">
+                        <input type="submit" class="btn btn-sm btn-danger" value="Remove">
                     </form>
                 </td>
             </tr>

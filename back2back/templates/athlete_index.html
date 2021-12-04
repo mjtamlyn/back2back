@@ -22,14 +22,14 @@
                 {{ match.score_1.score|default:"-" }} v {{ match.score_2.score|default:"-" }}
                 <small><strong>Verified<strong></small>
             {% else %}
-                <form class="form-inline inline" method="POST" action="{% url 'first-round-match-record' category=category.slug group=first_round_group.number match=match.index time=match.time %}">
+                <form class="form-inline" method="POST" action="{% url 'first-round-match-record' category=category.slug group=first_round_group.number match=match.index time=match.time %}">
                     {% csrf_token %}
-                    <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" type="number" class="form-control input-sm">
+                    <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" type="number" class="form-control form-control-sm">
                     v
-                    <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" type="number" class="form-control input-sm">
+                    <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" type="number" class="form-control form-control-sm">
                     <div class="form-group">
                         {% if not match.form.verified %}
-                            <input type="submit" value="Save" class="btn btn-xs btn-success">
+                            <input type="submit" value="Save" class="btn btn-sm btn-success">
                         {% endif %}
                     </div>
                 </form>
