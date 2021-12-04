@@ -447,11 +447,13 @@ class Group(object):
     def verify_results(self, matches):
         for match in matches:
             score_1 = self.get_score(match['archer_1'], match['archer_2'], match['time'])
-            score_1.verified = True
-            score_1.save()
+            if score_1:
+                score_1.verified = True
+                score_1.save()
             score_2 = self.get_score(match['archer_2'], match['archer_1'], match['time'])
-            score_2.verified = True
-            score_2.save()
+            if score_2:
+                score_2.verified = True
+                score_2.save()
         self.denorm_group_data()
 
     def leaderboard(self, scores=False):
