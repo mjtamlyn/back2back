@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^(?P<category>[a-z-]+)/second-round/set-groups/$', views.SecondRoundSetGroups.as_view(), name='second-round-set-groups'),
     url(r'^(?P<category>[a-z-]+)/second-round/matches/$', views.SecondRoundMatches.as_view(), name='second-round-matches'),
     url(r'^(?P<category>[a-z-]+)/second-round/matches/(?P<group>\d+)/(?P<time>\d+)/(?P<match>\d+)/$', views.SecondRoundMatchRecord.as_view(), name='second-round-match-record'),
+    url(r'^(?P<category>[a-z-]+)/second-round/matches/(?P<group>\d+)/(?P<time>\d+)/verify/$', views.SecondRoundMatchVerify.as_view(), name='second-round-match-verify'),
+
     url(r'^(?P<category>[a-z-]+)/second-round/leaderboard/$', views.SecondRoundLeaderboard.as_view(), name='second-round-leaderboard'),
     url(r'^(?P<category>[a-z-]+)/second-round/scoresheets/$', views.SecondRoundScoresheets.as_view(), name='second-round-scoresheets'),
     url(r'^(?P<category>[a-z-]+)/second-round/judges/$', views.SecondRoundJudges.as_view(), name='second-round-judges'),

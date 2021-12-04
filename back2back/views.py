@@ -365,6 +365,7 @@ class SecondRoundMatches(FirstRoundMatches):
         return {
             'round': 'Second',
             'match_url_name': 'second-round-match-record',
+            'verify_url_name': 'second-round-match-verify',
             'category': category,
             'groups': groups,
             'matches': matches,
@@ -376,6 +377,29 @@ class SecondRoundMatchRecord(FirstRoundMatchRecord):
 
     def get_groups(self):
         return self.category.get_second_round_groups()
+
+
+class SecondRoundMatchVerify(SecondRoundMatchRecord):
+    form_class = VerifyForm
+
+    def test_func(self, user):
+        if user.is_anonymous:
+            return False
+        if user.is_superuser:
+            return True
+        return False
+
+    def get_form_kwargs(self):
+        self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = self.get_groups()
+        self.group = groups[int(self.kwargs['group'])]
+        self.matches = self.group.matches()[int(self.kwargs['time'])]['matches']
+        kwargs = super(FormView, self).get_form_kwargs()
+        kwargs.update({
+            'group': self.group,
+            'matches': self.matches,
+        })
+        return kwargs
 
 
 class SecondRoundLeaderboard(StaffuserRequiredMixin, TemplateView):
