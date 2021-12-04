@@ -161,19 +161,32 @@ class FirstRoundMatches(StaffuserRequiredMixin, TemplateView):
         }
 
 
-class FirstRoundMatchRecord(StaffuserRequiredMixin, FormView):
+class FirstRoundMatchRecord(UserPassesTestMixin, FormView):
     template_name = 'first_round_match_record.html'
     form_class = MatchForm
     success_url_name = 'first-round-matches'
+
+    def test_func(self, user):
+        self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
+        groups = self.get_groups()
+        self.group = groups[int(self.kwargs['group'])]
+        self.match = self.group.matches()[int(self.kwargs['time'])]['matches'][int(self.kwargs['match'])]
+        if user.is_anonymous:
+            return False
+        if user.is_superuser:
+            return True
+        try:
+            user.entry
+        except Entry.DoesNotExist:
+            return False
+        if user.entry in [self.match['archer_1'], self.match['archer_2']]:
+            return True
+        return False
 
     def get_groups(self):
         return self.category.get_first_round_groups()
 
     def get_form_kwargs(self):
-        self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]
-        groups = self.get_groups()
-        self.group = groups[int(self.kwargs['group'])]
-        self.match = self.group.matches()[int(self.kwargs['time'])]['matches'][int(self.kwargs['match'])]
         kwargs = super().get_form_kwargs()
         kwargs.update({
             'group': self.group,
@@ -206,6 +219,13 @@ class FirstRoundMatchRecord(StaffuserRequiredMixin, FormView):
 
 class FirstRoundMatchVerify(FirstRoundMatchRecord):
     form_class = VerifyForm
+
+    def test_func(self, user):
+        if user.is_anonymous:
+            return False
+        if user.is_superuser:
+            return True
+        return False
 
     def get_form_kwargs(self):
         self.category = CATEGORIES_BY_SLUG[self.kwargs['category']]

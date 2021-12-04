@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block nav %}
 <h1>Athlete Info</h1>
 <h4 class="text-muted">{{ entry }} - {{ category }}</h4>
@@ -9,13 +11,30 @@
 {% if first_round_group %}
 <h3>First round - {{ first_round_group }}</h3>
 
-<table class="table table-bordered">
+<table class="table table-bordered table-matches">
     <caption>My Matches</caption>
     {% for match in first_round_matches %}
     <tr>
         <td>Target {{ match.target }}</td>
         <td {% if match.score_1.is_win %}class="winner"{% endif %}>{{ match.archer_1 }}</td>
-        <td>{{ match.score_1.score|default:"-" }} v {{ match.score_2.score|default:"-" }}</td>
+        <td>
+            {% if match.score_1.verified and match.score_2.verified %}
+                {{ match.score_1.score|default:"-" }} v {{ match.score_2.score|default:"-" }}
+                <small><strong>Verified<strong></small>
+            {% else %}
+                <form class="form-inline inline" method="POST" action="{% url 'first-round-match-record' category=category.slug group=first_round_group.number match=match.index time=match.time %}">
+                    {% csrf_token %}
+                    <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" type="number" class="form-control input-sm">
+                    v
+                    <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" type="number" class="form-control input-sm">
+                    <div class="form-group">
+                        {% if not match.form.verified %}
+                            <input type="submit" value="Save" class="btn btn-xs btn-success">
+                        {% endif %}
+                    </div>
+                </form>
+            {% endif %}
+        </td>
         <td {% if match.score_2.is_win %}class="winner"{% endif %}>{{ match.archer_2 }}</td>
     </tr>
     {% endfor %}
@@ -61,4 +80,9 @@
     {% endfor %}
 </table>
 {% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script src="{% static 'js/matchForms.js' %}"></script>
 {% endblock %}
