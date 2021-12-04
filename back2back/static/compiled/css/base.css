@@ -78,21 +78,21 @@ table.table-matches form.saved:after {
 }
 
 @keyframes slideup {
-  0% {
+  from {
     transform: translateY(50%);
   }
-  100% {
+  to {
     transform: translateY(-100%);
   }
 }
 /* line 66, ../../../sass/base.sass */
 .scrolling-container {
   overflow: hidden;
-  height: 80vh;
+  height: 100%;
 }
 /* line 70, ../../../sass/base.sass */
 .scrolling-container .scrolling {
-  animation: slideup 60 infinite linear;
+  animation: slideup 60 linear;
 }
 /* line 73, ../../../sass/base.sass */
 .scrolling-container .flex.three-col {

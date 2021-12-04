@@ -260,7 +260,7 @@ class FirstRoundLeaderboardExportRecurve(TemplateView):
 
     def get_context_data(self, **kwargs):
         leaderboards = []
-        for category in CATEGORIES[:2]:
+        for category in [CATEGORIES[0], CATEGORIES[4]]:
             entries = category.get_entries()
             groups = category.get_first_round_groups(entries=entries)
             category.get_first_round_qualifiers(entries=entries)
@@ -275,7 +275,7 @@ class FirstRoundLeaderboardExportCompound(FirstRoundLeaderboardExportRecurve):
 
     def get_context_data(self, **kwargs):
         leaderboards = []
-        for category in CATEGORIES[2:]:
+        for category in CATEGORIES[1:3]:
             entries = category.get_entries()
             groups = category.get_first_round_groups(entries=entries)
             category.get_first_round_qualifiers(entries=entries)
