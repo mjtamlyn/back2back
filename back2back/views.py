@@ -9,7 +9,7 @@ from django.urls import reverse
 
 from braces.views import StaffuserRequiredMixin, UserPassesTestMixin
 
-from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm, VerifyForm
+from .forms import EntryForm, LoginForm, MatchForm, FinalMatchForm, FinalShootdownForm, VerifyForm
 from .models import Entry
 from .structure import CATEGORIES, CATEGORIES_BY_SLUG
 
@@ -661,10 +661,10 @@ class Finals(StaffuserRequiredMixin, TemplateView):
         for category in CATEGORIES:
             entries = category.get_entries()
             qualifiers = category.get_second_round_qualifiers(entries=entries)
-            matches = category.finals_matches(qualifiers)
+            shootdown = category.get_shootdown(qualifiers)
             finalists.append({
                 'category': category,
-                'matches': matches,
+                'shootdown': shootdown,
             })
         return {
             'rounds': rounds,
@@ -679,10 +679,10 @@ class PublicFinals(TemplateView):
         category = CATEGORIES_BY_SLUG[self.kwargs['category']]
         entries = category.get_entries()
         qualifiers = category.get_second_round_qualifiers(entries=entries)
-        matches = category.finals_matches(qualifiers)
+        shootdown = category.get_shootdown(qualifiers)
         return {
             'category': category,
-            'matches': matches,
+            'shootdown': shootdown,
         }
 
 
@@ -719,6 +719,23 @@ class FinalsMatchRecord(StaffuserRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('finals')
+
+
+class FinalsShootdownRecord(StaffuserRequiredMixin, FormView):
+    template_name = 'finals_match_record.html'
+    form_class = FinalShootdownForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['archer'] = Entry.objects.get(pk=self.kwargs['archer'])
+        kwargs['end'] = self.kwargs['end']
+        return kwargs
+
+    def form_valid(self, form):
+        result = form.save()
+        if self.request.is_ajax():
+            return HttpResponse(json.dumps(result))
+        return super().form_valid(form)
 
 
 class FinalsScoresheets(StaffuserRequiredMixin, TexPDFView):

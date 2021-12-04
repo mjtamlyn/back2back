@@ -4,14 +4,19 @@
 
 {% block content %}
 <div class="row">
-    <table class="table">
-        {% for match in matches %}
+    <table class="table table-bordered">
+        <caption>{{ category }}</caption>
+        {% for end in shootdown %}
         <tr>
-            <td>{{ match.archer_1|default:"" }}</td>
-            <td>{{ match.form.archer_1.value|default:"" }}</td>
-            <td>V</td>
-            <td>{{ match.form.archer_2.value|default:"" }}</td>
-            <td>{{ match.archer_2 }}</td>
+            <td rowspan="2"><strong>{{ end.label }}</strong></td>
+            {% for archer in end.archers %}
+            <td>{{ archer.archer }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for archer in end.archers %}
+            <td>{{ archer.score|default:'' }}</td>
+            {% endfor %}
         </tr>
         {% empty %}
         <div class="col-sm-6"><p>Matches to be confirmed.</p></div>

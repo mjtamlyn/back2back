@@ -143,6 +143,19 @@ class BaseCategory(object):
             qualifier.final_round_seed = i + 1
             qualifier.save()
 
+    def get_shootdown(self, qualifiers):
+        seeded_qualifiers = sorted((q for q in qualifiers if q.final_round_seed), key=lambda e: (
+            e.final_round_seed,
+        ))
+        return [{
+            'label': 'End %s' % (i + 1),
+            'number': i + 1,
+            'archers': [{
+                'archer': q,
+                'score': getattr(q, 'final_match_%s_score' % (i + 1)),
+            } for q in seeded_qualifiers],
+        } for i in range(5)]
+
     def finals_matches(self, qualifiers):
         seeded_qualifiers = sorted((q for q in qualifiers if q.final_round_seed), key=lambda e: (
             e.final_round_seed,

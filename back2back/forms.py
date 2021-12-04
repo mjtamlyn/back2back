@@ -93,3 +93,18 @@ class FinalMatchForm(MatchForm):
 
     def save(self):
         self.category.record_final_result(self.match, self.cleaned_data)
+
+
+class FinalShootdownForm(forms.Form):
+    score = forms.IntegerField()
+
+    def __init__(self, archer, end, **kwargs):
+        super().__init__(**kwargs)
+        self.archer = archer
+        self.end = end
+
+    def save(self):
+        field = 'final_match_%s_score' % self.end
+        setattr(self.archer, field, self.cleaned_data['score'])
+        self.archer.save()
+        return self.cleaned_data['score']

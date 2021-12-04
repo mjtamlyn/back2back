@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^(?P<category>[a-z-]+)/finals/set-seeds/$', views.FinalsSetSeeds.as_view(), name='finals-set-seeds'),
     url(r'^finals/$', views.Finals.as_view(), name='finals'),
     url(r'^finals/(?P<category>[a-z-]+)/(?P<match>\d+)/$', views.FinalsMatchRecord.as_view(), name='finals-match-record'),
+    url(r'^finals/(?P<category>[a-z-]+)/(?P<archer>\d+)/(?P<end>\d+)/$', views.FinalsShootdownRecord.as_view(), name='finals-shootdown-record'),
     url(r'^finals/scoresheets/$', views.FinalsScoresheets.as_view(), name='finals-scoresheets'),
 
     url(r'^(?P<category>[a-z-]+)/finals/$', views.PublicFinals.as_view(), name='public-finals'),

@@ -1,32 +1,30 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 <h3>Finals scores</h3>
 {% for category in finalists %}
 <div class="col-sm-6">
-    <table class="table table-bordered">
+    <table class="table table-bordered table-matches">
         <caption>{{ category.category }}</caption>
-        {% for match in category.matches %}
+        {% for end in category.shootdown %}
         <tr>
-            <td>{{ match.archer_1 }}</td>
+            <td rowspan="2"><strong>{{ end.label }}</strong></td>
+            {% for archer in end.archers %}
+            <td>{{ archer.archer }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for archer in end.archers %}
             <td>
-                {% if match.form %}
-                <form action="{% url 'finals-match-record' category=category.category.slug match=match.index %}" method="POST" class="form-inline inline" role="form">
+                <form class="form-inline" method="POST" action="{% url 'finals-shootdown-record' category=category.category.slug archer=archer.archer.pk end=end.number %}">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" type="number" class="form-control input-sm">
-                    </div>
-                    V
-                    <div class="form-group">
-                        <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" type="number" class="form-control input-sm">
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-sm btn-success">
-                    </div>
+                    <input name="score" type="number" class="form-control form-control-sm" value="{{ archer.score }}" />
+                    <input type="submit" value="Save" class="btn btn-sm btn-success" />
                 </form>
-                {% endif %}
             </td>
-            <td>{{ match.archer_2 }}</td>
+            {% endfor %}
         </tr>
         {% empty %}
         <div class="col-sm-6"><p>Matches to be confirmed.</p></div>
@@ -34,4 +32,9 @@
     </table>
 </div>
 {% endfor %}
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'js/jquery-2.0.3.min.js' %}"></script>
+<script src="{% static 'js/matchForms.js' %}"></script>
 {% endblock %}
