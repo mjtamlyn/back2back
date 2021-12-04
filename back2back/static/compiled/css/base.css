@@ -32,6 +32,7 @@
 }
 /* line 25, ../../../sass/base.sass */
 table.table caption {
+  caption-side: top;
   font-weight: bold;
   font-size: 16px;
   padding: 2px;
@@ -39,27 +40,27 @@ table.table caption {
   border: 1px solid #ddd;
   border-bottom: 0;
 }
-/* line 32, ../../../sass/base.sass */
+/* line 33, ../../../sass/base.sass */
 table.table input[type=number] {
   max-width: 60px;
 }
 
-/* line 36, ../../../sass/base.sass */
+/* line 37, ../../../sass/base.sass */
 table.table-matches td.winner {
   font-weight: bold;
 }
-/* line 38, ../../../sass/base.sass */
+/* line 39, ../../../sass/base.sass */
 table.table-matches td.error {
   animation: fadered 1250ms normal forwards;
 }
-/* line 41, ../../../sass/base.sass */
+/* line 42, ../../../sass/base.sass */
 table.table-matches form:after {
   content: "";
   width: 15px;
   height: 15px;
   display: inline-block;
 }
-/* line 46, ../../../sass/base.sass */
+/* line 47, ../../../sass/base.sass */
 table.table-matches form.saving:after {
   animation: three-quarters-loader 1250ms infinite linear;
   border: 3px solid #5cb85c;
@@ -70,7 +71,7 @@ table.table-matches form.saving:after {
   overflow: hidden;
   text-indent: -9999px;
 }
-/* line 55, ../../../sass/base.sass */
+/* line 56, ../../../sass/base.sass */
 table.table-matches form.saved:after {
   content: "OK!";
   animation: fadeout 1250ms normal forwards;
@@ -84,22 +85,22 @@ table.table-matches form.saved:after {
     transform: translateY(-100%);
   }
 }
-/* line 65, ../../../sass/base.sass */
+/* line 66, ../../../sass/base.sass */
 .scrolling-container {
   overflow: hidden;
   height: 80vh;
 }
-/* line 69, ../../../sass/base.sass */
+/* line 70, ../../../sass/base.sass */
 .scrolling-container .scrolling {
-  animation: slideup 60s infinite linear;
+  animation: slideup 60 infinite linear;
 }
-/* line 72, ../../../sass/base.sass */
+/* line 73, ../../../sass/base.sass */
 .scrolling-container .flex.three-col {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
-/* line 76, ../../../sass/base.sass */
+/* line 77, ../../../sass/base.sass */
 .scrolling-container .flex.three-col table {
   max-width: 30%;
   margin: 20px 10px;
