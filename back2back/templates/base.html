@@ -16,7 +16,7 @@
                     {% if user.is_staff %}
                     Logged in as {{ user }} - <a href="{% url 'index' %}">Scorers admin</a>
                     {% else %}
-                    Logged in as {{ user.entry }}
+                    Logged in as {{ user.entry }} - <a href="{% url 'athlete-index' %}">My matches</a> - <a href="{% url 'public-index' %}">Leaderboards</a>
                     {% endif %}
                     - <a href="{% url 'logout' %}">Log out</a>
                 {% else %}
