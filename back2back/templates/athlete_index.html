@@ -62,7 +62,24 @@
     <tr>
         <td>Target {{ match.target }}</td>
         <td {% if match.score_1.is_win %}class="winner"{% endif %}>{{ match.archer_1 }}</td>
-        <td>{{ match.score_1.score|default:"-" }} v {{ match.score_2.score|default:"-" }}</td>
+        <td>
+            {% if match.score_1.verified and match.score_2.verified %}
+                {{ match.score_1.score|default:"-" }} v {{ match.score_2.score|default:"-" }}
+                <small><strong>Verified<strong></small>
+            {% else %}
+                <form class="form-inline" method="POST" action="{% url 'second-round-match-record' category=category.slug group=second_round_group.number match=match.index time=match.time %}">
+                    {% csrf_token %}
+                    <input id="{{ match.form.archer_1.auto_id }}" name="{{ match.form.archer_1.name }}" value="{{ match.form.archer_1.value }}" type="number" class="form-control form-control-sm">
+                    v
+                    <input id="{{ match.form.archer_2.auto_id }}" name="{{ match.form.archer_2.name }}" value="{{ match.form.archer_2.value }}" type="number" class="form-control form-control-sm">
+                    <div class="form-group">
+                        {% if not match.form.verified %}
+                            <input type="submit" value="Save" class="btn btn-sm btn-success">
+                        {% endif %}
+                    </div>
+                </form>
+            {% endif %}
+        </td>
         <td {% if match.score_2.is_win %}class="winner"{% endif %}>{{ match.archer_2 }}</td>
     </tr>
     {% endfor %}
