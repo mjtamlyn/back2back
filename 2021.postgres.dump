@@ -1,0 +1,2531 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.8
+-- Dumped by pg_dump version 13.8
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: heroku_ext; Type: SCHEMA; Schema: -; Owner: marc
+--
+
+CREATE SCHEMA heroku_ext;
+
+
+ALTER SCHEMA heroku_ext OWNER TO marc;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO marc;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO marc;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO marc;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO marc;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO marc;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO marc;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(150) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO marc;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO marc;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO marc;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_user_groups_id_seq OWNED BY public.auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO marc;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO marc;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO marc;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_user_user_permissions.id;
+
+
+--
+-- Name: back2back_entry; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.back2back_entry (
+    id integer NOT NULL,
+    category character varying(255) NOT NULL,
+    surname character varying(255) NOT NULL,
+    agb_number character varying(20) NOT NULL,
+    first_group_number integer,
+    first_group_index integer,
+    first_group_placing integer,
+    first_group_points integer NOT NULL,
+    first_group_score integer NOT NULL,
+    second_group_number integer,
+    second_group_index integer,
+    second_group_placing integer,
+    second_group_points integer NOT NULL,
+    second_group_score integer NOT NULL,
+    final_round_seed integer,
+    final_match_1_score integer,
+    final_match_2_score integer,
+    final_match_3_score integer,
+    final_match_4_score integer,
+    final_match_5_score integer,
+    third_group_index integer,
+    third_group_number integer,
+    third_group_placing integer,
+    third_group_points integer NOT NULL,
+    third_group_score integer NOT NULL,
+    final_match_6_score integer,
+    final_match_7_score integer,
+    forename character varying(255) NOT NULL,
+    user_id integer NOT NULL,
+    CONSTRAINT back2back_entry_final_match_1_score_check CHECK ((final_match_1_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_2_score_check CHECK ((final_match_2_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_3_score_check CHECK ((final_match_3_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_4_score_check CHECK ((final_match_4_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_5_score_check CHECK ((final_match_5_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_6_score_check CHECK ((final_match_6_score >= 0)),
+    CONSTRAINT back2back_entry_final_match_7_score_check CHECK ((final_match_7_score >= 0)),
+    CONSTRAINT back2back_entry_final_round_seed_check CHECK ((final_round_seed >= 0)),
+    CONSTRAINT back2back_entry_first_group_index_check CHECK ((first_group_index >= 0)),
+    CONSTRAINT back2back_entry_first_group_number_check CHECK ((first_group_number >= 0)),
+    CONSTRAINT back2back_entry_first_group_placing_check CHECK ((first_group_placing >= 0)),
+    CONSTRAINT back2back_entry_first_group_points_check CHECK ((first_group_points >= 0)),
+    CONSTRAINT back2back_entry_first_group_score_check CHECK ((first_group_score >= 0)),
+    CONSTRAINT back2back_entry_second_group_index_check CHECK ((second_group_index >= 0)),
+    CONSTRAINT back2back_entry_second_group_number_check CHECK ((second_group_number >= 0)),
+    CONSTRAINT back2back_entry_second_group_placing_check CHECK ((second_group_placing >= 0)),
+    CONSTRAINT back2back_entry_second_group_points_check CHECK ((second_group_points >= 0)),
+    CONSTRAINT back2back_entry_second_group_score_check CHECK ((second_group_score >= 0)),
+    CONSTRAINT back2back_entry_third_group_index_check CHECK ((third_group_index >= 0)),
+    CONSTRAINT back2back_entry_third_group_number_check CHECK ((third_group_number >= 0)),
+    CONSTRAINT back2back_entry_third_group_placing_check CHECK ((third_group_placing >= 0)),
+    CONSTRAINT back2back_entry_third_group_points_check CHECK ((third_group_points >= 0)),
+    CONSTRAINT back2back_entry_third_group_score_check CHECK ((third_group_score >= 0))
+);
+
+
+ALTER TABLE public.back2back_entry OWNER TO marc;
+
+--
+-- Name: back2back_entry_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.back2back_entry_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.back2back_entry_id_seq OWNER TO marc;
+
+--
+-- Name: back2back_entry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.back2back_entry_id_seq OWNED BY public.back2back_entry.id;
+
+
+--
+-- Name: back2back_score; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.back2back_score (
+    id integer NOT NULL,
+    stage character varying(255) NOT NULL,
+    "time" integer NOT NULL,
+    score integer NOT NULL,
+    points integer NOT NULL,
+    entry_id integer NOT NULL,
+    opponent_id integer,
+    verified boolean NOT NULL,
+    CONSTRAINT back2back_score_points_check CHECK ((points >= 0)),
+    CONSTRAINT back2back_score_score_check CHECK ((score >= 0)),
+    CONSTRAINT back2back_score_time_check CHECK (("time" >= 0))
+);
+
+
+ALTER TABLE public.back2back_score OWNER TO marc;
+
+--
+-- Name: back2back_score_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.back2back_score_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.back2back_score_id_seq OWNER TO marc;
+
+--
+-- Name: back2back_score_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.back2back_score_id_seq OWNED BY public.back2back_score.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO marc;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO marc;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO marc;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO marc;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO marc;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: marc
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO marc;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: marc
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: marc
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO marc;
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups ALTER COLUMN id SET DEFAULT nextval('public.auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: back2back_entry id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_entry ALTER COLUMN id SET DEFAULT nextval('public.back2back_entry_id_seq'::regclass);
+
+
+--
+-- Name: back2back_score id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score ALTER COLUMN id SET DEFAULT nextval('public.back2back_score_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add entry	1	add_entry
+2	Can change entry	1	change_entry
+3	Can delete entry	1	delete_entry
+4	Can add score	2	add_score
+5	Can change score	2	change_score
+6	Can delete score	2	delete_score
+7	Can add log entry	3	add_logentry
+8	Can change log entry	3	change_logentry
+9	Can delete log entry	3	delete_logentry
+10	Can add permission	4	add_permission
+11	Can change permission	4	change_permission
+12	Can delete permission	4	delete_permission
+13	Can add group	5	add_group
+14	Can change group	5	change_group
+15	Can delete group	5	delete_group
+16	Can add user	6	add_user
+17	Can change user	6	change_user
+18	Can delete user	6	delete_user
+19	Can add content type	7	add_contenttype
+20	Can change content type	7	change_contenttype
+21	Can delete content type	7	delete_contenttype
+22	Can add session	8	add_session
+23	Can change session	8	change_session
+24	Can delete session	8	delete_session
+25	Can view entry	1	view_entry
+26	Can view score	2	view_score
+27	Can view log entry	3	view_logentry
+28	Can view permission	4	view_permission
+29	Can view group	5	view_group
+30	Can view user	6	view_user
+31	Can view content type	7	view_contenttype
+32	Can view session	8	view_session
+\.
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+46	pbkdf2_sha256$260000$ZlPZQT0kUQ7rOttoCQk9P5$dRUMlAruQ3Q97LoDAVJ47lnlRq6Fbzp3d/QBK5fkBSA=	\N	f	MERRYN				f	t	2021-12-03 12:22:23.41315+00
+2	pbkdf2_sha256$260000$7ApOfcEnvkIdGtnGM8vvqD$H46ea26iTA2llPE7Zuw/x4I4hnnDUAOMFvVKBmmhydc=	2021-12-04 12:52:19.673635+00	t	team				t	t	2017-12-02 07:53:17+00
+4	pbkdf2_sha256$260000$iJZqfFnvDcfS487mPw6non$94EjPx0u+gbXFUAU9z3ZCYC3P9FrdQ3BnPWeDV3s0Tc=	\N	f	ANNISONL				f	t	2021-12-03 12:22:08.701358+00
+5	pbkdf2_sha256$260000$VKIKuscGRSuIl1pnSmu9ru$vffYtsHNQEo7nAm50oogrtjdq3BcMtUtYCBZsg3+qSw=	\N	f	BARLOWR				f	t	2021-12-03 12:22:09.068765+00
+7	pbkdf2_sha256$260000$LUU7OH17Odo2PlbnPQxVr7$cwECNud+XXNR4XydXjLZGHlU1sjCgmjx+ohYWt9Tfto=	\N	f	BODEA				f	t	2021-12-03 12:22:09.767673+00
+8	pbkdf2_sha256$260000$OgOSiEiN1YM2DGg0PBrjvO$T9KJ0NFVGK7z9Pnua1gRCeYIzM4D6mwm+cKfpxt4hyU=	\N	f	BRIDGEWATERN				f	t	2021-12-03 12:22:10.114102+00
+9	pbkdf2_sha256$260000$EHQWcXjzhNl81bSrMmLUsX$ePmgCMCUoXrLnwSpR9oeJHXd2fDaIC14tC4vJAEP3Eg=	\N	f	BRUGE				f	t	2021-12-03 12:22:10.460338+00
+10	pbkdf2_sha256$260000$0jiQM5As4hDWSHmCqPwZoW$fYJBTl9Hun2wmmNdZfMrnKF2/3jZ43e969fbLFQshB0=	\N	f	BRYANJ				f	t	2021-12-03 12:22:10.809578+00
+11	pbkdf2_sha256$260000$gj44syx0Ac3WNlixsMyV7J$xQxvslHUo7EQjhM7ks9Ns3cbS5HxRB7fo6Jm6b1zvVs=	\N	f	BUDEND				f	t	2021-12-03 12:22:11.161342+00
+12	pbkdf2_sha256$260000$6ilOH7hqZsuydSZjzEtLdu$okCORjERie8oO44o2yhF2A9gJds1kJbtE4h07daIo7E=	\N	f	BUSBYD				f	t	2021-12-03 12:22:11.533481+00
+13	pbkdf2_sha256$260000$dnz4PVDISS0kvzxFzVyLRd$Dc3tebi1n5PonPawK1GQbX8CB9ja3SPskM9eLa8e3Fg=	\N	f	CARPENTERA				f	t	2021-12-03 12:22:11.883411+00
+14	pbkdf2_sha256$260000$YayUjrnKAzdJ2Ek5obKPHg$6th6i56Msw12BHv0VknhuWPXGMJDfl2/zQ2U6Sb+Bcs=	\N	f	CARPENTERI				f	t	2021-12-03 12:22:12.231565+00
+15	pbkdf2_sha256$260000$ndf7gNB67MkSMPtE4LHlYP$gqaV2BKpITKIUawYnpz62RUWwsalE3P4OJieCFgWG+E=	\N	f	CHAPPELLG				f	t	2021-12-03 12:22:12.577383+00
+16	pbkdf2_sha256$260000$9w3NXBbOJcst3iwVOH8l6t$PlxmideMmue3UA8mww/m0YVknT5DIAliWYvg1hUzVzQ=	\N	f	CLASONS				f	t	2021-12-03 12:22:12.920059+00
+17	pbkdf2_sha256$260000$joqA9hi3kw2fFin4EEQ721$biwUM1r7UBfItF2i8TsGGFv7XCjw+TMRdP9ZA6geMw8=	\N	f	CORLESSS				f	t	2021-12-03 12:22:13.268538+00
+18	pbkdf2_sha256$260000$VoeIgD5PMGTTD8RAIQOJF3$px1LuVP2Y+6+Xn6nu0ZPj4ARezyaEdABQaefH6MpqVI=	\N	f	CROWD				f	t	2021-12-03 12:22:13.613251+00
+19	pbkdf2_sha256$260000$NFDPGYFMNZgyIjsHNlP7BG$pdMCwcj9dWsKT9IRWyng+R8pn8W7j1SommeqfbVjZkU=	\N	f	FISHERJ				f	t	2021-12-03 12:22:13.951495+00
+20	pbkdf2_sha256$260000$12fmLx09IpWychXbT9Nfss$WgRDHER5/3KIp9LSpqUuPtigWKJUzMUcwbZjGGhmZmM=	\N	f	FOSTERE				f	t	2021-12-03 12:22:14.295787+00
+21	pbkdf2_sha256$260000$iN2NOq3bq4qTTfQfbRcpiI$jUvoyc2NaPQek2BI8Uwr1DSiaYc+LzQddXuJ2jQx4QQ=	\N	f	GEDDESD				f	t	2021-12-03 12:22:14.644295+00
+22	pbkdf2_sha256$260000$Rt7CtjrE4HlKZ9hcvNiRQT$mNbr8kGcCJSEwPLILadY7hR5vUw8GhtNDd0OjsQ51po=	\N	f	GIBSONE				f	t	2021-12-03 12:22:14.987465+00
+23	pbkdf2_sha256$260000$heuYNq01hbdihMmpwPj6VS$seRvt5rC0XVbWutgA6XS7Y10OVmezCQWvrmgzhj8uVA=	\N	f	GREENWOODH				f	t	2021-12-03 12:22:15.338813+00
+25	pbkdf2_sha256$260000$VMfayyeW5VzUPjzICDlLyP$m9YrGmL74utFOcnyl94pX5fL/YaMdaaXVhqirqZHaBE=	\N	f	HALLC				f	t	2021-12-03 12:22:16.101065+00
+26	pbkdf2_sha256$260000$xVijs8EMLZs8Xp8P2ObJqw$CXlzbpOmDyec6svaFV/GTSRStmQK7i/RT6T9o9an4pk=	\N	f	HARDINGK				f	t	2021-12-03 12:22:16.44885+00
+27	pbkdf2_sha256$260000$EUngwG70vneaC9v0TJRdTm$7yI7V5YfwoVFheUqYI6NNOqf8LcTD7Qdp2qAk/cX494=	\N	f	HASLAML				f	t	2021-12-03 12:22:16.796606+00
+28	pbkdf2_sha256$260000$ou5iBDERjLbuN6XXfVS2Ta$r0kgQacYXClI3FL8ZUxG+jEVIJpeLFaY8KwwKKu4/9A=	\N	f	HEALEYP				f	t	2021-12-03 12:22:17.139125+00
+29	pbkdf2_sha256$260000$vQXn1F0PzOdBQi3wRSptvI$O75biMe03FrJk5xVJUag04iD+GTrJyr4u75OWUgzhZg=	\N	f	HOLDENR				f	t	2021-12-03 12:22:17.479054+00
+30	pbkdf2_sha256$260000$8d8nFNNKhKS1H2IHnOoCOD$rfAj0dAMMU1OiM3N8DlzASG3tDXvXqJRf8NNgNIsik8=	\N	f	HUGHESH				f	t	2021-12-03 12:22:17.874044+00
+31	pbkdf2_sha256$260000$4RpdbAeOFTy6euTXNhdOtQ$y6Nihae2P9z4nvoekWE4ATgrcmarmK6QF8PZET/H9oc=	\N	f	HUSTONP				f	t	2021-12-03 12:22:18.226099+00
+32	pbkdf2_sha256$260000$tIo6LTodjLQ2kCJwiIYqC3$+uNF++KCcEG5HmpXU0xUJJ13rjSe0af+bIPDqWhEwDQ=	\N	f	HYNDSF				f	t	2021-12-03 12:22:18.582869+00
+33	pbkdf2_sha256$260000$HLrsIrwnf5aKRDK6B2j47z$H1ocl7F+w3MEy6FRkOzgw7cHTwTTVDN4HXBJwHiWra8=	\N	f	IVANOVK				f	t	2021-12-03 12:22:18.928926+00
+34	pbkdf2_sha256$260000$UnzFoUGNAruxSp4Ymk6r4O$WHRV+uYu7rVLf7u5kboFr4eRFYNOZ8t/zIF+oqqQr8w=	\N	f	JAMIESONG				f	t	2021-12-03 12:22:19.276683+00
+35	pbkdf2_sha256$260000$VIeQNkGBkzVqQ4QWUN39Vv$7tvSR2+HZMt/nTvm867BmXa8gfjvQSShehmDkiAjJtk=	\N	f	JUDDM				f	t	2021-12-03 12:22:19.623429+00
+36	pbkdf2_sha256$260000$vEUPC8qJAAGNdNjEJ6X4O7$HAGuepIBESX0ZuG/8hZX3gDC6lvPtypKeOHybUoIfHY=	\N	f	KALMARUT				f	t	2021-12-03 12:22:19.96157+00
+37	pbkdf2_sha256$260000$RkePx7g7FIk2HBHnO4ft88$wXuUDqjq6BXUfSMeYoNXbZizparjsnayJcQ35YXAVbo=	\N	f	KENNEDYS				f	t	2021-12-03 12:22:20.303515+00
+38	pbkdf2_sha256$260000$6B3zOBnBLwlWuo56NTKqCw$5wUAmIydQzhe0u+ybYJhPf24T1xJVSKymZEMxzYh8hI=	\N	f	KLEINP				f	t	2021-12-03 12:22:20.644757+00
+39	pbkdf2_sha256$260000$7yYK0N5gRkxJ6hajcf6Dxj$DMrpioNNvueO5Ks7iTUcy02kpTFSJaS723FCCs174Jc=	\N	f	LARKINSY				f	t	2021-12-03 12:22:20.991513+00
+40	pbkdf2_sha256$260000$V40g0NG8ISSiH6jcW17Q1c$xTBqHLin1nrq2/hzRZfc2W2hBOHJFyHaoCA1kwo1n7k=	\N	f	LEIGHR				f	t	2021-12-03 12:22:21.341497+00
+41	pbkdf2_sha256$260000$TqRMD0Q8e4S9UPOeDspLlE$KoMEmg+DZmt1FmpSe7G1HNzqgXWxo0YEnRkua9JObUs=	\N	f	LOADERV				f	t	2021-12-03 12:22:21.688401+00
+42	pbkdf2_sha256$260000$0ojbhxAiAvnUUTt6j7F3BT$hWj9F3xZGHF71PrTu8SOAqRp8lJC8ENwhLSrXPvuGSw=	\N	f	MASONJ				f	t	2021-12-03 12:22:22.037322+00
+43	pbkdf2_sha256$260000$sItiAECkFcKI88uxhhhuSX$dMQZhyy2woIjSBwGy2eHqAA6vXShQlTiBsi8wYmF6t4=	\N	f	MCGUANEM				f	t	2021-12-03 12:22:22.384148+00
+44	pbkdf2_sha256$260000$dxGqLk0Yc3t46DZ9vBYAi7$U5LwqtOXfoWoJt74w0sFHKUh1pISR8zi4Btr50Db//s=	\N	f	MCINERNEYK				f	t	2021-12-03 12:22:22.736301+00
+45	pbkdf2_sha256$260000$d3i7Dtk2q6ChoJI7zEoI5w$6N+QTikmEE5R8hXn+fxMHW8aVwM72gkPH5qMyNr5H74=	\N	f	MCINNESF				f	t	2021-12-03 12:22:23.063815+00
+47	pbkdf2_sha256$260000$L0XzhA4OyvcRR0ktVCSnHk$NUcswFy/ieHHZ4xUYF3QpGepufawLT1/n3HL3ZuBXys=	\N	f	MOONS				f	t	2021-12-03 12:22:23.779505+00
+48	pbkdf2_sha256$260000$M7j8dH2Re3TiJzYy3D9jhz$Ad44MSaQzVxl+4Q6uhiuuoHZSEU6OEPe3jiwvfXTq0o=	\N	f	NEWBYI				f	t	2021-12-03 12:22:24.122254+00
+50	pbkdf2_sha256$260000$SwV3ZkAsqUFgSGHpwtV98A$PmGGxPk8ve0CVboinqeRx8Jxnik+SA4OitNtX5Iep8A=	\N	f	ORTONM				f	t	2021-12-03 12:22:24.83914+00
+51	pbkdf2_sha256$260000$AcYLLnsVjht0qP6JMavLGP$yHfO/+AKdoLNzlJ1ur2mLoM0QhkJSdsPPg7I67h8ets=	\N	f	PARVESSM				f	t	2021-12-03 12:22:25.181558+00
+52	pbkdf2_sha256$260000$SbfRco3GJAMF0FX0CKlMXo$cwsPtUVIj5yuIHhsL5pf08ZK32h4PoULQkAiBUH5Q00=	\N	f	PATERS				f	t	2021-12-03 12:22:25.530408+00
+49	pbkdf2_sha256$260000$A1M2VWSXTm7bKGZDolHLTj$7AYrdLGbipRXZp/Er8u+aXhNUX9i6WjRhcMHLpxLqmU=	\N	f	OSULLIVANL				f	t	2021-12-03 12:22:24+00
+6	pbkdf2_sha256$260000$3kc5EYXguN9gwI5APCqutP$8SklireHp3uXR0oIBJnubBuvJZxtpKx/xFPT6N9u2ro=	\N	f	BEESERAYBOULDG				f	t	2021-12-03 12:22:09+00
+24	pbkdf2_sha256$260000$JcBw71GP0cIVZae42vhIJC$XwzqWN6KcC/zU5e4ICZHeZoxKORJ6y91T6mseWcENm4=	2021-12-04 10:14:01.076011+00	f	HALLT				f	t	2021-12-03 12:22:15.730743+00
+53	pbkdf2_sha256$260000$FgEnBQ840DSF6MIeMmLlZN$iLE9WyN604EKiPWMb0bZuwJVvVJ6CdFLZnSJK1TycEw=	\N	f	PETREI				f	t	2021-12-03 12:22:25.880661+00
+54	pbkdf2_sha256$260000$2NQ2pPnIwEea5ofbbMZxrn$ohP8lerHInwdtFgVpPclBQOqgLH2vcOXY8fc2Tflw8c=	\N	f	PHILLIPSJ				f	t	2021-12-03 12:22:26.225355+00
+55	pbkdf2_sha256$260000$a5pRSqbwz90oeHBzEPuOMt$638sm/wG0lT07enQGCCWVRORBWBzBpfQ2SAaScxQr4g=	\N	f	PINDERR				f	t	2021-12-03 12:22:26.573212+00
+56	pbkdf2_sha256$260000$ntakz916HGjCyp2EKVIeks$esyf/Snx2aL9FA194idEqd1kty3Z6j9KCiUgo/kIEpw=	\N	f	PINEP				f	t	2021-12-03 12:22:26.921027+00
+59	pbkdf2_sha256$260000$xIOiOU4W4HckXfKX0O8nFU$FB3KoN59CXXl+6pGq2r0s1X0EPeyRmxtNFPz7rkLYL8=	\N	f	PITMANB				f	t	2021-12-03 12:22:27.992279+00
+60	pbkdf2_sha256$260000$2fdjsxz4bYAy84fVSoE4ka$jdIH0BQ57n33Cf2K4VgDLG7FxYJe7tTHbQtpJcsK+uw=	\N	f	PLATTC				f	t	2021-12-03 12:22:28.33898+00
+61	pbkdf2_sha256$260000$QZjMIQpBQs26PTLDEHJKwg$Bz2mlCEfkAI/syh8TvFcSYsmW/cZnIE5gedoa1+JkAw=	\N	f	POTTSA				f	t	2021-12-03 12:22:28.68832+00
+63	pbkdf2_sha256$260000$JRElJ5aZiN2mcswZVg5jkN$2v3nWj98zARtzxPIZUlIeBjDdRQREfkw5k7HcxbS5+4=	\N	f	PUNJABIS				f	t	2021-12-03 12:22:29.38459+00
+64	pbkdf2_sha256$260000$hljntNl6ftxQ2ovoglLR4W$xcdHy03By2XKcVPfPj4Tmkc5fjWrkhiL8tv5E7zesjo=	\N	f	RADIGANC				f	t	2021-12-03 12:22:29.733538+00
+65	pbkdf2_sha256$260000$IyUctnVzXQdNn0qfLnEYK2$K9B6ZanVqXlwGH+I332UVj70Z1N+c9Hr359/8yUvGhQ=	\N	f	RAVENSCROFTA				f	t	2021-12-03 12:22:30.096204+00
+66	pbkdf2_sha256$260000$Q9nTILGS2OoyrlwHuN7MXe$ChVtQPoPperFSKq749Qk5OGEeB2fvfhg5liOkH/DMrE=	\N	f	RICHARDSC				f	t	2021-12-03 12:22:30.445578+00
+67	pbkdf2_sha256$260000$2uNqhAWmpnGCZvMXNife3w$wg8nxTImd1Ajn3wLZJ9T8ryoWvxgAq+hJ0w/8lrxQGU=	\N	f	ROBBK				f	t	2021-12-03 12:22:30.794162+00
+68	pbkdf2_sha256$260000$WDrVZ585Z3fDvGqzje4lWP$+CLeXyD8Nenr8lCfGzfxhk1xRWtrsoC43cfjRscKw+o=	\N	f	ROWBOTHAME				f	t	2021-12-03 12:22:31.145024+00
+69	pbkdf2_sha256$260000$vwd0ZuLtJrcbTzfFDjEZEt$0CZfvH6UdaNJFJ3dtYe+eAr2DgUbFstrT0g0MGeYJQA=	\N	f	SAGOOJ				f	t	2021-12-03 12:22:31.490098+00
+70	pbkdf2_sha256$260000$KbHfnWd6bVi8bS32hyjKah$O7hkBS2A1KPegB4rYlmTe6zn7SUC+5jIOzcS69F4jI4=	\N	f	SARGEANTB				f	t	2021-12-03 12:22:31.838862+00
+72	pbkdf2_sha256$260000$oHEICP88IJQywJTrIU6WxJ$DOds5tS6lhUFoio8X09LXJfduYQZbWYxQEFCmRAOjPg=	\N	f	SCHLOESSERM				f	t	2021-12-03 12:22:32.53939+00
+73	pbkdf2_sha256$260000$DclZ7l8omqL4k7d57aE1tu$qiH6Jre0FR85/+vMao3A52fJfZhgx/C6Hyk9CxqYYJw=	\N	f	SCOTTS				f	t	2021-12-03 12:22:32.885372+00
+75	pbkdf2_sha256$260000$cxHvEF70ZddYPuJDdnwV60$Bsp9WO346GS38AJwoEFtbuBfF/dz8l5ObaqDNyVilRs=	\N	f	SCOTTA				f	t	2021-12-03 12:22:33.579686+00
+76	pbkdf2_sha256$260000$Ail4muhwASOWKrwLwf6OBR$F0QlBuqBPIMHt48CtLX1YrhrOjvM4pe8Y6gxxzrgLaA=	\N	f	SHKOLNAM				f	t	2021-12-03 12:22:33.934866+00
+78	pbkdf2_sha256$260000$XVvUbdWQYBbdEaRZox626U$l/meE7JiI90XBVFVWmaW9yX13Yg3htyIG6gAD4ZyXWE=	\N	f	TAYLORS				f	t	2021-12-03 12:22:34.632005+00
+79	pbkdf2_sha256$260000$tfGt7UraNJ2qqTfhxecWel$YdeftURs/uoaPMlhY1B3POcZOxcEr8yO19Li4YS0eGY=	\N	f	TAYLORH				f	t	2021-12-03 12:22:34.974083+00
+81	pbkdf2_sha256$260000$Zl81Eppj5SpzjvxevUYva6$OjqPAtbdWU5utmUZWkiyF21mfBjtU/zoNerrzX8qZO4=	\N	f	TITTENSORP				f	t	2021-12-03 12:22:35.663177+00
+82	pbkdf2_sha256$260000$yAfb15wZd5lPJq6YkmZLTa$xvJoM2WqI1rXRpq8VnDUYbr5M1L5zVe0IkaZ/z05RZw=	\N	f	WALSHJ				f	t	2021-12-03 12:22:36.00831+00
+83	pbkdf2_sha256$260000$jX2lXMKGSzt1twYPptynM4$GzML2bK5Q6m19rh+a5WfHmViCXp13gHgoxGHAD0X4sg=	\N	f	WHITEC				f	t	2021-12-03 12:22:36.353901+00
+84	pbkdf2_sha256$260000$UeXb3rjkeKIATR00e0hB46$rQ80uwZy8Kcd880suOLzq0rRAMjeIhWC4L3bmmaEKWE=	\N	f	WHITER				f	t	2021-12-03 12:22:36.702142+00
+85	pbkdf2_sha256$260000$G23Q5VD3YsNSAEMN2AOgfe$P5xN9XqP6QMU3wTzmcfzkDx47I0qgzmTwISHD/hLNrU=	\N	f	WHITMARSHA				f	t	2021-12-03 12:22:37.064281+00
+86	pbkdf2_sha256$260000$ARVgNrGs8TQu8XZDofBzef$LmzIdzouGMAvPttV5nMMo9vdJi35cHZMD/eHbCQDumI=	\N	f	WILLEMSS				f	t	2021-12-03 12:22:37.40864+00
+87	pbkdf2_sha256$260000$JaaNvL29jeQNTKkESMj8Ax$rUEYeVK1V6qE37bD6xuS9ulbey1Tfei2mFbKKecr0PM=	\N	f	WISEA				f	t	2021-12-03 12:22:37.784413+00
+88	pbkdf2_sha256$260000$RPSmVlYaqbir0tUeqc58Ap$cQj2ufMEvUpY0sFN1LvlskkFZGCur6XOjbs9KUyibdE=	\N	f	WONGM				f	t	2021-12-03 12:22:38.135684+00
+89	pbkdf2_sha256$260000$0w6et2Qsi64ZFEv5fw4x9X$3OU/AwWohXli6/oVXeTrD9nKrvXC1gAFBAdpAZYP1+8=	\N	f	WOODA				f	t	2021-12-03 12:22:38.502415+00
+90	pbkdf2_sha256$260000$Ob3LFF0Wht58I4XQoFYayW$oX00Urv2/fQFMP/5Dw2Ym4jB81o5nZmKGLacn72alJg=	\N	f	WOODGATEJ				f	t	2021-12-03 12:22:38.851697+00
+3	pbkdf2_sha256$260000$BWyaCxwqX6zhUmyj7opPFu$EgFWSjsXx8KX9L50fKBr3i99Vdzk8ambP39rKduo+ew=	\N	f	ABEARC				f	t	2021-12-03 12:22:07+00
+74	pbkdf2_sha256$260000$rQWDcgLygbEMAaDmgSraoa$LenIROfdxKknfHEUB+XYB8+K/cntEcUgN7py3afvOCY=	\N	f	SCOTTAJ				f	t	2021-12-03 12:22:33+00
+91	pbkdf2_sha256$260000$ei6QA5HwR4Qih0U28o9wbk$oTOnmfDy/BQO29QeIeZigkJycqFv7J4FGxxkUL2rDWE=	\N	f	COSTANZAM				f	t	2021-12-04 09:15:49.293041+00
+77	pbkdf2_sha256$260000$20LxNrUwviDmYa2KSDuqSv$5mAqLvPBTzhnp+x13xvVx8UrG9RpDSAoCPND6l12vU8=	\N	f	SULLIVANBELLI				f	t	2021-12-03 12:22:34+00
+80	pbkdf2_sha256$260000$u3UBBeSDfmtJyuZiWb2kNo$CP5altn3REg/tdZ9E1JHZd5vImLsdjCwqBWS22j9Kyk=	\N	f	THOMASPRAUSEK				f	t	2021-12-03 12:22:35+00
+1	pbkdf2_sha256$260000$Alphn3ZOHHhrG1hsZaiVmy$5+vjayNirAZUz9Jp43upDTliDamoTO9/wHJSB+/hgRs=	2021-12-04 10:18:16.845625+00	t	marc			marc.tamlyn@gmail.com	t	t	2016-12-03 07:42:31.803234+00
+58	pbkdf2_sha256$260000$2F3jNkdA4F96j3ltwnQRH0$yjR9cfvq9yVi+1ndHc6QIeplDiZ0q7DQIFNg17fbPzY=	2021-12-04 12:27:52.007909+00	f	PIPERE				f	t	2021-12-03 12:22:27.641699+00
+62	pbkdf2_sha256$260000$to4Aq6PGwJxwqazyOYGxnX$b7ElXgNV0+NN+h/zipP5lwzXBDEKX9+3qK8C2WO3prk=	2021-12-06 12:07:54.5712+00	f	PRIEELSS				f	t	2021-12-03 12:22:29.036194+00
+71	pbkdf2_sha256$260000$MvBCxINbtyik7ysS05XANF$pAaehSiPwS+68NPQnmvBU7EbTeP5vwpy3BfepIuMf8Y=	2021-12-04 12:03:43.522858+00	f	SCHLOESSERG				f	t	2021-12-03 12:22:32.192038+00
+57	pbkdf2_sha256$260000$gLhDxOBf7wHRWLP4mJ1Sja$6QBmEVOCcjWd8bod3EKmfRyY05y17Ljy/TTkLWfWBJE=	2021-12-04 12:20:57.481808+00	f	PIPERL				f	t	2021-12-03 12:22:27.264271+00
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: back2back_entry; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.back2back_entry (id, category, surname, agb_number, first_group_number, first_group_index, first_group_placing, first_group_points, first_group_score, second_group_number, second_group_index, second_group_placing, second_group_points, second_group_score, final_round_seed, final_match_1_score, final_match_2_score, final_match_3_score, final_match_4_score, final_match_5_score, third_group_index, third_group_number, third_group_placing, third_group_points, third_group_score, final_match_6_score, final_match_7_score, forename, user_id) FROM stdin;
+993	gents-compound	Scott	996908	2	4	5	2	563	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Andrew	75
+960	gents-compound	Mason	1038513	1	1	5	4	578	0	5	6	0	572	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	James	42
+987	ladies-recurve	Sagoo	1064413	2	4	2	8	576	0	2	3	4	561	1	29	26	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Jaspreet	69
+945	gents-compound	Haslam	2087584	2	1	6	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Lewis	27
+952	gents-recurve	Jamieson	1053224	3	2	4	4	539	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Gilbert	34
+949	gents-recurve	Huston	1060056	0	2	1	10	579	0	0	3	6	580	2	31	28	27	\N	\N	\N	\N	\N	0	0	\N	\N	Patrick	31
+943	gents-recurve	Hall	2027134	0	1	2	8	578	1	0	2	8	571	3	27	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Conor	25
+940	ladies-compound	Gibson	2101659	3	4	1	10	591	1	3	1	10	588	5	32	33	32	31	33	\N	\N	\N	0	0	\N	\N	Ella	22
+941	ladies-compound	Greenwood	1058169	0	1	2	6	560	1	0	4	5	569	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Hope	23
+924	gents-recurve	Beese-Raybould	2032513	2	0	6	0	0	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Gabriel	6
+953	gents-recurve	Judd	986372	3	3	1	10	572	1	3	3	6	563	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Michael	35
+922	ladies-compound	Annison	2044757	1	0	2	8	571	1	1	6	1	567	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Layla	4
+972	gents-recurve	Phillips	2132982	1	3	6	1	535	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Jonathan	54
+988	ladies-compound	Sargeant	2065505	2	4	1	8	575	1	2	3	5	579	2	31	32	31	\N	\N	\N	\N	\N	0	0	\N	\N	Bayley-Rose	70
+958	ladies-recurve	Leigh	2028062	2	2	4	4	544	0	3	5	3	518	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Rebecca	40
+986	gents-recurve	Rowbotham	1010308	0	4	4	4	553	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Erik	68
+947	gents-recurve	Holden	2033105	3	1	5	2	552	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Ryan	29
+944	gents-recurve	Harding	975578	2	1	2	7	582	0	2	1	7	583	5	31	31	30	29	\N	\N	\N	\N	0	0	\N	\N	Keith	26
+962	gents-recurve	McInerney	2071850	0	3	5	2	489	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Kevin	44
+977	ladies-recurve	Pitman	1047801	1	3	2	7	573	1	1	1	8	569	5	28	30	30	26	\N	\N	\N	\N	0	0	\N	\N	Bryony	59
+983	gents-compound	Ravenscroft	952514	2	3	1	10	590	1	2	1	6	586	5	31	30	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Adam	65
+934	ladies-compound	Clason	2038470	2	1	4	4	551	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Stephanie	16
+942	gents-recurve	Hall	2030121	3	0	2	8	579	0	3	4	6	579	1	29	31	31	30	32	\N	\N	\N	0	0	\N	\N	Tom	24
+961	ladies-compound	Mcguane	3011128	2	2	5	2	532	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Mia	43
+931	gents-compound	Carpenter	1063967	2	0	2	8	589	0	2	3	6	586	2	33	33	31	\N	\N	\N	\N	\N	0	0	\N	\N	Adam	13
+957	ladies-recurve	Larkins	2021781	2	1	1	10	569	1	2	2	6	570	3	30	29	26	\N	\N	\N	\N	\N	0	0	\N	\N	Yulia	39
+930	gents-compound	Busby	961148	1	0	2	7	582	1	1	5	4	582	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Duncan	12
+923	gents-recurve	Barlow	3001142	0	0	6	0	491	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Ru	5
+938	ladies-compound	Foster	1062007	3	3	3	5	567	1	4	5	3	572	1	31	31	32	30	\N	\N	\N	\N	0	0	\N	\N	Elizabeth	20
+975	ladies-recurve	Piper	2022561	1	2	3	7	566	1	3	3	6	569	2	26	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Louisa	57
+950	gents-recurve	Hynds	2044710	1	1	4	4	536	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Frank	32
+967	ladies-compound	O'Sullivan	986090	2	3	3	8	565	1	5	2	6	571	3	30	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Lucy	49
+946	ladies-recurve	Healey	2077223	1	0	1	10	569	0	1	1	10	583	6	30	27	28	30	28	\N	\N	\N	0	0	\N	\N	Penny	28
+982	gents-recurve	Radigan	2130138	2	2	5	4	547	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Cameron	64
+966	ladies-recurve	Newby	2054671	2	3	3	6	540	1	4	6	1	504	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Imogen	48
+971	ladies-compound	Petre	2103765	0	4	4	4	564	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Iulia	53
+965	ladies-compound	Moon	2089748	0	3	5	4	556	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Sarah	47
+933	ladies-compound	Chappell	2105979	0	0	6	2	560	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Grace	15
+954	gents-compound	Kalmaru	983361	2	2	3	6	567	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Tapani	36
+927	ladies-recurve	Brug	2056019	2	0	5	2	444	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Eleanor	9
+948	ladies-recurve	Hughes	2050887	1	1	6	0	505	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Heather	30
+926	gents-compound	Bridgewater	106182	0	0	4	4	572	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Neil	8
+974	ladies-compound	Pine	2056099	3	5	5	2	564	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Phoebe	56
+925	ladies-compound	Bode	2056903	3	1	6	1	556	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Amy	7
+939	ladies-recurve	Geddes	2067963	0	1	5	2	526	0	5	6	2	524	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Debbie	21
+929	gents-compound	Buden	3008108	3	0	2	8	586	0	3	2	7	591	4	31	33	32	32	31	\N	\N	\N	0	0	\N	\N	Domagoj	11
+1001	gents-compound	White	862289	1	5	4	5	577	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Christopher	83
+1000	gents-compound	Walsh	2040315	1	4	6	1	576	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Jake	82
+980	ladies-compound	Prieels	2107135	0	5	1	10	583	0	0	1	10	591	6	32	30	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Sarah	62
+989	ladies-recurve	Schloesser	1001	0	4	1	10	572	0	0	2	8	579	4	32	28	30	28	30	\N	\N	\N	0	0	\N	\N	Gaby	71
+959	ladies-compound	Loader	1059325	0	2	3	4	565	0	5	3	6	567	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Victoria	41
+935	ladies-compound	Corless	2040771	3	2	2	7	565	0	3	4	4	570	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Susan	17
+921	ladies-compound	A'Bear	2040200	3	0	4	5	565	0	4	5	2	563	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Chloe	3
+928	ladies-compound	Bryan	2028988	2	0	2	8	569	0	2	6	1	569	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Jenny	10
+1008	gents-recurve	Woodgate	1064477	1	5	2	7	575	1	1	4	5	572	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	James	90
+1002	gents-recurve	White	999338	0	5	3	6	562	1	5	5	2	568	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Richard	84
+973	gents-recurve	Pinder	2020505	3	5	3	4	575	1	4	6	0	565	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Ryan	55
+964	ladies-compound	Merry	1004966	1	3	3	6	558	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Nat	46
+985	ladies-compound	Robb	985664	1	4	4	4	553	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Kirsty	67
+963	ladies-compound	McInnes	3031805	1	2	5	2	528	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Faye	45
+932	ladies-compound	Carpenter	1063966	1	1	1	10	579	0	1	2	7	571	4	31	31	31	32	31	\N	\N	\N	0	0	\N	\N	Isabelle	14
+997	ladies-recurve	Taylor	1023404	1	5	5	2	514	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Helen	79
+979	gents-compound	Potts	3038761	3	3	3	4	579	0	4	4	5	575	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Alec	61
+991	gents-compound	Scott	1023356	3	4	4	4	578	1	5	3	5	585	1	29	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Simon	73
+955	gents-recurve	Kennedy	3033898	3	4	6	2	540	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Stuart	37
+996	gents-compound	Taylor	2125306	1	3	1	8	586	0	1	5	4	583	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Stuart	78
+978	gents-compound	Platt	2124692	1	2	3	5	581	1	4	2	6	577	3	30	31	33	31	\N	\N	\N	\N	0	0	\N	\N	Callum	60
+1003	gents-recurve	Whitmarsh	2032795	1	4	3	6	551	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Austin	85
+1009	gents-recurve	Costanza	2081687	1	0	5	2	530	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Marco	91
+968	gents-recurve	Orton	2124691	1	2	1	10	583	0	1	2	7	577	4	30	27	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Monty	50
+951	ladies-recurve	Ivanov	2088749	0	2	4	4	497	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Kayleigh	33
+998	gents-compound	Thomas-Prause	1047736	0	4	3	7	577	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Kai	80
+1004	gents-compound	Willems	1004	3	5	5	2	575	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Stef	86
+937	ladies-recurve	Fisher	2084570	0	0	6	2	513	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Jackie	19
+1006	gents-compound	Wong	2107626	0	5	5	2	573	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Matthew	88
+1007	gents-recurve	Wood	996967	2	5	4	4	563	0	5	5	2	569	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Antony	89
+936	gents-compound	Crow	2061654	3	1	6	2	571	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Dillon	18
+999	gents-recurve	Tittensor	991034	2	3	3	6	570	0	4	6	2	567	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Paul	81
+995	ladies-recurve	Sullivan-Bell	3019966	0	5	2	6	552	1	0	4	5	547	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Imogen	77
+981	ladies-recurve	Punjabi	2099060	1	4	4	4	536	1	5	5	4	538	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Shauna	63
+1005	gents-recurve	Wise	2097211	2	4	1	9	590	1	2	1	9	587	6	28	31	29	30	29	\N	\N	\N	0	0	\N	\N	Alex	87
+990	gents-compound	Schloesser	1002	0	3	1	10	594	0	0	1	8	597	6	33	32	33	32	33	\N	\N	\N	0	0	\N	\N	Michael	72
+984	gents-compound	Richards	2044723	0	2	2	7	578	1	0	4	5	576	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Carl	66
+970	gents-compound	Pater	1003	3	2	1	10	589	1	3	6	4	580	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Sil	52
+969	gents-compound	Parvess	2031462	0	1	6	0	568	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Mike	51
+992	gents-compound	Scott	2104432	2	5	4	4	550	\N	\N	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Ajay	74
+976	ladies-recurve	Piper	2022562	0	3	3	6	544	0	4	4	3	542	\N	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	\N	Eleanor	58
+\.
+
+
+--
+-- Data for Name: back2back_score; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.back2back_score (id, stage, "time", score, points, entry_id, opponent_id, verified) FROM stdin;
+4391	first-round	0	114	0	926	984	t
+4392	first-round	0	117	2	984	926	t
+4393	first-round	0	117	2	990	998	t
+4394	first-round	0	114	0	998	990	t
+4395	first-round	0	114	2	1006	969	t
+4396	first-round	0	111	0	969	1006	t
+4397	first-round	0	116	2	930	978	t
+4398	first-round	0	115	0	978	930	t
+4399	first-round	0	117	2	996	1000	t
+4400	first-round	0	113	0	1000	996	t
+4401	first-round	0	114	2	1001	960	t
+4402	first-round	0	112	0	960	1001	t
+4409	first-round	0	114	0	929	970	t
+4410	first-round	0	115	2	970	929	t
+4411	first-round	0	115	2	979	991	t
+4412	first-round	0	113	0	991	979	t
+4413	first-round	0	115	2	1004	936	t
+4414	first-round	0	114	0	936	1004	t
+4403	first-round	0	118	2	931	954	t
+4404	first-round	0	116	0	954	931	t
+4405	first-round	0	118	2	983	993	t
+4406	first-round	0	112	0	993	983	t
+4407	first-round	0	111	2	992	945	t
+4408	first-round	0	0	0	945	992	t
+4415	first-round	0	101	0	937	951	t
+4416	first-round	0	107	2	951	937	t
+4389	first-round	0	109	0	976	989	t
+4390	first-round	0	112	2	989	976	t
+4417	first-round	0	113	2	995	939	t
+4418	first-round	0	109	0	939	995	t
+4419	first-round	0	115	2	946	975	t
+4420	first-round	0	111	0	975	946	t
+4421	first-round	0	116	2	977	981	t
+4422	first-round	0	109	0	981	977	t
+4423	first-round	0	97	2	997	948	t
+4424	first-round	0	86	0	948	997	t
+4425	first-round	0	61	0	927	958	t
+4426	first-round	0	111	2	958	927	t
+4427	first-round	0	101	0	966	987	t
+4428	first-round	0	117	2	987	966	t
+4440	first-round	1	108	0	966	957	t
+4441	first-round	1	115	2	957	966	t
+4444	first-round	1	114	2	987	927	t
+4445	first-round	1	94	0	927	987	t
+4429	first-round	0	112	2	957	\N	t
+4430	first-round	1	115	2	976	939	t
+4431	first-round	1	107	0	939	976	t
+4432	first-round	1	112	2	989	937	t
+4433	first-round	1	105	0	937	989	t
+4434	first-round	1	83	0	951	995	t
+4435	first-round	1	109	2	995	951	t
+4446	first-round	1	103	2	958	\N	t
+4458	first-round	1	117	1	1001	978	t
+4459	first-round	1	119	2	983	945	t
+4438	first-round	1	116	2	977	948	t
+4439	first-round	1	100	0	948	977	t
+4442	first-round	1	103	0	981	946	t
+4443	first-round	1	112	2	946	981	t
+4436	first-round	1	113	2	975	997	t
+4437	first-round	1	104	0	997	975	t
+4447	first-round	1	119	2	990	969	t
+4448	first-round	1	117	0	969	990	t
+4449	first-round	1	114	2	998	926	t
+4450	first-round	1	112	0	926	998	t
+4451	first-round	1	114	2	984	1006	t
+4452	first-round	1	113	0	1006	984	t
+4453	first-round	1	118	2	996	960	t
+4454	first-round	1	116	0	960	996	t
+4455	first-round	1	117	1	1000	930	t
+4456	first-round	1	117	1	930	1000	t
+4457	first-round	1	117	1	978	1001	t
+4460	first-round	1	0	0	945	983	t
+4461	first-round	1	112	0	993	931	t
+4462	first-round	1	119	2	931	993	t
+4463	first-round	1	114	2	954	992	t
+4464	first-round	1	111	0	992	954	t
+4465	first-round	1	115	0	979	936	t
+4466	first-round	1	116	2	936	979	t
+4467	first-round	1	115	0	991	929	t
+4468	first-round	1	118	2	929	991	t
+4469	first-round	1	118	2	970	1004	t
+4470	first-round	1	117	0	1004	970	t
+4471	first-round	2	110	0	995	989	t
+4472	first-round	2	118	2	989	995	t
+4473	first-round	2	92	0	939	951	t
+4474	first-round	2	99	2	951	939	t
+4475	first-round	2	106	2	937	976	t
+4476	first-round	2	105	0	976	937	t
+4477	first-round	2	97	0	997	981	t
+4478	first-round	2	105	2	981	997	t
+4479	first-round	2	109	0	948	975	t
+4480	first-round	2	116	2	975	948	t
+4481	first-round	2	116	2	946	977	t
+4482	first-round	2	114	0	977	946	t
+4483	first-round	2	115	2	987	\N	t
+4489	first-round	2	118	2	998	1006	t
+4490	first-round	2	114	0	969	984	t
+4491	first-round	2	116	2	984	969	t
+4492	first-round	2	114	0	926	990	t
+4493	first-round	2	119	2	990	926	t
+4495	first-round	2	114	0	1000	1001	t
+4496	first-round	2	114	0	960	978	t
+4497	first-round	2	115	2	978	960	t
+4498	first-round	2	118	2	930	996	t
+4499	first-round	2	115	0	996	930	t
+4500	first-round	2	114	2	992	993	t
+4501	first-round	2	113	0	993	992	t
+4502	first-round	2	0	0	945	954	t
+4488	first-round	2	116	0	1006	998	t
+4494	first-round	2	116	2	1001	1000	t
+4503	first-round	2	112	2	954	945	t
+4504	first-round	2	118	0	931	983	t
+4505	first-round	2	119	2	983	931	t
+4510	first-round	2	113	0	1004	991	t
+4511	first-round	2	117	2	991	1004	t
+4506	first-round	2	114	0	936	970	t
+4507	first-round	2	118	2	970	936	t
+4508	first-round	2	118	2	929	979	t
+4509	first-round	2	117	0	979	929	t
+4512	first-round	3	113	2	939	937	t
+4513	first-round	3	103	0	937	939	t
+4514	first-round	3	104	0	995	976	t
+4515	first-round	3	106	2	976	995	t
+4516	first-round	3	114	2	989	951	t
+4517	first-round	3	107	0	951	989	t
+4518	first-round	3	102	0	948	946	t
+4519	first-round	3	114	2	946	948	t
+4520	first-round	3	109	0	997	977	t
+4521	first-round	3	115	2	977	997	t
+4522	first-round	3	109	0	981	975	t
+4523	first-round	3	114	2	975	981	t
+4551	first-round	3	114	2	979	1004	t
+4552	first-round	3	117	0	991	970	t
+4524	first-round	3	115	2	957	927	t
+4525	first-round	3	103	0	927	957	t
+4529	first-round	3	112	2	966	\N	t
+4526	first-round	3	118	2	987	958	t
+4527	first-round	3	110	0	958	987	t
+4484	first-round	2	114	2	957	958	t
+4485	first-round	2	112	0	958	957	t
+4486	first-round	2	82	0	927	966	t
+4487	first-round	2	108	2	966	927	t
+4530	first-round	3	112	0	969	926	t
+4531	first-round	3	116	2	926	969	t
+4532	first-round	3	115	0	1006	990	t
+4533	first-round	3	120	2	990	1006	t
+4534	first-round	3	116	1	998	984	t
+4535	first-round	3	116	1	984	998	t
+4536	first-round	3	119	2	960	930	t
+4537	first-round	3	114	0	930	960	t
+4538	first-round	3	114	0	1001	996	t
+4539	first-round	3	118	2	996	1001	t
+4540	first-round	3	117	0	1000	978	t
+4541	first-round	3	118	2	978	1000	t
+4542	first-round	3	0	0	945	931	t
+4543	first-round	3	117	2	931	945	t
+4544	first-round	3	106	0	992	983	t
+4545	first-round	3	117	2	983	992	t
+4546	first-round	3	110	0	993	954	t
+4547	first-round	3	115	2	954	993	t
+4548	first-round	3	112	0	936	929	t
+4549	first-round	3	118	2	929	936	t
+4550	first-round	3	113	0	1004	979	t
+4553	first-round	3	119	2	970	991	t
+4554	first-round	4	101	0	951	976	t
+4555	first-round	4	109	2	976	951	t
+4556	first-round	4	98	0	937	995	t
+4557	first-round	4	116	2	995	937	t
+4558	first-round	4	105	0	939	989	t
+4559	first-round	4	116	2	989	939	t
+4560	first-round	4	112	1	975	977	t
+4561	first-round	4	112	1	977	975	t
+4562	first-round	4	112	2	946	997	t
+4563	first-round	4	107	0	997	946	t
+4564	first-round	4	108	0	948	981	t
+4565	first-round	4	110	2	981	948	t
+4566	first-round	4	108	0	958	966	t
+4567	first-round	4	111	2	966	958	t
+4568	first-round	4	104	2	927	\N	t
+4569	first-round	4	113	2	957	987	t
+4570	first-round	4	112	0	987	957	t
+4571	first-round	4	115	0	984	990	t
+4572	first-round	4	119	2	990	984	t
+4573	first-round	4	116	2	926	1006	t
+4574	first-round	4	115	0	1006	926	t
+4575	first-round	4	114	0	969	998	t
+4576	first-round	4	115	2	998	969	t
+4581	first-round	4	110	0	954	983	t
+4582	first-round	4	117	2	983	954	t
+4583	first-round	4	117	2	931	992	t
+4584	first-round	4	108	0	992	931	t
+4585	first-round	4	0	0	945	993	t
+4586	first-round	4	116	2	993	945	t
+4587	first-round	4	119	2	970	979	t
+4588	first-round	4	118	0	979	970	t
+4589	first-round	4	118	2	929	1004	t
+4590	first-round	4	117	0	1004	929	t
+4591	first-round	4	115	0	936	991	t
+4592	first-round	4	116	2	991	936	t
+4594	first-round	4	116	0	978	996	t
+4595	first-round	4	118	2	996	978	t
+4577	first-round	4	117	2	930	1001	t
+4578	first-round	4	116	0	1001	930	t
+4579	first-round	4	117	2	960	1000	t
+4580	first-round	4	115	0	1000	960	t
+4604	first-round	0	0	0	924	982	t
+4605	first-round	0	112	2	982	924	t
+4606	first-round	0	112	0	999	1005	t
+4607	first-round	0	118	2	1005	999	t
+4610	first-round	0	116	2	1007	944	t
+4611	first-round	0	114	0	944	1007	t
+4596	first-round	0	117	2	942	952	t
+4597	first-round	0	106	0	952	942	t
+4598	first-round	0	115	2	953	955	t
+4599	first-round	0	113	0	955	953	t
+4601	first-round	0	115	2	947	973	t
+4602	first-round	0	111	0	933	959	t
+4603	first-round	0	113	2	959	933	t
+4608	first-round	0	116	2	965	971	t
+4609	first-round	0	111	0	971	965	t
+4600	first-round	0	114	0	973	947	t
+4628	first-round	0	83	0	923	949	t
+4629	first-round	0	113	2	949	923	t
+4632	first-round	0	87	0	962	986	t
+4633	first-round	0	115	2	986	962	t
+4634	first-round	0	111	0	1002	943	t
+4635	first-round	0	116	2	943	1002	t
+4636	first-round	0	105	0	1009	968	t
+4637	first-round	0	115	2	968	1009	t
+4638	first-round	0	102	0	972	1003	t
+4639	first-round	0	115	2	1003	972	t
+4640	first-round	0	115	2	1008	950	t
+4641	first-round	0	104	0	950	1008	t
+4612	first-round	0	119	2	980	941	t
+4613	first-round	0	110	0	941	980	t
+4614	first-round	0	115	2	922	963	t
+4615	first-round	0	98	0	963	922	t
+4616	first-round	0	113	2	964	985	t
+4617	first-round	0	109	0	985	964	t
+4618	first-round	0	114	2	932	\N	t
+4619	first-round	0	111	2	928	961	t
+4620	first-round	0	109	0	961	928	t
+4621	first-round	0	113	2	967	988	t
+4622	first-round	0	112	0	988	967	t
+4623	first-round	0	114	2	934	\N	t
+4624	first-round	0	110	1	921	935	t
+4625	first-round	0	110	1	935	921	t
+4626	first-round	0	113	0	938	940	t
+4627	first-round	0	116	2	940	938	t
+4630	first-round	0	114	2	974	925	t
+4631	first-round	0	113	0	925	974	t
+4642	first-round	1	110	0	999	944	t
+4643	first-round	1	114	2	944	999	t
+4644	first-round	1	117	2	1005	924	t
+4645	first-round	1	0	0	924	1005	t
+4646	first-round	1	116	2	982	1007	t
+4647	first-round	1	113	0	1007	982	t
+4650	first-round	1	116	2	953	947	t
+4651	first-round	1	112	0	947	953	t
+4652	first-round	1	109	0	955	942	t
+4653	first-round	1	117	2	942	955	t
+4656	first-round	1	113	0	952	973	t
+4657	first-round	1	116	2	973	952	t
+4669	first-round	1	99	0	962	943	t
+4670	first-round	1	114	2	943	962	t
+4671	first-round	1	111	2	986	923	t
+4672	first-round	1	99	0	923	986	t
+4675	first-round	1	118	2	949	1002	t
+4676	first-round	1	111	0	1002	949	t
+4678	first-round	1	106	0	972	950	t
+4679	first-round	1	110	2	950	972	t
+4680	first-round	1	110	2	1003	1009	t
+4681	first-round	1	98	0	1009	1003	t
+4682	first-round	1	118	2	968	1008	t
+4683	first-round	1	114	0	1008	968	t
+4648	first-round	1	112	0	964	932	t
+4649	first-round	1	119	2	932	964	t
+4654	first-round	1	111	0	985	922	t
+4655	first-round	1	117	2	922	985	t
+4658	first-round	1	109	2	963	\N	t
+4659	first-round	1	114	2	967	934	t
+4660	first-round	1	109	0	934	967	t
+4661	first-round	1	116	2	988	928	t
+4662	first-round	1	115	0	928	988	t
+4677	first-round	1	108	2	961	\N	t
+4695	first-round	2	108	0	955	973	t
+4696	first-round	2	108	0	947	952	t
+4697	first-round	2	111	2	952	947	t
+4699	first-round	2	114	0	942	953	t
+4700	first-round	2	115	2	953	942	t
+4673	first-round	1	114	2	965	941	t
+4674	first-round	1	110	0	941	965	t
+4686	first-round	1	116	2	971	933	t
+4687	first-round	1	113	0	933	971	t
+4684	first-round	1	114	0	959	980	t
+4685	first-round	1	119	2	980	959	t
+4663	first-round	1	112	1	938	925	t
+4664	first-round	1	112	1	925	938	t
+4665	first-round	1	118	2	940	921	t
+4666	first-round	1	113	0	921	940	t
+4667	first-round	1	116	2	935	974	t
+4668	first-round	1	113	0	974	935	t
+4694	first-round	2	117	2	973	955	t
+4711	first-round	2	111	0	986	1002	t
+4714	first-round	2	112	0	943	949	t
+4715	first-round	2	114	2	949	943	t
+4718	first-round	2	97	0	923	962	t
+4719	first-round	2	102	2	962	923	t
+4721	first-round	2	105	0	1003	1008	t
+4724	first-round	2	107	0	950	968	t
+4725	first-round	2	116	2	968	950	t
+4688	first-round	2	117	2	980	971	t
+4689	first-round	2	113	0	971	980	t
+4690	first-round	2	112	2	941	959	t
+4691	first-round	2	111	0	959	941	t
+4692	first-round	2	112	2	933	965	t
+4693	first-round	2	108	0	965	933	t
+4698	first-round	2	111	2	985	\N	t
+4701	first-round	2	115	2	932	963	t
+4702	first-round	2	112	0	963	932	t
+4703	first-round	2	115	2	922	964	t
+4704	first-round	2	111	0	964	922	t
+4707	first-round	2	115	2	988	\N	t
+4705	first-round	2	110	2	934	961	t
+4708	first-round	2	115	2	928	967	t
+4709	first-round	2	113	0	967	928	t
+4712	first-round	2	111	0	974	940	t
+4713	first-round	2	119	2	940	974	t
+4716	first-round	2	111	0	925	935	t
+4717	first-round	2	113	2	935	925	t
+4722	first-round	2	114	0	921	938	t
+4723	first-round	2	115	2	938	921	t
+4710	first-round	2	114	2	1002	986	t
+4720	first-round	2	114	2	1008	1003	t
+4726	first-round	2	115	2	1009	972	t
+4727	first-round	2	103	0	972	1009	t
+4728	first-round	2	109	0	1007	1005	t
+4729	first-round	2	119	2	1005	1007	t
+4730	first-round	2	118	2	944	982	t
+4731	first-round	2	104	0	982	944	t
+4732	first-round	2	0	0	924	999	t
+4733	first-round	2	115	2	999	924	t
+4706	first-round	2	103	0	961	934	t
+4743	first-round	3	110	0	925	921	t
+4744	first-round	3	113	2	921	925	t
+4745	first-round	3	113	0	974	938	t
+4746	first-round	3	114	2	938	974	t
+4749	first-round	3	120	2	940	935	t
+4750	first-round	3	112	0	935	940	t
+4736	first-round	3	108	0	934	928	t
+4737	first-round	3	111	2	928	934	t
+4738	first-round	3	111	2	967	\N	t
+4739	first-round	3	115	2	988	961	t
+4740	first-round	3	107	0	961	988	t
+4734	first-round	3	114	2	941	933	t
+4735	first-round	3	112	0	933	941	t
+4741	first-round	3	114	2	980	965	t
+4742	first-round	3	107	0	965	980	t
+4747	first-round	3	114	2	971	959	t
+4748	first-round	3	112	0	959	971	t
+4751	first-round	3	116	2	932	922	t
+4752	first-round	3	112	0	922	932	t
+4753	first-round	3	112	2	964	\N	t
+4754	first-round	3	111	2	985	963	t
+4755	first-round	3	109	0	963	985	t
+4756	first-round	3	115	0	947	942	t
+4757	first-round	3	116	2	942	947	t
+4758	first-round	3	114	0	973	953	t
+4759	first-round	3	117	2	953	973	t
+4760	first-round	3	106	0	955	952	t
+4761	first-round	3	108	2	952	955	t
+4762	first-round	3	119	2	943	923	t
+4763	first-round	3	102	0	923	943	t
+4764	first-round	3	115	2	1002	962	t
+4765	first-round	3	103	0	962	1002	t
+4766	first-round	3	111	0	986	949	t
+4767	first-round	3	115	2	949	986	t
+4768	first-round	3	107	2	950	1009	t
+4769	first-round	3	103	0	1009	950	t
+4770	first-round	3	114	1	1008	972	t
+4771	first-round	3	114	1	972	1008	t
+4772	first-round	3	107	0	1003	968	t
+4773	first-round	3	116	2	968	1003	t
+4774	first-round	3	118	2	944	924	t
+4775	first-round	3	0	0	924	944	t
+4776	first-round	3	114	0	1007	999	t
+4777	first-round	3	115	2	999	1007	t
+4778	first-round	3	118	2	1005	982	t
+4779	first-round	3	108	0	982	1005	t
+4780	first-round	4	107	0	982	999	t
+4781	first-round	4	118	2	999	982	t
+4782	first-round	4	0	0	924	1007	t
+4783	first-round	4	111	2	1007	924	t
+4784	first-round	4	118	1	944	1005	t
+4785	first-round	4	118	1	1005	944	t
+4786	first-round	4	101	0	952	953	t
+4787	first-round	4	109	2	953	952	t
+4788	first-round	4	115	2	942	973	t
+4789	first-round	4	114	0	973	942	t
+4790	first-round	4	102	0	947	955	t
+4791	first-round	4	104	2	955	947	t
+4808	first-round	4	118	2	968	972	t
+4809	first-round	4	110	0	972	968	t
+4810	first-round	4	109	0	1009	1008	t
+4811	first-round	4	118	2	1008	1009	t
+4812	first-round	4	108	0	950	1003	t
+4813	first-round	4	114	2	1003	950	t
+4802	first-round	4	119	2	949	962	t
+4803	first-round	4	98	0	962	949	t
+4804	first-round	4	110	0	923	1002	t
+4805	first-round	4	111	2	1002	923	t
+4806	first-round	4	117	2	943	986	t
+4807	first-round	4	105	0	986	943	t
+4792	first-round	4	115	2	959	965	t
+4793	first-round	4	111	0	965	959	t
+4794	first-round	4	112	0	933	980	t
+4795	first-round	4	114	2	980	933	t
+4796	first-round	4	114	2	941	971	t
+4797	first-round	4	110	0	971	941	t
+4798	first-round	4	100	0	963	964	t
+4799	first-round	4	110	2	964	963	t
+4823	first-round	4	112	2	922	\N	t
+4800	first-round	4	115	2	932	985	t
+4801	first-round	4	111	0	985	932	t
+4814	first-round	4	105	0	961	967	t
+4815	first-round	4	114	2	967	961	t
+4816	first-round	4	117	2	928	\N	t
+4817	first-round	4	110	0	934	988	t
+4818	first-round	4	117	2	988	934	t
+4819	first-round	4	114	2	935	938	t
+4820	first-round	4	113	0	938	935	t
+4821	first-round	4	115	2	921	974	t
+4822	first-round	4	113	0	974	921	t
+4824	first-round	4	110	0	925	940	t
+4825	first-round	4	118	2	940	925	t
+4833	second-round	0	117	2	988	941	t
+4827	second-round	0	115	0	928	980	t
+4828	second-round	0	116	2	935	921	t
+4829	second-round	0	113	0	921	935	t
+4830	second-round	0	110	0	959	932	t
+4831	second-round	0	111	2	932	959	t
+4834	second-round	0	117	2	989	987	t
+4835	second-round	0	112	0	987	989	t
+4832	second-round	0	114	0	941	988	t
+4836	second-round	0	118	2	940	938	t
+4837	second-round	0	113	0	938	940	t
+4840	second-round	0	115	2	967	922	t
+4841	second-round	0	112	0	922	967	t
+4826	second-round	0	119	2	980	928	t
+4838	second-round	0	109	1	958	976	t
+4839	second-round	0	109	1	976	958	t
+4842	second-round	0	107	0	939	946	t
+4843	second-round	0	116	2	946	939	t
+4880	second-round	1	117	0	970	930	t
+4844	second-round	0	113	2	995	957	t
+4845	second-round	0	107	0	957	995	t
+4846	second-round	0	115	2	975	966	t
+4847	second-round	0	101	0	966	975	t
+4850	second-round	0	110	0	981	977	t
+4851	second-round	0	117	2	977	981	t
+4856	second-round	0	113	0	943	1005	t
+4857	second-round	0	119	2	1005	943	t
+4858	second-round	0	116	2	953	973	t
+4859	second-round	0	115	0	973	953	t
+4860	second-round	0	112	0	1002	1008	t
+4861	second-round	0	114	2	1008	1002	t
+4848	second-round	0	116	2	949	944	t
+4849	second-round	0	115	0	944	949	t
+4852	second-round	0	118	2	942	999	t
+4853	second-round	0	108	0	999	942	t
+4854	second-round	0	116	0	1007	968	t
+4855	second-round	0	117	2	968	1007	t
+4868	second-round	0	119	0	990	931	t
+4869	second-round	0	120	2	931	990	t
+4872	second-round	0	117	2	929	979	t
+4873	second-round	0	114	0	979	929	t
+4866	second-round	0	112	0	960	996	t
+4867	second-round	0	118	2	996	960	t
+4870	second-round	0	116	0	984	983	t
+4871	second-round	0	117	2	983	984	t
+4864	second-round	0	118	2	970	978	t
+4865	second-round	0	112	0	978	970	t
+4862	second-round	0	118	1	991	930	t
+4863	second-round	0	118	1	930	991	t
+4896	second-round	1	116	2	953	1008	t
+4897	second-round	1	115	0	1008	953	t
+4894	second-round	1	113	0	973	943	t
+4895	second-round	1	117	2	943	973	t
+4881	second-round	1	118	2	930	970	t
+4882	second-round	1	113	0	978	984	t
+4883	second-round	1	114	2	984	978	t
+4884	second-round	1	120	2	983	991	t
+4885	second-round	1	116	0	991	983	t
+4874	second-round	1	118	1	929	996	t
+4875	second-round	1	118	1	996	929	t
+4876	second-round	1	113	0	979	990	t
+4877	second-round	1	120	2	990	979	t
+4878	second-round	1	117	2	931	960	t
+4879	second-round	1	115	0	960	931	t
+4886	second-round	1	118	2	942	968	t
+4887	second-round	1	116	0	968	942	t
+4888	second-round	1	115	0	999	949	t
+4889	second-round	1	117	2	949	999	t
+4890	second-round	1	117	2	944	1007	t
+4891	second-round	1	113	0	1007	944	t
+4898	second-round	1	111	0	958	946	t
+4899	second-round	1	116	2	946	958	t
+4900	second-round	1	108	0	976	989	t
+4901	second-round	1	118	2	989	976	t
+4902	second-round	1	115	2	987	939	t
+4903	second-round	1	104	0	939	987	t
+4892	second-round	1	116	2	1005	1002	t
+4893	second-round	1	114	0	1002	1005	t
+4904	second-round	1	113	2	975	977	t
+4905	second-round	1	111	0	977	975	t
+4906	second-round	1	108	1	966	995	t
+4907	second-round	1	108	1	995	966	t
+4908	second-round	1	118	2	957	981	t
+4909	second-round	1	103	0	981	957	t
+4910	second-round	1	114	0	935	932	t
+4911	second-round	1	116	2	932	935	t
+4912	second-round	1	113	0	921	980	t
+4913	second-round	1	118	2	980	921	t
+4914	second-round	1	115	0	928	959	t
+4915	second-round	1	118	2	959	928	t
+4916	second-round	1	116	2	940	922	t
+4917	second-round	1	112	0	922	940	t
+4918	second-round	1	111	0	938	941	t
+4919	second-round	1	114	2	941	938	t
+4920	second-round	1	115	0	988	967	t
+4921	second-round	1	116	2	967	988	t
+4933	second-round	2	118	2	978	991	t
+4934	second-round	2	117	0	930	983	t
+4935	second-round	2	119	2	983	930	t
+4922	second-round	2	116	0	960	979	t
+4924	second-round	2	114	2	959	921	t
+4925	second-round	2	113	0	921	959	t
+4930	second-round	2	115	1	932	928	t
+4931	second-round	2	115	1	928	932	t
+4932	second-round	2	115	0	991	978	t
+4938	second-round	2	117	2	984	970	t
+4939	second-round	2	115	0	970	984	t
+4923	second-round	2	117	2	979	960	t
+4926	second-round	2	115	0	996	931	t
+4927	second-round	2	117	2	931	996	t
+4928	second-round	2	120	2	990	929	t
+4929	second-round	2	119	0	929	990	t
+4936	second-round	2	116	2	980	935	t
+4937	second-round	2	115	0	935	980	t
+4940	second-round	2	116	2	967	938	t
+4941	second-round	2	114	0	938	967	t
+4942	second-round	2	114	0	922	988	t
+4943	second-round	2	117	2	988	922	t
+4944	second-round	2	113	0	941	940	t
+4945	second-round	2	118	2	940	941	t
+4952	second-round	2	116	2	1002	973	t
+4953	second-round	2	115	0	973	1002	t
+4954	second-round	2	118	1	1008	1005	t
+4955	second-round	2	118	1	1005	1008	t
+4956	second-round	2	115	2	943	953	t
+4957	second-round	2	106	0	953	943	t
+4946	second-round	2	111	0	1007	999	t
+4947	second-round	2	114	2	999	1007	t
+4948	second-round	2	113	1	968	944	t
+4949	second-round	2	113	1	944	968	t
+4950	second-round	2	119	2	949	942	t
+4951	second-round	2	114	0	942	949	t
+4958	second-round	2	103	0	939	976	t
+4959	second-round	2	108	2	976	939	t
+4960	second-round	2	117	2	946	987	t
+4961	second-round	2	110	0	987	946	t
+4962	second-round	2	113	2	989	958	t
+4963	second-round	2	107	0	958	989	t
+4964	second-round	2	109	2	981	966	t
+4965	second-round	2	95	0	966	981	t
+4966	second-round	2	116	2	977	957	t
+4967	second-round	2	115	0	957	977	t
+4968	second-round	2	117	2	995	975	t
+4969	second-round	2	115	0	975	995	t
+4986	second-round	3	116	1	938	988	t
+4987	second-round	3	116	1	988	938	t
+4970	second-round	3	117	0	932	980	t
+4971	second-round	3	119	2	980	932	t
+4972	second-round	3	113	2	959	935	t
+4973	second-round	3	110	0	935	959	t
+4974	second-round	3	114	2	921	928	t
+4975	second-round	3	111	0	928	921	t
+4976	second-round	3	116	2	968	949	t
+4977	second-round	3	115	0	949	968	t
+4980	second-round	3	112	0	1007	942	t
+4981	second-round	3	115	2	942	1007	t
+4982	second-round	3	117	0	999	944	t
+4983	second-round	3	119	2	944	999	t
+4984	second-round	3	110	0	1008	943	t
+4985	second-round	3	111	2	943	1008	t
+4990	second-round	3	112	0	1002	953	t
+4991	second-round	3	113	2	953	1002	t
+4992	second-round	3	115	0	973	1005	t
+4993	second-round	3	118	2	1005	973	t
+4994	second-round	3	117	2	946	989	t
+4995	second-round	3	115	0	989	946	t
+4996	second-round	3	106	2	939	958	t
+4997	second-round	3	80	0	958	939	t
+4998	second-round	3	110	0	976	987	t
+4999	second-round	3	116	2	987	976	t
+5000	second-round	3	114	2	977	995	t
+5001	second-round	3	106	0	995	977	t
+5002	second-round	3	106	0	981	975	t
+5003	second-round	3	112	2	975	981	t
+5004	second-round	3	94	0	966	957	t
+5005	second-round	3	115	2	957	966	t
+4978	second-round	3	114	1	922	941	t
+4979	second-round	3	114	1	941	922	t
+4988	second-round	3	111	0	967	940	t
+4989	second-round	3	117	2	940	967	t
+5006	second-round	3	118	0	996	990	t
+5007	second-round	3	120	2	990	996	t
+5008	second-round	3	114	0	960	929	t
+5009	second-round	3	118	2	929	960	t
+5010	second-round	3	117	2	979	931	t
+5011	second-round	3	114	0	931	979	t
+5012	second-round	3	115	1	930	984	t
+5013	second-round	3	115	1	984	930	t
+5014	second-round	3	118	2	991	970	t
+5015	second-round	3	114	0	970	991	t
+5016	second-round	3	119	2	978	983	t
+5017	second-round	3	117	0	983	978	t
+5018	second-round	4	118	0	931	929	t
+5019	second-round	4	119	2	929	931	t
+5029	second-round	4	116	2	970	983	t
+5020	second-round	4	118	2	990	960	t
+5021	second-round	4	115	0	960	990	t
+5024	second-round	4	114	1	996	979	t
+5025	second-round	4	114	1	979	996	t
+5022	second-round	4	113	0	928	935	t
+5023	second-round	4	115	2	935	928	t
+5026	second-round	4	119	2	980	959	t
+5027	second-round	4	112	0	959	980	t
+5030	second-round	4	112	2	932	921	t
+5031	second-round	4	110	0	921	932	t
+5028	second-round	4	113	0	983	970	t
+5032	second-round	4	114	0	984	991	t
+5033	second-round	4	118	2	991	984	t
+5034	second-round	4	114	0	930	978	t
+5035	second-round	4	115	2	978	930	t
+5036	second-round	4	114	0	988	940	t
+5037	second-round	4	119	2	940	988	t
+5038	second-round	4	114	2	941	967	t
+5039	second-round	4	113	0	967	941	t
+5040	second-round	4	115	0	922	938	t
+5041	second-round	4	118	2	938	922	t
+5048	second-round	4	116	2	1005	953	t
+5049	second-round	4	112	0	953	1005	t
+5050	second-round	4	115	2	943	1002	t
+5051	second-round	4	114	0	1002	943	t
+5052	second-round	4	115	2	1008	973	t
+5053	second-round	4	107	0	973	1008	t
+5042	second-round	4	119	2	944	942	t
+5043	second-round	4	114	0	942	944	t
+5044	second-round	4	113	0	949	1007	t
+5045	second-round	4	117	2	1007	949	t
+5046	second-round	4	115	2	968	999	t
+5047	second-round	4	113	0	999	968	t
+5060	second-round	4	115	2	957	975	t
+5061	second-round	4	114	0	975	957	t
+5062	second-round	4	103	0	995	981	t
+5063	second-round	4	110	2	981	995	t
+5064	second-round	4	111	2	977	966	t
+5065	second-round	4	106	0	966	977	t
+5054	second-round	4	108	0	987	958	t
+5055	second-round	4	111	2	958	987	t
+5056	second-round	4	116	2	989	939	t
+5057	second-round	4	104	0	939	989	t
+5058	second-round	4	117	2	946	976	t
+5059	second-round	4	107	0	976	946	t
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2016-12-03 16:39:00.417992+00	488	Alex Smith	2	Changed final_round_seed.	1	1
+2	2016-12-03 16:39:33.989465+00	512	Tom Hall	2	Changed final_round_seed.	1	1
+3	2016-12-03 16:39:53.677749+00	471	Alex Wise	2	Changed final_round_seed.	1	1
+4	2016-12-03 16:40:03.344973+00	482	Ashe Morgan 	2	Changed final_round_seed.	1	1
+5	2016-12-03 16:40:12.295481+00	495	Sean Evans	2	Changed final_round_seed.	1	1
+6	2016-12-03 16:40:49.240887+00	489	Mark Nesbitt	2	Changed final_round_seed.	1	1
+7	2017-12-01 16:34:40.417905+00	569	Rodney Groom	3		1	1
+8	2017-12-01 16:34:40.425978+00	568	Neil Laszkowicz	3		1	1
+9	2017-12-01 16:34:40.428913+00	567	Robert Hall	3		1	1
+10	2017-12-01 16:34:40.431817+00	566	Rebekah Tipping	3		1	1
+11	2017-12-01 16:34:40.434442+00	565	Jessica Stretton	3		1	1
+12	2017-12-01 16:34:40.437242+00	564	Emma Davies	3		1	1
+13	2017-12-01 16:34:40.440148+00	563	Abigail Fowler	3		1	1
+14	2017-12-01 16:34:40.443216+00	562	Emma Downie	3		1	1
+15	2017-12-01 16:34:40.446323+00	561	Neringa Siugzdinyte	3		1	1
+16	2017-12-01 16:34:40.450836+00	560	Gabriela Bayardo	3		1	1
+17	2017-12-01 16:34:40.453778+00	559	Monique Pascall	3		1	1
+18	2017-12-01 16:34:40.456885+00	558	Michelle Kiddy	3		1	1
+19	2017-12-01 16:34:40.459923+00	557	Charlotte Birch	3		1	1
+20	2017-12-01 16:34:40.462831+00	549	Emily Bryant	3		1	1
+21	2017-12-01 16:34:40.465892+00	548	Alyssia Tromans-Ansell	3		1	1
+22	2017-12-01 16:34:40.46894+00	547	Kirstie Smith	3		1	1
+23	2017-12-01 16:34:40.471672+00	546	Emma Borrie	3		1	1
+24	2017-12-01 16:34:40.477978+00	545	Leah Bannister	3		1	1
+25	2017-12-01 16:34:40.483195+00	544	Johanna Meyer	3		1	1
+26	2017-12-01 16:34:40.48993+00	543	Rebecca Martin	3		1	1
+27	2017-12-01 16:34:40.495701+00	542	Amy Gott	3		1	1
+28	2017-12-01 16:34:40.49877+00	541	Petra Ginman	3		1	1
+29	2017-12-01 16:34:40.502381+00	540	Klara Fay	3		1	1
+30	2017-12-01 16:34:40.504863+00	539	Vlada Priestman	3		1	1
+31	2017-12-01 16:34:40.509911+00	538	Amy Oliver	3		1	1
+32	2017-12-01 16:34:40.512767+00	537	Alica Reynolds	3		1	1
+33	2017-12-01 16:34:40.515374+00	536	Jeanetta McLean	3		1	1
+34	2017-12-01 16:34:40.518122+00	535	Susan Agnew	3		1	1
+35	2017-12-01 16:34:40.52122+00	534	Nell Piper	3		1	1
+36	2017-12-01 16:34:40.524339+00	533	Songi Woo	3		1	1
+37	2017-12-01 16:34:40.526941+00	532	Jessie Slater	3		1	1
+38	2017-12-01 16:34:40.52987+00	531	Ruby Paul	3		1	1
+39	2017-12-01 16:34:40.532498+00	530	Lisa Kompfner	3		1	1
+40	2017-12-01 16:34:40.535133+00	529	Pip Taylor	3		1	1
+41	2017-12-01 16:34:40.53757+00	528	Bryony Pitman	3		1	1
+42	2017-12-01 16:34:40.540148+00	527	Jessica Nilsson	3		1	1
+43	2017-12-01 16:34:40.542633+00	526	Kayleigh Ivanov	3		1	1
+44	2017-12-01 16:34:40.5453+00	525	Kayleigh Griffin	3		1	1
+45	2017-12-01 16:34:40.548125+00	524	Lisa Cooper	3		1	1
+46	2017-12-01 16:34:40.550805+00	523	Sarah Bettles	3		1	1
+47	2017-12-01 16:34:40.553603+00	522	Louisa Piper	3		1	1
+48	2017-12-01 16:34:40.556352+00	521	Megan-Amy Logan	3		1	1
+49	2017-12-01 16:34:40.558902+00	520	Fiona Hirst	3		1	1
+50	2017-12-01 16:34:40.56131+00	519	Jaspreet Sagoo	3		1	1
+51	2017-12-01 16:34:40.564316+00	518	Aida Roman	3		1	1
+52	2017-12-01 16:34:40.573693+00	517	Roy Watts	3		1	1
+53	2017-12-01 16:34:40.578234+00	516	Kenneth Harper	3		1	1
+54	2017-12-01 16:34:40.581328+00	515	Ian Finlay	3		1	1
+55	2017-12-01 16:34:40.584253+00	514	Andy Caine	3		1	1
+56	2017-12-01 16:34:40.589189+00	513	Malcolm Alexander	3		1	1
+57	2017-12-01 16:34:40.59405+00	512	Tom Hall	3		1	1
+58	2017-12-01 16:34:40.599176+00	511	Paul Tittensor	3		1	1
+59	2017-12-01 16:34:40.60551+00	510	Jonathan Tate	3		1	1
+60	2017-12-01 16:34:40.608268+00	509	John Prior	3		1	1
+61	2017-12-01 16:34:40.61113+00	508	Mohammad Bilaal	3		1	1
+62	2017-12-01 16:34:40.61424+00	507	Jack Masefield	3		1	1
+63	2017-12-01 16:34:40.617048+00	506	Stuart Barby	3		1	1
+64	2017-12-01 16:34:40.621259+00	505	Tomasz Maliszewski	3		1	1
+65	2017-12-01 16:34:40.62395+00	504	Robert Lowe	3		1	1
+66	2017-12-01 16:34:40.626577+00	503	Vladimir Hurban	3		1	1
+67	2017-12-01 16:34:40.629068+00	502	Keith Harding	3		1	1
+68	2017-12-01 16:34:40.63164+00	501	Guy Matzkin	3		1	1
+69	2017-12-01 16:34:40.634591+00	500	David Timmins	3		1	1
+70	2017-12-01 16:34:40.638497+00	499	Chris Trolan	3		1	1
+71	2017-12-01 16:34:40.641508+00	498	Tony Sze	3		1	1
+72	2017-12-01 16:34:40.644267+00	497	Christian Roberts	3		1	1
+73	2017-12-01 16:34:40.647119+00	496	Jr Downey	3		1	1
+74	2017-12-01 16:34:40.649798+00	495	Sean Evans	3		1	1
+75	2017-12-01 16:34:40.652658+00	494	Michael Judd	3		1	1
+76	2017-12-01 16:34:40.65549+00	493	Callum Platt	3		1	1
+77	2017-12-01 16:34:40.658363+00	492	Thomas Nairn	3		1	1
+78	2017-12-01 16:34:40.663204+00	491	Radley Goby-Taylor	3		1	1
+79	2017-12-01 16:34:40.666971+00	490	Morgan Donaldson	3		1	1
+80	2017-12-01 16:34:40.669485+00	489	Mark Nesbitt	3		1	1
+81	2017-12-01 16:34:40.672425+00	488	Alex Smith	3		1	1
+82	2017-12-01 16:34:40.675288+00	487	Jacob Reid	3		1	1
+83	2017-12-01 16:34:40.679373+00	486	Richard Parker	3		1	1
+84	2017-12-01 16:34:40.681913+00	485	Frank Hynds	3		1	1
+85	2017-12-01 16:34:40.684567+00	484	Joe Fairburn	3		1	1
+86	2017-12-01 16:34:40.688786+00	483	Conor Hall	3		1	1
+87	2017-12-01 16:34:40.692341+00	482	Ashe Morgan 	3		1	1
+88	2017-12-01 16:34:40.697634+00	481	Ciprian Zahan	3		1	1
+89	2017-12-01 16:34:40.700157+00	480	Adam Reeks	3		1	1
+90	2017-12-01 16:34:40.703624+00	479	Alec Hodgkinson	3		1	1
+91	2017-12-01 16:34:40.706628+00	478	Sonnie Emeney	3		1	1
+92	2017-12-01 16:34:40.710624+00	477	Kieran Slater	3		1	1
+93	2017-12-01 16:34:40.715801+00	476	Colin Geenes	3		1	1
+94	2017-12-01 16:34:40.721786+00	475	Vic Wonderle	3		1	1
+95	2017-12-01 16:34:40.725414+00	474	David Phillips	3		1	1
+96	2017-12-01 16:34:40.729097+00	473	Ryan Holden	3		1	1
+97	2017-12-01 16:34:40.731892+00	472	Jamie Adams	3		1	1
+98	2017-12-01 16:34:40.734671+00	471	Alex Wise	3		1	1
+99	2017-12-01 16:34:40.737806+00	470	Patrick Huston	3		1	1
+100	2017-12-01 16:34:40.742169+00	469	Abbie Spinks	3		1	1
+101	2017-12-01 16:34:40.745074+00	468	Sarah Moon	3		1	1
+102	2017-12-01 16:34:40.748074+00	466	Bayley Sargeant	3		1	1
+103	2017-12-01 16:34:40.751065+00	465	Lucy O'Sullivan	3		1	1
+104	2017-12-01 16:34:40.754443+00	464	Hope Greenwood	3		1	1
+105	2017-12-01 16:34:40.759111+00	463	Claudine Jennings	3		1	1
+106	2017-12-01 16:34:40.763075+00	462	Emily Must	3		1	1
+107	2017-12-01 16:34:40.766241+00	461	Pauline Burfitt	3		1	1
+108	2017-12-01 16:34:40.769015+00	460	Rebecca Lennon	3		1	1
+109	2017-12-01 16:34:40.771951+00	459	Isabelle Carpenter	3		1	1
+110	2017-12-01 16:34:40.774717+00	458	Erin Prior	3		1	1
+111	2017-12-01 16:34:40.777556+00	457	Helen Neumann	3		1	1
+112	2017-12-01 16:34:40.781134+00	456	Vicci Flack	3		1	1
+113	2017-12-01 16:34:40.784121+00	455	Susan Corless	3		1	1
+114	2017-12-01 16:34:40.786959+00	454	Lucy Mason	3		1	1
+115	2017-12-01 16:34:40.79149+00	453	Gen Witham	3		1	1
+116	2017-12-01 16:34:40.795027+00	452	Julia Petre	3		1	1
+117	2017-12-01 16:34:40.798109+00	451	Maddison Codling	3		1	1
+118	2017-12-01 16:34:40.801331+00	450	Layla Annison	3		1	1
+119	2017-12-01 16:34:40.804338+00	449	Daisy Clark	3		1	1
+120	2017-12-01 16:34:40.808809+00	448	Marion Sambridge	3		1	1
+121	2017-12-01 16:34:40.812382+00	447	Stephanie Clason 	3		1	1
+122	2017-12-01 16:34:40.816266+00	446	Victoria Barby	3		1	1
+123	2017-12-01 16:34:40.826021+00	445	Andrea Gales	3		1	1
+124	2017-12-01 16:34:40.831457+00	444	Lizzie Foster	3		1	1
+125	2017-12-01 16:34:40.835086+00	443	Kirsty Robb	3		1	1
+126	2017-12-01 16:34:40.839725+00	442	Phoebe Pine	3		1	1
+127	2017-12-01 16:34:40.844519+00	441	Nat Merry	3		1	1
+128	2017-12-01 16:34:40.847521+00	440	Anna King	3		1	1
+129	2017-12-01 16:34:40.850545+00	439	Nichola Simpson	3		1	1
+130	2017-12-01 16:34:40.853175+00	438	Sarah Prieels	3		1	1
+131	2017-12-01 16:34:40.856357+00	437	Linus Stromberg	3		1	1
+132	2017-12-01 16:34:40.861639+00	436	James King	3		1	1
+133	2017-12-01 16:34:40.868805+00	435	Mark Haldane	3		1	1
+134	2017-12-01 16:34:40.874605+00	434	Samuel Baldwin	3		1	1
+135	2017-12-01 16:34:40.879926+00	433	James Mason	3		1	1
+136	2017-12-01 16:34:40.884851+00	432	Stephan Hanson	3		1	1
+137	2017-12-01 16:34:40.889072+00	431	Rhys Moore	3		1	1
+138	2017-12-01 16:34:40.891826+00	430	Matthew Hall	3		1	1
+139	2017-12-01 16:34:40.894595+00	429	John Walker	3		1	1
+140	2017-12-01 16:34:40.897963+00	428	Luke Ralls	3		1	1
+141	2017-12-01 16:34:40.900747+00	427	Hampus Borgstrom	3		1	1
+142	2017-12-01 16:34:40.908145+00	426	Adam Ravenscroft	3		1	1
+143	2017-12-01 16:34:40.916117+00	425	Chris Woodgate	3		1	1
+144	2017-12-01 16:34:40.918991+00	424	Alistair Whittingham 	3		1	1
+145	2017-12-01 16:34:40.922491+00	423	Philip Tucknott	3		1	1
+146	2017-12-01 16:34:40.926671+00	422	Mikit Sanghrajka	3		1	1
+147	2017-12-01 16:34:40.93027+00	421	Christopher White	3		1	1
+148	2017-12-01 16:34:40.933501+00	420	Jordan Mitchell	3		1	1
+149	2017-12-01 16:34:40.93655+00	419	Alfie Wilkes	3		1	1
+150	2017-12-01 16:34:40.939455+00	418	Geraint Thomas	3		1	1
+151	2017-12-01 16:34:40.942618+00	417	Adam Shaw	3		1	1
+152	2017-12-01 16:34:40.945496+00	416	Jacek Pedziwiatr	3		1	1
+153	2017-12-01 16:34:40.948351+00	415	Tapani Kalmaru	3		1	1
+154	2017-12-01 16:34:40.951167+00	414	Paul Tedford	3		1	1
+155	2017-12-01 16:34:40.954057+00	413	Liam Upfold	3		1	1
+156	2017-12-01 16:34:40.957234+00	412	Carl Richards	3		1	1
+157	2017-12-01 16:34:40.960317+00	411	Richard Morris	3		1	1
+158	2017-12-01 16:34:40.963538+00	410	Ethan Moore	3		1	1
+159	2017-12-01 16:34:40.966567+00	409	Adam Carpenter	3		1	1
+160	2017-12-01 16:34:40.969617+00	408	Domagoj Buden	3		1	1
+161	2017-12-01 16:34:40.972745+00	407	Simon Scott	3		1	1
+162	2017-12-01 16:34:40.975861+00	406	James Howell	3		1	1
+163	2017-12-01 16:34:40.978987+00	405	George Harding	3		1	1
+164	2017-12-01 16:34:40.986829+00	404	Fraser Chape	3		1	1
+165	2017-12-01 16:34:40.995045+00	403	Dean Hamilton	3		1	1
+166	2017-12-01 16:34:40.998312+00	402	Dave Cousins	3		1	1
+167	2017-12-01 16:34:41.002145+00	400	David Moore	3		1	1
+168	2017-12-01 16:34:41.009848+00	399	Thomas Howse	3		1	1
+169	2017-12-01 16:34:41.013546+00	398	Jacob Caine	3		1	1
+170	2017-12-01 16:34:41.022062+00	397	James Howse	3		1	1
+171	2017-12-01 16:34:41.026763+00	394	Brad Stewart	3		1	1
+172	2017-12-01 16:34:41.029902+00	393	Isak Carlsson	3		1	1
+173	2017-12-01 16:34:41.043711+00	392	Michael Kells	3		1	1
+174	2017-12-01 16:34:41.046511+00	391	Harrison Ooi	3		1	1
+175	2017-12-01 16:34:41.049499+00	390	Mike Schloesser	3		1	1
+176	2017-12-02 07:53:18.010652+00	2	team	1		6	1
+177	2017-12-02 07:53:57.499546+00	2	team	2	Changed password.	6	1
+178	2017-12-02 07:54:46.651043+00	2	team	2	No fields changed.	6	1
+179	2017-12-02 07:54:46.729387+00	2	team	2	No fields changed.	6	1
+180	2017-12-02 07:54:54.319888+00	2	team	2	Changed is_staff and is_superuser.	6	1
+181	2017-12-02 10:53:57.395124+00	650	Ella Gibson	2	Changed second_group_number and second_group_index.	1	1
+182	2017-12-02 10:54:32.719955+00	645	Stephanie Clason	2	Changed second_group_number and second_group_index.	1	1
+183	2017-12-02 11:48:19.218012+00	689	Jackie Fisher	2	Changed name.	1	1
+184	2017-12-02 11:50:15.769316+00	689	Jackie Fisher	2	Changed first_group_index.	1	1
+185	2017-12-02 11:50:19.772589+00	688	Melanie-Lee Bebbington-Trengove	2	Changed first_group_index.	1	1
+186	2017-12-02 11:50:26.414189+00	687	Georgia Maryon	2	Changed first_group_index.	1	1
+187	2017-12-02 11:50:29.990809+00	686	Thea Rogers	2	Changed first_group_index.	1	1
+188	2017-12-02 11:50:37.959782+00	685	Fiona Hirst	2	Changed first_group_number, first_group_index and first_group_placing.	1	1
+189	2017-12-02 11:50:42.736864+00	684	Sarah Bettles	2	Changed first_group_index.	1	1
+190	2017-12-02 11:51:16.896254+00	685	Fiona Hirst	2	Changed first_group_number, first_group_index and first_group_placing.	1	1
+191	2017-12-02 15:00:52.043449+00	578	Conor Hall	2	Changed second_group_index.	1	1
+192	2017-12-02 15:01:02.975734+00	578	Conor Hall	2	Changed second_group_number.	1	1
+193	2017-12-02 15:01:11.799859+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+194	2017-12-02 15:02:37.296037+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+195	2017-12-02 15:02:41.579259+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+196	2017-12-02 15:02:48.075063+00	585	Colin Geenes	2	Changed second_group_index.	1	1
+197	2017-12-02 15:33:23.931894+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+198	2017-12-02 15:33:47.91045+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+199	2017-12-02 15:34:28.845892+00	585	Colin Geenes	2	No fields changed.	1	1
+200	2017-12-02 15:35:07.888602+00	581	Erik Rowbotham	2	Changed second_group_index.	1	1
+201	2017-12-02 15:35:09.489354+00	587	Guy Matzkin	2	Changed second_group_index.	1	1
+202	2017-12-02 15:35:25.770475+00	575	Alex Smith	2	Changed second_group_index.	1	1
+203	2017-12-02 15:35:28.232303+00	585	Colin Geenes	2	Changed second_group_index.	1	1
+204	2017-12-02 15:50:16.290036+00	653	Isabelle Carpenter	2	Changed final_round_seed.	1	1
+205	2017-12-02 15:50:17.49768+00	642	Hope Greenwood	2	Changed final_round_seed.	1	1
+206	2017-12-02 15:50:21.988386+00	642	Hope Greenwood	2	Changed final_round_seed.	1	1
+207	2017-12-02 16:50:37.622516+00	588	Mark Nesbitt	2	Changed final_round_seed.	1	1
+208	2017-12-02 16:50:39.421769+00	594	Tom Hall	2	Changed final_round_seed.	1	1
+209	2018-11-28 11:51:40.444512+00	689	Jackie Fisher	3		1	1
+210	2018-11-28 11:51:40.456337+00	688	Melanie-Lee Bebbington-Trengove	3		1	1
+211	2018-11-28 11:51:40.464277+00	687	Georgia Maryon	3		1	1
+212	2018-11-28 11:51:40.474442+00	686	Thea Rogers	3		1	1
+213	2018-11-28 11:51:40.484277+00	685	Fiona Hirst	3		1	1
+214	2018-11-28 11:51:40.495379+00	684	Sarah Bettles	3		1	1
+215	2018-11-28 11:51:40.508308+00	683	Vici Royle	3		1	1
+216	2018-11-28 11:51:40.516891+00	682	Eleanor Piper	3		1	1
+217	2018-11-28 11:51:40.522885+00	681	Amy Bode	3		1	1
+218	2018-11-28 11:51:40.531738+00	680	Pip Taylor	3		1	1
+219	2018-11-28 11:51:40.538286+00	679	Wendy Aubrey	3		1	1
+220	2018-11-28 11:51:40.548345+00	678	Alyssia Tromans-Ansell	3		1	1
+221	2018-11-28 11:51:40.561848+00	677	Lisa  Kompfner	3		1	1
+222	2018-11-28 11:51:40.572043+00	676	Sally Gilder	3		1	1
+223	2018-11-28 11:51:40.584342+00	675	Ruby Paul	3		1	1
+224	2018-11-28 11:51:40.592584+00	674	Vlada Priestman	3		1	1
+225	2018-11-28 11:51:40.599367+00	673	Eugenia D'Arcy	3		1	1
+226	2018-11-28 11:51:40.612937+00	672	Nicola Turner	3		1	1
+227	2018-11-28 11:51:40.619544+00	671	Sophie  Castle	3		1	1
+228	2018-11-28 11:51:40.632321+00	670	Susan Agnew	3		1	1
+229	2018-11-28 11:51:40.646496+00	669	Jaspreet Sagoo	3		1	1
+230	2018-11-28 11:51:40.659255+00	668	Johanna Meyer	3		1	1
+231	2018-11-28 11:51:40.680489+00	667	Abbie Fisher	3		1	1
+232	2018-11-28 11:51:40.693236+00	666	Louisa Piper	3		1	1
+233	2018-11-28 11:51:40.725695+00	664	Lizzie Warner	3		1	1
+234	2018-11-28 11:51:40.740281+00	663	Sarah Smith	3		1	1
+235	2018-11-28 11:51:40.755372+00	662	Rebekah Tipping	3		1	1
+236	2018-11-28 11:51:40.775741+00	661	Rebecca Stephenson	3		1	1
+237	2018-11-28 11:51:40.785169+00	660	Bryony Pitman	3		1	1
+238	2018-11-28 11:51:40.799165+00	659	Claudine Jennings	3		1	1
+239	2018-11-28 11:51:40.813313+00	658	Phoebe Pine	3		1	1
+240	2018-11-28 11:51:40.8217+00	657	Jodie Grinham	3		1	1
+241	2018-11-28 11:51:40.835834+00	656	Victoria Loader	3		1	1
+242	2018-11-28 11:51:40.844896+00	655	Daisy Clark	3		1	1
+243	2018-11-28 11:51:40.8544+00	654	Lucy Mason	3		1	1
+244	2018-11-28 11:51:40.874684+00	653	Isabelle Carpenter	3		1	1
+245	2018-11-28 11:51:40.883214+00	652	Nichola Simpson	3		1	1
+246	2018-11-28 11:51:40.892002+00	651	Hannah Brown	3		1	1
+247	2018-11-28 11:51:40.908366+00	650	Ella Gibson	3		1	1
+248	2018-11-28 11:51:40.925495+00	649	Andrea Gales	3		1	1
+249	2018-11-28 11:51:40.936762+00	648	Susan Corless	3		1	1
+250	2018-11-28 11:51:40.960377+00	647	Rebecca Lennon	3		1	1
+251	2018-11-28 11:51:40.967613+00	646	Iulia Petre	3		1	1
+252	2018-11-28 11:51:40.990895+00	645	Stephanie Clason	3		1	1
+253	2018-11-28 11:51:41.002999+00	644	Rebecca Blewett	3		1	1
+254	2018-11-28 11:51:41.009118+00	643	Sarah Moon	3		1	1
+255	2018-11-28 11:51:41.015834+00	642	Hope Greenwood	3		1	1
+256	2018-11-28 11:51:41.025653+00	641	Erin Prior	3		1	1
+257	2018-11-28 11:51:41.051027+00	640	Anna King	3		1	1
+258	2018-11-28 11:51:41.059777+00	639	Gen Witham	3		1	1
+259	2018-11-28 11:51:41.087695+00	638	Jo Frith	3		1	1
+260	2018-11-28 11:51:41.109212+00	637	Elizabeth Foster	3		1	1
+261	2018-11-28 11:51:41.129675+00	636	Layla Annison	3		1	1
+262	2018-11-28 11:51:41.148977+00	635	Abbie Spinks	3		1	1
+263	2018-11-28 11:51:41.156471+00	634	Kirsty Robb	3		1	1
+264	2018-11-28 11:51:41.172006+00	633	Hollie Smith	3		1	1
+265	2018-11-28 11:51:41.188806+00	632	Marion Sambridge	3		1	1
+266	2018-11-28 11:51:41.204413+00	631	Bayley Sargeant	3		1	1
+267	2018-11-28 11:51:41.215012+00	630	Lucy O'Sullivan	3		1	1
+268	2018-11-28 11:51:41.224112+00	629	Matthew Wong	3		1	1
+269	2018-11-28 11:51:41.234772+00	628	John Walker MBE	3		1	1
+270	2018-11-28 11:51:41.245811+00	627	David Taylor	3		1	1
+271	2018-11-28 11:51:41.253965+00	626	Carl Richards	3		1	1
+272	2018-11-28 11:51:41.264246+00	625	Kai Thomas-Prause	3		1	1
+273	2018-11-28 11:51:41.274532+00	624	Chris White	3		1	1
+274	2018-11-28 11:51:41.288349+00	623	Stephen Ramdeen	3		1	1
+275	2018-11-28 11:51:41.300358+00	622	Luke Ralls	3		1	1
+276	2018-11-28 11:51:41.313074+00	621	Liam Peake	3		1	1
+277	2018-11-28 11:51:41.321119+00	620	Timothy Nash	3		1	1
+278	2018-11-28 11:51:41.336962+00	619	Jordan Mitchell	3		1	1
+279	2018-11-28 11:51:41.348953+00	618	Duncan Busby	3		1	1
+280	2018-11-28 11:51:41.356766+00	617	Rhys Moore	3		1	1
+281	2018-11-28 11:51:41.36897+00	616	Martin Krusche	3		1	1
+282	2018-11-28 11:51:41.3778+00	615	Michael Kells	3		1	1
+283	2018-11-28 11:51:41.394664+00	614	Tapani Kalmaru	3		1	1
+284	2018-11-28 11:51:41.412696+00	613	James Howell	3		1	1
+285	2018-11-28 11:51:41.423329+00	612	James Mason	3		1	1
+286	2018-11-28 11:51:41.45154+00	611	Dean Hamilton	3		1	1
+287	2018-11-28 11:51:41.479368+00	610	Mark Haldane	3		1	1
+288	2018-11-28 11:51:41.495694+00	609	Rodney Groom	3		1	1
+289	2018-11-28 11:51:41.505346+00	608	David Cousins	3		1	1
+290	2018-11-28 11:51:41.516308+00	607	James Howse	3		1	1
+291	2018-11-28 11:51:41.528277+00	606	Adam Shaw	3		1	1
+292	2018-11-28 11:51:41.538187+00	605	Adam Carpenter	3		1	1
+293	2018-11-28 11:51:41.551493+00	604	Jacob Caine	3		1	1
+294	2018-11-28 11:51:41.564287+00	603	Samuel Baldwin	3		1	1
+295	2018-11-28 11:51:41.574639+00	602	Mike Aubrey	3		1	1
+296	2018-11-28 11:51:41.58229+00	601	Simon Scott	3		1	1
+297	2018-11-28 11:51:41.591267+00	600	Adam Ravenscroft	3		1	1
+298	2018-11-28 11:51:41.603724+00	599	Ryan Holden	3		1	1
+299	2018-11-28 11:51:41.618957+00	598	Jacob Reid	3		1	1
+300	2018-11-28 11:51:41.629311+00	597	Alec Hodgkinson	3		1	1
+301	2018-11-28 11:51:41.638959+00	596	Ryan Pinder	3		1	1
+302	2018-11-28 11:51:41.647079+00	595	Sean Evans	3		1	1
+303	2018-11-28 11:51:41.658712+00	594	Tom Hall	3		1	1
+304	2018-11-28 11:51:41.680344+00	593	Ian Finlay	3		1	1
+305	2018-11-28 11:51:41.698158+00	592	Daniel  Thompson	3		1	1
+306	2018-11-28 11:51:41.704009+00	591	Andy Caine	3		1	1
+307	2018-11-28 11:51:41.709673+00	590	Kenneth Harper	3		1	1
+308	2018-11-28 11:51:41.717052+00	589	Michael Judd	3		1	1
+309	2018-11-28 11:51:41.733801+00	588	Mark Nesbitt	3		1	1
+310	2018-11-28 11:51:41.744349+00	587	Guy Matzkin	3		1	1
+311	2018-11-28 11:51:41.752312+00	586	John Prior	3		1	1
+312	2018-11-28 11:51:41.760736+00	585	Colin Geenes	3		1	1
+313	2018-11-28 11:51:41.766357+00	584	Malcolm Alexander	3		1	1
+314	2018-11-28 11:51:41.774942+00	583	Keith Harding	3		1	1
+315	2018-11-28 11:51:41.780827+00	582	Ashe  Morgan	3		1	1
+316	2018-11-28 11:51:41.787548+00	581	Erik Rowbotham	3		1	1
+317	2018-11-28 11:51:41.798636+00	580	Gilbert Jamieson	3		1	1
+318	2018-11-28 11:51:41.807907+00	579	Ciprian Zahan	3		1	1
+319	2018-11-28 11:51:41.813718+00	578	Conor Hall	3		1	1
+320	2018-11-28 11:51:41.824324+00	577	Alex Wise	3		1	1
+321	2018-11-28 11:51:41.834631+00	576	David Timmins	3		1	1
+322	2018-11-28 11:51:41.840552+00	575	Alex Smith	3		1	1
+323	2018-11-28 11:51:41.850276+00	574	Tony Sze	3		1	1
+324	2018-11-28 11:51:41.859995+00	573	Michal Twarowski	3		1	1
+325	2018-11-28 11:51:41.865952+00	572	Jonathan Tate	3		1	1
+326	2018-11-28 11:51:41.874326+00	571	Thomas Nairn	3		1	1
+327	2018-11-28 11:51:41.88625+00	570	Patrick Huston	3		1	1
+328	2018-12-01 08:14:28.246423+00	2	team	2	[{"changed": {"fields": ["password"]}}]	6	1
+329	2018-12-01 10:31:09.822428+00	751	James Howse	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+330	2018-12-01 10:31:13.355046+00	770	Tim Nash	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+331	2018-12-01 10:31:50.485081+00	748	James Mason	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+332	2018-12-01 10:31:52.599576+00	765	Luke Ralls	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+333	2018-12-01 12:14:30.770885+00	741	Imogen Newby	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+334	2018-12-01 12:14:34.204937+00	729	Eléonore Cossade	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+335	2018-12-01 13:31:23.92032+00	728	Shauna Punjabi	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+336	2018-12-01 13:31:27.063003+00	746	Eugenia D'Arcy	2	[{"changed": {"fields": ["second_group_number", "second_group_index"]}}]	1	1
+337	2019-11-29 10:08:38.061932+00	807	Andrea Gales	3		1	1
+338	2019-11-29 10:08:38.068467+00	806	Michelle Sword	3		1	1
+339	2019-11-29 10:08:38.073169+00	805	Claudine Jennings	3		1	1
+340	2019-11-29 10:08:38.077889+00	804	Lena Meynen Degryse	3		1	1
+341	2019-11-29 10:08:38.082381+00	803	Hope Greenwood	3		1	1
+342	2019-11-29 10:08:38.087101+00	802	Layla Annison	3		1	1
+343	2019-11-29 10:08:38.091858+00	801	Ruth Watson	3		1	1
+344	2019-11-29 10:08:38.099683+00	800	Stephanie Clason	3		1	1
+345	2019-11-29 10:08:38.104884+00	799	Rebbeca Lennon	3		1	1
+346	2019-11-29 10:08:38.109836+00	798	Jessica Nilsson	3		1	1
+347	2019-11-29 10:08:38.114745+00	797	Bayley Sargeant	3		1	1
+348	2019-11-29 10:08:38.119528+00	796	Mariya Shkolna	3		1	1
+349	2019-11-29 10:08:38.124001+00	795	Katrina McIntosh	3		1	1
+350	2019-11-29 10:08:38.131511+00	794	Katharina Baier	3		1	1
+351	2019-11-29 10:08:38.141802+00	793	Erin Prior	3		1	1
+352	2019-11-29 10:08:38.151051+00	792	Sarah Moon	3		1	1
+353	2019-11-29 10:08:38.159552+00	791	Ella Gibson	3		1	1
+354	2019-11-29 10:08:38.173791+00	790	Lucy Mason	3		1	1
+355	2019-11-29 10:08:38.184408+00	789	Nat Merry	3		1	1
+356	2019-11-29 10:08:38.189082+00	788	Victoria Loader	3		1	1
+357	2019-11-29 10:08:38.193265+00	787	Abbie Spinks	3		1	1
+358	2019-11-29 10:08:38.1973+00	786	Daisy Clark	3		1	1
+359	2019-11-29 10:08:38.201602+00	785	Lucy O'Sullivan	3		1	1
+360	2019-11-29 10:08:38.205909+00	784	Izzy Carpenter	3		1	1
+361	2019-11-29 10:08:38.210323+00	783	Elizabeth Foster	3		1	1
+362	2019-11-29 10:08:38.215046+00	782	Holly Clifford	3		1	1
+363	2019-11-29 10:08:38.219449+00	781	Iulia Petre	3		1	1
+364	2019-11-29 10:08:38.23025+00	780	Kirsty Robb	3		1	1
+365	2019-11-29 10:08:38.244063+00	779	Susan Corless	3		1	1
+366	2019-11-29 10:08:38.251959+00	778	Sarah Prieels	3		1	1
+367	2019-11-29 10:08:38.262439+00	777	Michael Kells	3		1	1
+368	2019-11-29 10:08:38.279351+00	776	Lewis Haslam	3		1	1
+369	2019-11-29 10:08:38.292099+00	775	Sam Jeram	3		1	1
+370	2019-11-29 10:08:38.29865+00	774	Mike Aubrey	3		1	1
+371	2019-11-29 10:08:38.304678+00	773	Adam Shaw	3		1	1
+372	2019-11-29 10:08:38.310152+00	772	Domagoj Buden	3		1	1
+373	2019-11-29 10:08:38.319467+00	771	Martyn Cotterill	3		1	1
+374	2019-11-29 10:08:38.325037+00	770	Tim Nash	3		1	1
+375	2019-11-29 10:08:38.33037+00	769	Liam Peake	3		1	1
+376	2019-11-29 10:08:38.335349+00	768	Nathan Thomas	3		1	1
+377	2019-11-29 10:08:38.340272+00	767	Kai Thomas-Prause	3		1	1
+378	2019-11-29 10:08:38.345215+00	766	Chris White	3		1	1
+379	2019-11-29 10:08:38.351705+00	765	Luke Ralls	3		1	1
+380	2019-11-29 10:08:38.363026+00	764	Tapani Kalmaru	3		1	1
+381	2019-11-29 10:08:38.375993+00	763	Matthew Wong	3		1	1
+382	2019-11-29 10:08:38.386721+00	762	Jason Sargeant	3		1	1
+383	2019-11-29 10:08:38.394489+00	761	Simon Scott	3		1	1
+384	2019-11-29 10:08:38.408612+00	760	Reginald Kools	3		1	1
+385	2019-11-29 10:08:38.416456+00	759	Sam Baldwin	3		1	1
+386	2019-11-29 10:08:38.421099+00	758	Adam Outram	3		1	1
+387	2019-11-29 10:08:38.425675+00	757	Jacob Caine	3		1	1
+388	2019-11-29 10:08:38.430934+00	756	James Howell	3		1	1
+389	2019-11-29 10:08:38.437668+00	755	Duncan Busby	3		1	1
+390	2019-11-29 10:08:38.442509+00	754	Adam Ravenscroft	3		1	1
+391	2019-11-29 10:08:38.447813+00	753	Jake Walsh	3		1	1
+392	2019-11-29 10:08:38.453046+00	752	Adam Carpenter	3		1	1
+393	2019-11-29 10:08:38.459786+00	751	James Howse	3		1	1
+394	2019-11-29 10:08:38.472106+00	750	Alistair Whittingham	3		1	1
+395	2019-11-29 10:08:38.479104+00	749	Dean Hamilton	3		1	1
+396	2019-11-29 10:08:38.483699+00	748	James Mason	3		1	1
+397	2019-11-29 10:08:38.491395+00	747	Wendy Aubrey	3		1	1
+398	2019-11-29 10:08:38.496543+00	746	Eugenia D'Arcy	3		1	1
+399	2019-11-29 10:08:38.501265+00	745	Sarah Smith	3		1	1
+400	2019-11-29 10:08:38.505841+00	744	Jaspreet Sagoo	3		1	1
+401	2019-11-29 10:08:38.510168+00	743	Naomi Folkard	3		1	1
+402	2019-11-29 10:08:38.514426+00	742	Sophie Castle	3		1	1
+403	2019-11-29 10:08:38.524069+00	741	Imogen Newby	3		1	1
+404	2019-11-29 10:08:38.536318+00	740	Johanna Meyer	3		1	1
+405	2019-11-29 10:08:38.541269+00	739	Susan Agnew	3		1	1
+406	2019-11-29 10:08:38.546032+00	738	Louisa Piper	3		1	1
+407	2019-11-29 10:08:38.552774+00	737	Yulia Larkins	3		1	1
+408	2019-11-29 10:08:38.557612+00	736	Jackie Fisher	3		1	1
+409	2019-11-29 10:08:38.566236+00	735	Kayleigh Ivanov	3		1	1
+410	2019-11-29 10:08:38.571509+00	734	Rebecca Stephenson	3		1	1
+411	2019-11-29 10:08:38.576278+00	733	Melanie-Lee Bebbington-Tengrove	3		1	1
+412	2019-11-29 10:08:38.586375+00	732	Heather Hughes	3		1	1
+413	2019-11-29 10:08:38.591503+00	731	Sarah Bettles	3		1	1
+414	2019-11-29 10:08:38.596102+00	730	Charlie Birch	3		1	1
+415	2019-11-29 10:08:38.604129+00	729	Eleonore Cossade	3		1	1
+416	2019-11-29 10:08:38.609956+00	728	Shauna Punjabi	3		1	1
+417	2019-11-29 10:08:38.616139+00	727	Lizzie Warner	3		1	1
+418	2019-11-29 10:08:38.624775+00	726	Eleanor Piper	3		1	1
+419	2019-11-29 10:08:38.629097+00	725	Hannah Burnage	3		1	1
+420	2019-11-29 10:08:38.636551+00	724	Freya Palmer	3		1	1
+421	2019-11-29 10:08:38.640602+00	723	Natasha Homer	3		1	1
+422	2019-11-29 10:08:38.64455+00	722	Rebekah Tipping	3		1	1
+423	2019-11-29 10:08:38.648414+00	720	Bryony Pitman	3		1	1
+424	2019-11-29 10:08:38.652464+00	719	Sherman Ip	3		1	1
+425	2019-11-29 10:08:38.656352+00	718	Morgan Donaldson	3		1	1
+426	2019-11-29 10:08:38.660266+00	717	Colin Geenes	3		1	1
+427	2019-11-29 10:08:38.666169+00	716	Andy Caine	3		1	1
+428	2019-11-29 10:08:38.675968+00	715	Jacob Reid	3		1	1
+429	2019-11-29 10:08:38.68032+00	714	Tom Hall	3		1	1
+430	2019-11-29 10:08:38.686656+00	713	Graeme Higgs	3		1	1
+431	2019-11-29 10:08:38.690984+00	712	Richard White	3		1	1
+432	2019-11-29 10:08:38.695644+00	711	Gilbert Jamieson	3		1	1
+433	2019-11-29 10:08:38.702189+00	710	Jonathan Tate	3		1	1
+434	2019-11-29 10:08:38.706651+00	709	Keith Harding	3		1	1
+435	2019-11-29 10:08:38.710841+00	708	Michael Judd	3		1	1
+436	2019-11-29 10:08:38.715588+00	707	Garry Partington	3		1	1
+437	2019-11-29 10:08:38.719765+00	706	Chris Avins	3		1	1
+438	2019-11-29 10:08:38.723807+00	705	Stephane Lericolais	3		1	1
+439	2019-11-29 10:08:38.728022+00	704	Daniel Thompson	3		1	1
+440	2019-11-29 10:08:38.732193+00	703	Ryan Pinder	3		1	1
+441	2019-11-29 10:08:38.736495+00	702	Alex Wise	3		1	1
+442	2019-11-29 10:08:38.740292+00	701	Ryan Holden	3		1	1
+443	2019-11-29 10:08:38.744313+00	700	Sean Evans	3		1	1
+444	2019-11-29 10:08:38.748361+00	699	Frank Hynds	3		1	1
+445	2019-11-29 10:08:38.752667+00	698	Kieran Shirley	3		1	1
+446	2019-11-29 10:08:38.75981+00	697	Mark Nesbitt	3		1	1
+447	2019-11-29 10:08:38.769355+00	696	Pit Klein	3		1	1
+448	2019-11-29 10:08:38.777759+00	695	Ken Hargreaves	3		1	1
+449	2019-11-29 10:08:38.782071+00	694	John Prior	3		1	1
+450	2019-11-29 10:08:38.786562+00	693	Antonios Katris	3		1	1
+451	2019-11-29 10:08:38.791522+00	692	Thomas Nairn	3		1	1
+452	2019-11-29 10:08:38.799443+00	691	Cameron Donaldson	3		1	1
+453	2019-11-29 10:08:38.806773+00	690	Patrick Huston	3		1	1
+454	2019-11-29 10:42:07.408158+00	2	team	2	[{"changed": {"fields": ["password"]}}]	6	1
+455	2019-11-30 16:10:06.184939+00	854	Ryan Holden	2	[{"changed": {"fields": ["final_round_seed"]}}]	1	1
+456	2019-11-30 16:10:15.624351+00	861	Thomas Susca	2	[{"changed": {"fields": ["final_round_seed"]}}]	1	1
+457	2019-11-30 17:43:19.512686+00	891	Layla Annison	2	[{"changed": {"fields": ["final_match_3_score"]}}]	1	1
+458	2019-11-30 17:43:44.276951+00	891	Layla Annison	2	[{"changed": {"fields": ["final_match_3_score"]}}]	1	1
+459	2019-11-30 17:46:01.152017+00	891	Layla Annison	2	[{"changed": {"fields": ["final_match_2_score"]}}]	1	1
+460	2021-12-03 12:23:20.873121+00	3	ABEARC	2	[{"changed": {"fields": ["Username"]}}]	6	1
+461	2021-12-03 12:23:29.628356+00	74	SCOTTAJ	2	[{"changed": {"fields": ["Username"]}}]	6	1
+462	2021-12-03 12:23:38.590392+00	49	OSULLIVANL	2	[{"changed": {"fields": ["Username"]}}]	6	1
+463	2021-12-03 12:23:53.964495+00	992	Ajay Scott	2	[{"changed": {"fields": ["Forename"]}}]	1	1
+464	2021-12-03 12:25:52.057756+00	996	Stuart Taylor	2	[{"changed": {"fields": ["Category"]}}]	1	1
+465	2021-12-03 12:27:07.777933+00	1007	Antony Wood	2	[{"changed": {"fields": ["Category"]}}]	1	1
+466	2021-12-04 05:48:06.331801+00	6	BEESERAYBOULDG	2	[{"changed": {"fields": ["Username"]}}]	6	1
+467	2021-12-04 05:48:27.731768+00	77	SULLIVANBELLI	2	[{"changed": {"fields": ["Username"]}}]	6	1
+468	2021-12-04 05:48:30.862536+00	80	THOMASPRAUSEK	2	[{"changed": {"fields": ["Username"]}}]	6	1
+469	2021-12-04 07:38:07.073474+00	2	team	2	[{"changed": {"fields": ["password"]}}]	6	1
+470	2021-12-04 08:58:26.467926+00	4429	Score object (4429)	2	[{"changed": {"fields": ["Verified"]}}]	2	1
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	back2back	entry
+2	back2back	score
+3	admin	logentry
+4	auth	permission
+5	auth	group
+6	auth	user
+7	contenttypes	contenttype
+8	sessions	session
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2015-11-30 21:50:24.057554+00
+2	auth	0001_initial	2015-11-30 21:50:24.157743+00
+3	admin	0001_initial	2015-11-30 21:50:24.191541+00
+4	contenttypes	0002_remove_content_type_name	2015-11-30 21:50:24.247357+00
+5	auth	0002_alter_permission_name_max_length	2015-11-30 21:50:24.269045+00
+6	auth	0003_alter_user_email_max_length	2015-11-30 21:50:24.287163+00
+7	auth	0004_alter_user_username_opts	2015-11-30 21:50:24.307684+00
+8	auth	0005_alter_user_last_login_null	2015-11-30 21:50:24.325535+00
+9	auth	0006_require_contenttypes_0002	2015-11-30 21:50:24.329121+00
+10	back2back	0001_initial	2015-11-30 21:50:24.373536+00
+11	sessions	0001_initial	2015-11-30 21:50:24.390327+00
+12	back2back	0002_auto_20161129_1358	2016-11-29 14:20:17.292978+00
+13	back2back	0003_finals_8	2017-12-02 15:49:41.729966+00
+14	admin	0002_logentry_remove_auto_add	2018-12-01 10:30:47.622758+00
+15	auth	0007_alter_validators_add_error_messages	2018-12-01 10:30:47.663128+00
+16	auth	0008_alter_user_username_max_length	2018-12-01 10:30:47.76642+00
+17	auth	0009_alter_user_last_name_max_length	2018-12-01 10:30:47.833455+00
+18	back2back	0004_remove_seedings	2018-12-01 10:30:47.926577+00
+19	admin	0003_logentry_add_action_flag_choices	2021-12-03 12:14:50.810779+00
+20	auth	0010_alter_group_name_max_length	2021-12-03 12:14:50.839499+00
+21	auth	0011_update_proxy_permissions	2021-12-03 12:14:50.862118+00
+22	auth	0012_alter_user_first_name_max_length	2021-12-03 12:14:50.87781+00
+23	back2back	0005_split_name_field	2021-12-03 12:14:50.900362+00
+24	back2back	0006_add_user_link	2021-12-03 12:14:50.959171+00
+25	back2back	0007_onetoone_entry	2021-12-03 12:16:25.084972+00
+26	back2back	0008_add_verified_field	2021-12-03 12:16:25.111907+00
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: marc
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+a0nx6rrlzq1dzogmqvu4e9dp8sns7yir	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:43:15.96495+00
+00e92czwukxf5ix9upuqqz4hv8vhi26s	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:47:10.807951+00
+ey5wyoe53qh9pi9gyloyh7glzpbj7ei5	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:48:18.616169+00
+0k61kxvgnw0y4fzf85qv8i1vs9iwsicm	OWM5MGIyYWU1YzQ3ZTRjYzllNGFhODJlZTdiNTg1MjUxY2U0MDRmYjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyOGMxYmUyMjFiZjk2YTY2ZDgyN2QxNmQ0MmFhNGNmZTE1OTY3NWE2In0=	2016-12-17 07:48:49.393876+00
+d4mqd671fsy9c0xru0z6jkgv1azl9hrg	MmRjODYzZWRlNjAyYzYzMzk2NjNiY2MzMzczOTdlMTY2ZGY1ZjNjNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiMjhjMWJlMjIxYmY5NmE2NmQ4MjdkMTZkNDJhYTRjZmUxNTk2NzVhNiIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=	2016-12-17 08:36:51.716437+00
+pklj5bhn8sgb5s7q8nw66lkwde3ovdc6	NGNjZDczNmJkZjhlYjhmNDhlYWIxNzZjZTgwZDBhZjVhZTMwM2U4MTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNTBkNzMzYzkyMmNkNGFhZGE4NGY3M2RmOTYzMjEyNjdkZGM1MTY0MCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2017-12-15 16:34:02.8219+00
+ne6spvgqit4b00y5r9gd71xtlceju4pp	NzQ0YWE3YTVmNDY3YmM4MTRkOTQ5N2RiMGVkYzBkNmUxZWIzNzQwNjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjIiLCJfYXV0aF91c2VyX2hhc2giOiI2OWJhODVjNzQ4Y2VlMTZkODk1NTg3NmI3NDJkZjgxYWIyNTMzMjI3In0=	2017-12-16 07:55:00.497966+00
+hnwp3iik37x99ul8ckj6g9c1ezqw3g0a	NGNjZDczNmJkZjhlYjhmNDhlYWIxNzZjZTgwZDBhZjVhZTMwM2U4MTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9oYXNoIjoiNTBkNzMzYzkyMmNkNGFhZGE4NGY3M2RmOTYzMjEyNjdkZGM1MTY0MCIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=	2018-01-19 12:08:57.513296+00
+c3aze3d9n31q6oakvu5nay9uo2942zyh	OGM4NDdlOWY1NTVjMTJiMmYxOWJiNzIxOGY3MTgzOWVkMjhhZWRhMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzYjQyMDRiMTdhMTBlMWFlODQ0MzAxZTQ1MmNhNjVmMTNjYmU4OWYwIn0=	2018-12-15 08:14:28.346891+00
+2oslbu2znpo2qr6kmquia0s7fhs9vr31	OGM4NDdlOWY1NTVjMTJiMmYxOWJiNzIxOGY3MTgzOWVkMjhhZWRhMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzYjQyMDRiMTdhMTBlMWFlODQ0MzAxZTQ1MmNhNjVmMTNjYmU4OWYwIn0=	2019-12-13 10:42:07.426137+00
+11581k2z5e7vevby8zxuuowqpcl2grrg	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 08:14:40.623261+00
+wenfiquqou99nesws7lbigg5zx9uoibd	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 08:31:39.177164+00
+qx4jl7nr5sn59hsywazxmvsv5qoixebj	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-13 14:24:49.43238+00
+hca299d50gmd4xi13cfhg0vpbazgkxry	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 08:40:55.218008+00
+0bmbnz0p7n6ag8s0lza1d59hey2hrl9w	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 10:39:58.583845+00
+xiaaare6zvcf2jemxahhyxmrrhqylh1x	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-14 07:50:45.645345+00
+fzuidhgu5oh1p51oe0pdr3qkui2n13ca	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 18:24:57.409456+00
+r18jlmt1ro6yaakmbdc84g79zeyj057m	ZjIwMmZiZjVkM2NlNTM0NWExMDJjYjQ1N2E3MmYwYjE1Yzg3YWNjYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJlMjc3MzIwMjU5MGYwMDk3MTcyMDlmM2NlYjJmZjA3NmQwOGIxNjNhIn0=	2018-12-15 19:39:57.0662+00
+gsb3vpjgprg9t5xe980giabgsvhkdrk4	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-14 07:50:46.469688+00
+cggi49fr1a0mmnrkh5yl6kfvvc3olhf7	ZGVjNzNmMDZiN2JmM2JmZjI4N2JkNWYzOWI3Mzc2NTM3YjBmMjliYjp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZDhiYzgyZjdiNGM5YjEyMjkwMWFlNDNmNDBlNmZjMGIzOWJkOWE4In0=	2019-12-14 07:52:51.212279+00
+kjuey47z9gjksss21stur6f1s860pam4	OGM4NDdlOWY1NTVjMTJiMmYxOWJiNzIxOGY3MTgzOWVkMjhhZWRhMzp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIzYjQyMDRiMTdhMTBlMWFlODQ0MzAxZTQ1MmNhNjVmMTNjYmU4OWYwIn0=	2019-12-14 12:09:50.801508+00
+9tiy6s5rz2316ctjvp8nif6odtunwanr	.eJxVjMEOwiAQRP-FsyFLi13w6N1vIAsLUjU0Ke3J-O9C0oPeJvPezFs42rfs9hpXN7O4CFTi9Ft6Cs9YOuEHlfsiw1K2dfayK_KgVd4Wjq_r4f4dZKq5rYE5GA2EqFOi8xDsoI2KYFX7iIyBcETfctIcaRqRgTux3vAECsTnCzMLOXQ:1mt8Ri:fXUMToKAtgox_vcO_JmSDXQpj4JSUVpUfjBbNcR3nlQ	2021-12-17 13:17:50.582998+00
+ozhc9o1dydvxbie07fxyq3e8qyueuyn2	.eJxVjMEOwiAQRP-FsyFLi13w6N1vIAsLUjU0Ke3J-O9C0oPeJvPezFs42rfs9hpXN7O4CFTi9Ft6Cs9YOuEHlfsiw1K2dfayK_KgVd4Wjq_r4f4dZKq5rYE5GA2EqFOi8xDsoI2KYFX7iIyBcETfctIcaRqRgTux3vAECsTnCzMLOXQ:1mtOPT:Gyas8ryJYMJf__9tt_VF05cviV3vImO-YHKh2LSh2GU	2021-12-18 06:20:35.665235+00
+2njfoq3gwzcpdt9yp90xbcidxt2ikutx	.eJxVjMEOwiAQRP-FsyFLi13w6N1vIAsLUjU0Ke3J-O9C0oPeJvPezFs42rfs9hpXN7O4CFTi9Ft6Cs9YOuEHlfsiw1K2dfayK_KgVd4Wjq_r4f4dZKq5rYE5GA2EqFOi8xDsoI2KYFX7iIyBcETfctIcaRqRgTux3vAECsTnCzMLOXQ:1mtPVw:C8UoYQ-x-cewi9Oci9h9KMsxNRm2iJR6CSvAqbskRNA	2021-12-18 07:31:20.773594+00
+sy84x4jsua8g9iwmib6akwv1cixqu2j1	.eJxVjMsOwiAQRf-FtSE4tDxcuu83kBkYpGogKe3K-O_apAvd3nPOfYmA21rC1nkJcxIXcRan340wPrjuIN2x3pqMra7LTHJX5EG7nFri5_Vw_w4K9vKtPXinHKnRcGSjnYsxZ4XkfRqJ0XkAk8FqYk4IljPlIQ3WZwYYjNbi_QH1KTiB:1mtPcV:bitFL1_zVgcjvukiso0S0r9sTv1MF0Fvuosln_lq-Cs	2021-12-18 07:38:07.084507+00
+e0wq9xhyt0qpw3p8w150sh8td9vdi7bz	.eJxVjDsOwjAQBe_iGllrx7-lpOcM1vqHA8iW4qRC3B0ipYD2zcx7MU_bWv028uLnxM5MstPvFig-cttBulO7dR57W5c58F3hBx382lN-Xg7376DSqN-6AAJNqDU4MlpLUIAFoyyIUYM1qJQT4LLFZIWTNCWjnMwGghVWusjeH6FnNg8:1mtPdN:LJeSC5m6WxQoVpckvQ8DBoQTRs1KkkzX4f92r3s_-hg	2021-12-18 07:39:01.7824+00
+f6d1czqob4bl35u4272u4eul9s2nypn2	.eJxVjMEOwiAQRP-FsyFLi13w6N1vIAsLUjU0Ke3J-O9C0oPeJvPezFs42rfs9hpXN7O4CFTi9Ft6Cs9YOuEHlfsiw1K2dfayK_KgVd4Wjq_r4f4dZKq5rYE5GA2EqFOi8xDsoI2KYFX7iIyBcETfctIcaRqRgTux3vAECsTnCzMLOXQ:1mtQ14:RoWhYuDMJBOL4BeU1INqxuyP7m0pFI_yq5tx_sGiiIM	2021-12-18 08:03:30.94908+00
+fva0elxlbk0g8pdhdxyy92o9cf1f0dic	.eJxVjDsOwjAQBe_iGllrx7-lpOcM1vqHA8iW4qRC3B0ipYD2zcx7MU_bWv028uLnxM5MstPvFig-cttBulO7dR57W5c58F3hBx382lN-Xg7376DSqN-6AAJNqDU4MlpLUIAFoyyIUYM1qJQT4LLFZIWTNCWjnMwGghVWusjeH6FnNg8:1mtQfL:MBM05a_WCMYAzccxHPjgMcm2GjnK7L1KrWveu7IlCbE	2021-12-18 08:45:07.448926+00
+ltxpq1jjpqp1qd8snq4xpkjgleaiym9k	.eJxVjDsOwjAQBe_iGllrx7-lpOcM1vqHA8iW4qRC3B0ipYD2zcx7MU_bWv028uLnxM5MstPvFig-cttBulO7dR57W5c58F3hBx382lN-Xg7376DSqN-6AAJNqDU4MlpLUIAFoyyIUYM1qJQT4LLFZIWTNCWjnMwGghVWusjeH6FnNg8:1mtQwQ:YC8p1rB2JfhNt07qkFLahfyyLYpzlfS_paH88BK7R5w	2021-12-18 09:02:46.98057+00
+860f7kw29k3gplx89ay302e331yn6ubm	.eJxVjDsOwjAQBe_iGln-xR9Kes5grddrHEC2FCcV4u4QKQW0b2bei0XY1hq3QUucMzszxU6_WwJ8UNtBvkO7dY69rcuc-K7wgw5-7Zmel8P9O6gw6rf2wnkrBUmH6KWxFIjyVArqnEAZzERYnNHKOOXLBMkGIyxCcJpUkYq9P_DVOD8:1mtRPt:1Shvf_9eTT-U9okIISYNVutoSr69FHGWv8Zcnddbzb0	2021-12-18 09:33:13.981717+00
+yjw1wds51cyy27e9bdizygamzrfy1pgr	.eJxVjMsOwiAQRf-FtSHMDEzBpXu_gUyBStXQpI-V8d-1SRe6veec-1JRtrXGbSlzHLM6K7Tq9Dv2kh6l7STfpd0mnaa2zmOvd0UfdNHXKZfn5XD_Dqos9VuDZ0DvDAoxgyHBAal3hqVQZoQuOAddTmjBWQzI0LGnIVMKjMYa9f4AtF81sg:1mtS3N:pPj3poCXh_QBIpB0yh4CQtQHSFjTal5beW4z0i_aZHQ	2021-12-18 10:14:01.081618+00
+q8sujeg37jngpxlde8no2pnoaotrhgb6	.eJxVjDsOwjAQBe_iGlnrv0xJzxms3bWNA8iR4qRC3B0ipYD2zcx7iYTb2tI2ypKmLM7CBXH6HQn5UfpO8h37bZY893WZSO6KPOiQ1zmX5-Vw_w4ajvatI2CuqD0ZAgIgNj47DSaQdczATKh0BEO6gKqIAQPbrGO12itrg3h_AB5HODM:1mtS7l:2-4apSc0PWsPPiPUNfdfvnI9S1BxvXdN39sgirMm2Bw	2021-12-18 10:18:33.374649+00
+93v0lhkb9uymtntx6aljl2d6m5dbc135	.eJxVjMsOwiAUBf-FtSFAy8ule7-B3AeVqoGktCvjv2uTLnR7Zua8RIJtLWnreUkzi7PwWpx-RwR65LoTvkO9NUmtrsuMclfkQbu8Ns7Py-H-HRTo5VubwXI2wU4Q9EAqklXeoXLDGDCO3pEJyM4BoNUGokEGPfkIGDhkUiTeH_YNODQ:1mtTj3:d8cfZCZf-nYOMSQl9XHCs5pWIRh0sRXgyqsvRIvcbLQ	2021-12-18 12:01:09.983866+00
+7ofhp71tsq16tbly72gzlc3kun2uokpa	.eJxVjMEOwiAQRP-FsyFLi13w6N1vIAsLUjU0Ke3J-O9C0oPeJvPezFs42rfs9hpXN7O4CFTi9Ft6Cs9YOuEHlfsiw1K2dfayK_KgVd4Wjq_r4f4dZKq5rYE5GA2EqFOi8xDsoI2KYFX7iIyBcETfctIcaRqRgTux3vAECsTnCzMLOXQ:1mtTlX:uKR0-eqUjs1D6HkF7nC82CL2OyvADYmzLN9BbEt7VvE	2021-12-18 12:03:43.527263+00
+53c185fpq0o3rmfdzkjbnyowaryygk76	.eJxVjDsOwjAQBe_iGlnrv0xJzxms3bWNA8iR4qRC3B0ipYD2zcx7iYTb2tI2ypKmLM7CBXH6HQn5UfpO8h37bZY893WZSO6KPOiQ1zmX5-Vw_w4ajvatI2CuqD0ZAgIgNj47DSaQdczATKh0BEO6gKqIAQPbrGO12itrg3h_AB5HODM:1mtU2D:Jj8TzXJ8_VcFQYSUM9NKkcWUJAHutZznZ5k0_iPS6Eg	2021-12-18 12:20:57.484831+00
+it24cc4tpmhzkta7nzcpjiomo5uhgc29	.eJxVjDsOwjAQBe_iGln-xR9Kes5grddrHEC2FCcV4u4QKQW0b2bei0XY1hq3QUucMzszxU6_WwJ8UNtBvkO7dY69rcuc-K7wgw5-7Zmel8P9O6gw6rf2wnkrBUmH6KWxFIjyVArqnEAZzERYnNHKOOXLBMkGIyxCcJpUkYq9P_DVOD8:1mtUWZ:-WzAyS2HOp2BnIJ3jPl-4QeiUkayb64mIBHMmwFhX1o	2021-12-18 12:52:19.76346+00
+ye5nt7e3uezp5ww5yy9j1d22ldg9iu3j	.eJxVjDsOwjAQBe_iGllex79Q0nMGa9e7JgEUS_lUiLtDpBTQvpl5L5VxW4e8LTLnkdVZBatOvyNheci0E77jdGu6tGmdR9K7og-66GtjeV4O9-9gwGX41l0qvRW0sQB58D466hNSRWeTmNJVkBpiH4QMJBBkZgxWOKFxQLaq9wcTxji-:1muCmg:-Pl-fQKNOwM2ENQQfatTXgnRhRZENOeOkB0H6XJTJJw	2021-12-20 12:07:54.575494+00
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 32, true);
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_user_id_seq', 91, true);
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: back2back_entry_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.back2back_entry_id_seq', 1009, true);
+
+
+--
+-- Name: back2back_score_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.back2back_score_id_seq', 5065, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 470, true);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 8, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: marc
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 26, true);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: back2back_entry back2back_entry_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_entry
+    ADD CONSTRAINT back2back_entry_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: back2back_entry back2back_entry_user_id_212fabd6_uniq; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_entry
+    ADD CONSTRAINT back2back_entry_user_id_212fabd6_uniq UNIQUE (user_id);
+
+
+--
+-- Name: back2back_score back2back_score_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score
+    ADD CONSTRAINT back2back_score_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_61b963fb6b89d22a_uniq; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_61b963fb6b89d22a_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: auth_group_name_12bfde5f361c8817_like; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_group_name_12bfde5f361c8817_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_0e939a4f; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_group_permissions_0e939a4f ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_8373b171; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_group_permissions_8373b171 ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_417f1b1c; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_permission_417f1b1c ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_0e939a4f; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_groups_0e939a4f ON public.auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_e8701ad4; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_groups_e8701ad4 ON public.auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_8373b171; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_user_permissions_8373b171 ON public.auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_e8701ad4; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_user_permissions_e8701ad4 ON public.auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_658d5105f8e5faf3_like; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX auth_user_username_658d5105f8e5faf3_like ON public.auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: back2back_score_3f5baa4e; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX back2back_score_3f5baa4e ON public.back2back_score USING btree (opponent_id);
+
+
+--
+-- Name: back2back_score_b64a62ea; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX back2back_score_b64a62ea ON public.back2back_score USING btree (entry_id);
+
+
+--
+-- Name: django_admin_log_417f1b1c; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_admin_log_417f1b1c ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_e8701ad4; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_admin_log_e8701ad4 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_de54fa62; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_session_de54fa62 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_59470ea1d6b13312_like; Type: INDEX; Schema: public; Owner: marc
+--
+
+CREATE INDEX django_session_session_key_59470ea1d6b13312_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: auth_permission auth_content_type_id_44d035ecde067492_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_content_type_id_44d035ecde067492_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_group_id_26db4e036e1c3f0c_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_group_id_26db4e036e1c3f0c_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permission_id_7d1d7daaaef28b2a_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permission_id_7d1d7daaaef28b2a_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user__permission_id_2b876ef75884dc7c_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user__permission_id_2b876ef75884dc7c_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_group_id_5a51774dd221d429_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_5a51774dd221d429_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_2eb4aa86dbdad615_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_2eb4aa86dbdad615_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permiss_user_id_5e3ed8a6195e52ba_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permiss_user_id_5e3ed8a6195e52ba_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: back2back_entry back2back_entry_user_id_212fabd6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_entry
+    ADD CONSTRAINT back2back_entry_user_id_212fabd6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: back2back_score back2back_sc_opponent_id_68b1802d1931c1c4_fk_back2back_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score
+    ADD CONSTRAINT back2back_sc_opponent_id_68b1802d1931c1c4_fk_back2back_entry_id FOREIGN KEY (opponent_id) REFERENCES public.back2back_entry(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: back2back_score back2back_score_entry_id_65e004e5b3cc756d_fk_back2back_entry_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.back2back_score
+    ADD CONSTRAINT back2back_score_entry_id_65e004e5b3cc756d_fk_back2back_entry_id FOREIGN KEY (entry_id) REFERENCES public.back2back_entry(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log djan_content_type_id_29165ea2d2442da9_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT djan_content_type_id_29165ea2d2442da9_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk; Type: FK CONSTRAINT; Schema: public; Owner: marc
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
