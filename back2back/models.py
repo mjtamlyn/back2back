@@ -2,10 +2,10 @@ from django.db import models
 
 
 CATEGORY_CHOICES = (
-    ('gents-recurve', 'Gents Recurve'),
-    ('ladies-recurve', 'Ladies Recurve'),
-    ('gents-compound', 'Gents Compound'),
-    ('ladies-compound', 'Ladies Compound'),
+    ('rm', 'Recurve Men'),
+    ('rw', 'Recurve Women'),
+    ('cm', 'Compound Men'),
+    ('cw', 'Compound Women'),
 )
 
 STAGE_CHOICES = (

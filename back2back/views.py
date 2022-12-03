@@ -76,7 +76,9 @@ class EntryAdd(StaffuserRequiredMixin, FormView):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(category=self.kwargs['category'], **kwargs)
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
 
     def form_valid(self, form):
         form.save()
