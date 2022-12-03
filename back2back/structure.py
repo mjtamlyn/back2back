@@ -198,40 +198,54 @@ class BaseCategory(object):
         match['archer_2'].save()
 
 
-class GentsRecurve(BaseCategory):
-    name = 'Gents Recurve'
-    slug = 'gents-recurve'
-    first_round_target = 1
-    second_round_target = 19
-
-
-class LadiesRecurve(BaseCategory):
-    name = 'Ladies Recurve'
-    slug = 'ladies-recurve'
-    max_entries = 18
-    first_round_target = 13
-    second_round_target = 1
-    first_round_groups = 3
+class RecurveMen(BaseCategory):
+    name = 'Recurve Men'
+    slug = 'rm'
+    max_entries = 30
+    first_round_target = 3
+    second_round_target = 23
+    first_round_groups = 5
+    second_round_groups = 3
     second_round_layout = [
-        0, 1,  # Winner, runner up for each group
-        0, 1,
+        0, 2,  # Winner, runner up for each group
         1, 0,
-        1, 0, 0, 1, 1, 0,  # High scores
+        2, 1,
+        2, 0,
+        1, 2,
+        0, 1, 2, 0, 0, 1, 1, 2,  # High scores
     ]
 
 
-class GentsCompound(BaseCategory):
-    name = 'Gents Compound'
-    slug = 'gents-compound'
-    first_round_target = 1
-    second_round_target = 13
+class RecurveWomen(BaseCategory):
+    name = 'Recurve Women'
+    slug = 'rw'
+    first_round_target = 19
+    second_round_target = 2
 
 
-class LadiesCompound(BaseCategory):
-    name = 'Ladies Compound'
-    slug = 'ladies-compound'
-    first_round_target = 13
-    second_round_target = 7
+class CompoundMen(BaseCategory):
+    name = 'Compound Men'
+    slug = 'cm'
+    max_entries = 30
+    first_round_target = 3
+    second_round_target = 14
+    first_round_groups = 5
+    second_round_groups = 3
+    second_round_layout = [
+        0, 2,  # Winner, runner up for each group
+        1, 0,
+        2, 1,
+        2, 0,
+        1, 2,
+        0, 1, 2, 0, 0, 1, 1, 2,  # High scores
+    ]
+
+
+class CompoundWomen(BaseCategory):
+    name = 'Compound Women'
+    slug = 'cw'
+    first_round_target = 19
+    second_round_target = 8
 
 
 class Group(object):
@@ -490,5 +504,5 @@ class Group(object):
         raise ValueError('Unknown round %s' % self.stage)
 
 
-CATEGORIES = [GentsRecurve(), LadiesRecurve(), GentsCompound(), LadiesCompound()]
+CATEGORIES = [RecurveMen(), RecurveWomen(), CompoundMen(), CompoundWomen()]
 CATEGORIES_BY_SLUG = OrderedDict((category.slug, category) for category in CATEGORIES)
