@@ -26,9 +26,9 @@
 {% for round in rounds %}
 {\large {{ round }}}\\
 \vspace{0.1in}
-\begin{tabular}{| j | c | c | c | c | c | }
+\begin{tabular}{| j | c | c | c | c | c | c | c | }
 \hline
-\textbf{J} & \multicolumn{3}{|c|}{\textbf{Arrows}} & \textbf{Score} & \textbf{ {% if forloop.last %}Winner?{% else %}Still playing?{% endif %}}\\
+\textbf{J} & \multicolumn{5}{|c|}{\textbf{Arrows}} & \textbf{Score} & \textbf{ {% if forloop.last %}Winner?{% else %}Still playing?{% endif %}}\\
 \hline
 & & & & & \\
 \hline
